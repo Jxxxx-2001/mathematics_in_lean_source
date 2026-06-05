@@ -1,87 +1,129 @@
+# Mathematics in Lean — 含解答与注释版本
 
-Mathematics in Lean Source
-==========================
+[Mathematics in Lean](https://leanprover-community.github.io/mathematics_in_lean/) 是一本使用 Lean 4 交互式证明助手学习数学证明的教程。
 
-This repository is used to generate the textbook and user repository for
-[Mathematics in Lean](https://leanprover-community.github.io/mathematics_in_lean/).
+此仓库 fork 自 [avigad/mathematics_in_lean_source](https://github.com/avigad/mathematics_in_lean_source)，是教材的**源码仓库**。与原版相比，本仓库额外包含：
 
-Our build process applies rudimentary scripts to marked up Lean files to generate
-- source files for the textbook,
-- Lean exercise files, and
-- Lean solution files,
+- **完整练习解答** ([`MIL/*/solutions/`](MIL/)) — 所有章节每道练习题的解答
+- **教学注释** — 在 Lean 源文件中嵌入了中文教学批注
+- **开发环境配置** — `.devcontainer/` 支持 Codespaces 开箱即用；`CLAUDE.md` 辅助 AI 工具协作
 
-and put them all in the right places.
+---
 
-We use [Sphinx](https://www.sphinx-doc.org/en/master/)
- and the [Read the Docs theme](https://sphinx-rtd-theme.readthedocs.io/en/stable/) to generate
- the HTML and PDF versions of the textbook.
+## 面向学习者：直接使用本仓库
 
-Finally, we use another script to deploy the contents to the
-[user repository](https://github.com/leanprover-community/mathematics_in_lean).
+如果你只是想学习教材、完成练习并对照解答：
 
+1. 安装 Lean 4 和 VS Code，参考[官方安装指南](https://lean-lang.org/install/)
+2. 克隆本仓库
+3. 运行 `lake exe cache get` 获取编译好的 Mathlib
+4. 在 VS Code 中打开任意 `.lean` 文件即可开始
 
-Setup
------
+教材可在线阅读：[HTML 版](https://leanprover-community.github.io/mathematics_in_lean/) | [PDF 版](https://leanprover-community.github.io/mathematics_in_lean/mathematics_in_lean.pdf)
 
-To edit the Lean files, you need to have Lean, github, and friends installed.
-See the instructions on the [Lean community web pages](https://leanprover-community.github.io/) .
-In particular, don't forget to use
-```
+解答文件位于各章的 `solutions/` 子目录中，可用 `MIL_solutions.lean` 批量加载。
+
+> **建议**：复制 `MIL` 文件夹到你自己的工作目录，在副本中练习，保留原始文件作为参考。
+
+---
+
+## 面向开发者：构建教材
+
+以下是原版源码仓库的构建说明。
+
+### 环境准备
+
+```bash
+# 安装 Lean 依赖
 lake exe cache get
+
+# 安装 Sphinx 与 Python 依赖（用于构建 HTML/PDF）
+pip install -r scripts/requirements.txt
 ```
-after fetching this repository to get the compiled version of Mathlib.
 
-To build the textbook, you need to have
-[Sphinx and ReadTheDocs](https://sphinx-rtd-tutorial.readthedocs.io/en/latest/install.html)
-installed, as well as the Python `regex` package.
-Ideally, `pip install -r scripts/requirements.txt` should suffice.
+### 构建流程
 
+运行 `scripts/mkall.py`：
+- 创建并初始化 `source/` 目录（供 Sphinx 使用）
+- 创建并初始化 `user_repo/` 目录（供部署到用户仓库）
+- 更新 `MIL.lean` 以匹配 `MIL/` 文件夹内容
 
-Overview
---------
+然后使用 Sphinx 构建：
 
-The Lean source files are in the `MIL` directory. There is a folder for each chapter, the
-name of which begins with the letter `C` and the chapter number.
-The scripts sort the chapters and ignore folders that do not begin with `C`.
+```bash
+make html       # 构建 HTML 版
+make latexpdf   # 构建 PDF 版
+```
 
-Each folder should contain an `.rst` file with the same name, which has the chapter header
-for Sphinx. Each folder also has a Lean source file for each section,
-the name of which begins with `S` and the section number.
-The scripts ignore Lean files that do not begin with `S`.
-The markup that is used to generate the content is described below.
+部署到用户仓库：
 
-The folder `sphinx_source` contains files that are automatically added to a generated folder
-called `source`, which is used by Sphinx.
-It includes, in particular, a folder for any figures you want to use in the textbook.
+```bash
+scripts/deploy.sh <github-org> <repo-name>
+```
 
-The folder `user_repo_source` contains files that are automatically added to a generated
-folder called `user_repo`, which is used to build the user repository.
-It includes, in particular, the `README` file for that repository.
+清理构建产物：
 
+```bash
+scripts/clean.py
+```
 
-Build
------
+### 项目结构
 
-Running `scripts/mkall.py` does the following:
-- It creates and initializes a `source` directory, for use by Sphinx.
-- It creates and initializes a `user_repo` directory with files that will be
-  deployed to the user repository.
-- It updates the file `MIL.lean` to match the contents of the `MIL` folder.
+```
+MIL/                  # Lean 源文件（按章节组织）
+  C01_Introduction/   # 每章一个文件夹，以 "C" + 章节编号开头
+    C01_Introduction.rst    # 章节 RST 头部
+    S01_Getting_Started.lean # 节文件，以 "S" + 节编号开头
+    solutions/              # 解答文件
+sphinx_source/        # Sphinx 文档源文件
+user_repo_source/     # 用户仓库模板文件
+scripts/              # 构建与部署脚本
+```
 
-With the `source` directory in place, you can use `make html` and `make latexpdf` to
-call Sphinx to build the HTML and PDF versions of the book, respectively.
-Sphinx puts these in a generated `build` directory.
+### Lean 源文件标记语法
 
-Running `scripts/deploy.sh leanprover-community mathematics_in_lean` calls all three of the
-previous scripts, copies the HTML and PDF versions of the book to `user_repo`,
-and deploys the user repository to the github repository `leanprover-community/mathematics_in_lean`.
-You can deploy to another destination for testing.
+源文件通过注释标记控制内容输出到三个目标：
+- **教材源文件** (Sphinx)
+- **练习文件** (用户仓库，含 `sorry`)
+- **解答文件** (用户仓库，含完整证明)
 
-Running `scripts/clean.py` deletes the `source`, `user_repo`, and `build` directories.
+常用标记：
 
+| 标记 | 作用 |
+|------|------|
+| `/- TEXT: ... TEXT. -/` | 仅输出到教材 |
+| `-- EXAMPLES:` | 后续行输出到练习文件 |
+| `-- SOLUTIONS:` | 后续行输出到解答文件 |
+| `-- BOTH:` | 后续行同时输出到练习和解答 |
+| `-- OMIT:` | 后续行不输出到任何文件 |
+| `-- QUOTE: ... -- QUOTE.` | 标记教材中的引用块 |
+| `-- TAG: my_tag ... -- TAG: end` | 标记可复用的引用片段 |
 
-Markup
-------
+详细说明见下方「标记语法完整参考」部分。
+
+### 测试
+
+```bash
+# 测试所有 Lean 源文件
+lake build
+
+# 测试生成的练习文件
+scripts/examples_test.py && lake build
+
+# 测试生成的解答文件
+scripts/solutions_test.py && lake build
+
+# 测试单节
+scripts/mksection.py C03_Logic S02_The_Existential_Quantifier
+```
+
+---
+
+## 标记语法完整参考
+
+以下是原版 `README` 中的完整标记语法说明，保留作为参考。
+
+*(以下内容来自原版仓库 README)*
 
 The Lean files in the `MIL` folder generate three types of files:
 - Source files for the Sphinx textbook.
@@ -242,47 +284,10 @@ in the middle of a text block anywhere in the file will insert the tagged text a
 block quote in the textbook,
 using a Sphinx directive that is designed for exactly that purpose.
 
+---
 
-Testing
--------
+## 贡献与反馈
 
-After running `scripts/mkall.py`, you can use `lake build` to compile all the lean source files.
-This will print all the output generated by `#check`, `#eval`, and other commands found in the
-source files, as well as a warning for each `sorry`, and so on. Scanning the output provides
-a way to detect whether all the definitions, theorems, and proofs are well formed.
-This does not, however, confirm that the examples files and solutions files that are generated
-from the lean source files are well formed.
+教材仍在不断完善中，欢迎反馈和勘误。请向[上游仓库](https://github.com/avigad/mathematics_in_lean_source)提交 PR。
 
-To test the examples, use `scripts/examples_test.py`.
-This compiles all the lean source files as with `scripts/mkall.py`,
-but then it copies the Lean files from `user_repo` into a folder `MIL/Test` and
-constructs `MIL.lean` to import each of those.
-Use `lake build` to compile them.
-
-Similarly, use `scripts/solutions_test.py` followed by `lake build` to test all the solutions files.
-
-Use `scripts/clean_test.py` to remove the directory `MIL/Test` and restore `MIL.lean` to import the
-Lean source files.
-
-
-Processing one section
-----------------------
-
-Instead of building everything, you can test build a single section with `scripts/mksection.py`.
-For example,
-```
-  scripts/mksection.py C03_Logic S02_The_Existential_Quantifier
-```
-creates the examples file, the solutions file, and the Sphinx restructured text file
-for the section indicated.
-
-
-How to contribute
------------------
-
-The textbook is still a work in progress, but feedback and corrections are welcome.
-You can open a pull request,
-find us on the [Lean Zulip channel](https://leanprover.zulipchat.com/),
-or contact us by email.
-Please contact us before making a pull request for substantial expository or stylistic
-changes.
+也可以在 [Lean Zulip](https://leanprover.zulipchat.com/) 上找到我们。

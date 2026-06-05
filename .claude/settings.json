@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(elan --version)",
+      "Bash(elan show *)",
+      "Read(//c/Users/Jxxxx/.elan/toolchains/**)",
+      "Bash(cd e:\\\\\\\\lean\\\\\\\\PKU\\\\\\\\mil_0523)",
+      "Bash(elan toolchain *)",
+      "Bash(glean --version)",
+      "Bash(glean --help)",
+      "Bash(rm -f \"C:\\\\Users\\\\Jxxxx\\\\.elan\\\\toolchains\\\\lean-4.28.0-windows.zip\")",
+      "Bash(rm -rf \"C:\\\\Users\\\\Jxxxx\\\\.elan\\\\toolchains\\\\tmp\")",
+      "Bash(git remote *)",
+      "Bash(git fetch *)",
+      "Bash(git ls-tree *)",
+      "Bash(grep \"\\\\.lean$\")",
+      "Bash(git branch *)",
+      "Bash(git checkout *)",
+      "Bash(git stash *)",
+      "Bash(git add *)"
+    ]
+  }
+}
