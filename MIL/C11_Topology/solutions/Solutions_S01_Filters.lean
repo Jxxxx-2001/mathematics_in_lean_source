@@ -3,7 +3,7 @@ import Mathlib.Topology.Instances.Real.Lemmas
 
 open Set Filter Topology
 
--- In the next example we could use `tauto` in each proof instead of knowing the lemmas
+-- 在下一个例子中，我们可以在每个证明中使用 `tauto` 而不必知道这些引理
 example {α : Type*} (s : Set α) : Filter α :=
   { sets := { t | s ⊆ t }
     univ_sets := subset_univ s
@@ -59,7 +59,7 @@ example (f : ℕ → ℝ × ℝ) (x₀ y₀ : ℝ) :
       rw [map_map, map_map]
 
 
--- an alternative solution
+-- 另一种解法
 example (f : ℕ → ℝ × ℝ) (x₀ y₀ : ℝ) :
     Tendsto f atTop (𝓝 (x₀, y₀)) ↔
       Tendsto (Prod.fst ∘ f) atTop (𝓝 x₀) ∧ Tendsto (Prod.snd ∘ f) atTop (𝓝 y₀) := by

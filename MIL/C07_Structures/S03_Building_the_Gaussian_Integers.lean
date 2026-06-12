@@ -5,21 +5,20 @@ import MIL.Common
 /- TEXT:
 .. _section_building_the_gaussian_integers:
 
-Building the Gaussian Integers
+构造高斯整数
 ------------------------------
 
-We will now illustrate the use of the algebraic hierarchy in Lean by
-building an important mathematical object, the *Gaussian integers*,
-and showing that it is a Euclidean domain. In other words, according to
-the terminology we have been using, we will define the Gaussian integers
-and show that they are an instance of the Euclidean domain structure.
+我们现在将通过构造一个重要的数学对象——*高斯整数*，
+来展示 Lean 中代数层级的使用，
+并证明它是一个欧几里得整环。换句话说，根据我们一直使用的
+术语，我们将定义高斯整数并证明它们是欧几里得整环结构的实例。
 
-In ordinary mathematical terms, the set of Gaussian integers :math:`\Bbb{Z}[i]`
-is the set of complex numbers :math:`\{ a + b i \mid a, b \in \Bbb{Z}\}`.
-But rather than define them as a subset of the complex numbers, our goal
-here is to define them as a data type in their own right. We do this by
-representing a Gaussian integer as a pair of integers, which we think of as the
-*real* and *imaginary* parts.
+用通常的数学术语，高斯整数集合 :math:`\Bbb{Z}[i]`
+是复数集合 :math:`\{ a + b i \mid a, b \in \Bbb{Z}\}`。
+但我们不是将它们定义为复数的子集，
+这里的目标是将它们本身定义为一个数据类型。我们通过
+将高斯整数表示为一对整数（我们将它们视为
+*实部*和*虚部*）来实现这一点。
 BOTH: -/
 -- QUOTE:
 @[ext]
@@ -29,18 +28,18 @@ structure GaussInt where
 -- QUOTE.
 
 /- TEXT:
-We first show that the Gaussian integers have the structure of a ring,
-with ``0`` defined to be ``⟨0, 0⟩``, ``1`` defined to be ``⟨1, 0⟩``, and
-addition defined pointwise. To work out the definition of multiplication,
-remember that we want the element :math:`i`, represented by ``⟨0, 1⟩``, to
-be a square root of :math:`-1`. Thus we want
+我们首先证明高斯整数具有环的结构，
+其中 ``0`` 定义为 ``⟨0, 0⟩``，``1`` 定义为 ``⟨1, 0⟩``，并且
+加法逐点定义。要推导乘法的定义，
+请记住我们希望元素 :math:`i`（由 ``⟨0, 1⟩`` 表示）是
+:math:`-1` 的平方根。因此我们希望
 
 .. math::
 
    (a + bi) (c + di) & = ac + bci + adi + bd i^2 \\
      & = (ac - bd) + (bc + ad)i.
 
-This explains the definition of ``Mul`` below.
+这解释了下面 ``Mul`` 的定义。
 BOTH: -/
 namespace GaussInt
 
@@ -62,16 +61,16 @@ instance : Mul GaussInt :=
 -- QUOTE.
 
 /- TEXT:
-As noted in :numref:`section_structures`, it is a good idea to put all the definitions
-related to a data type in a namespace with the same name. Thus in the Lean
-files associated with this chapter, these definitions are made in the
-``GaussInt`` namespace.
+正如 :numref:`section_structures` 中提到的，将与数据类型相关的所有
+定义放在同名的命名空间中是个好主意。因此，在与本章相关联的 Lean
+文件中，这些定义是在
+``GaussInt`` 命名空间中进行的。
 
-Notice that here we are defining the interpretations of the notation ``0``,
-``1``, ``+``, ``-``, and ``*`` directly, rather than naming them
-``GaussInt.zero`` and the like and assigning the notation to those.
-It is often useful to have an explicit name for the definitions, for example,
-to use with ``simp`` and ``rw``.
+请注意，这里我们直接定义记号 ``0``、
+``1``、``+``、``-`` 和 ``*`` 的解释，而不是将它们命名为
+``GaussInt.zero`` 之类的名称再将记号分配给它。
+为这些定义提供显式名称通常是有用的，例如，
+用于 ``simp`` 和 ``rw``。
 BOTH: -/
 -- QUOTE:
 theorem zero_def : (0 : GaussInt) = ⟨0, 0⟩ :=
@@ -92,8 +91,8 @@ theorem mul_def (x y : GaussInt) :
 -- QUOTE.
 
 /- TEXT:
-It is also useful to name the rules that compute the real and imaginary
-parts, and to declare them to the simplifier.
+为计算实部和虚部的规则命名也很有用，
+并将它们声明给简化器。
 BOTH: -/
 -- QUOTE:
 @[simp]
@@ -138,28 +137,28 @@ theorem mul_im (x y : GaussInt) : (x * y).im = x.re * y.im + x.im * y.re :=
 -- QUOTE.
 
 /- TEXT:
-It is now surprisingly easy to show that the Gaussian integers are an instance
-of a commutative ring. We are putting the structure concept to good use.
-Each particular Gaussian integer is an instance of the ``GaussInt`` structure,
-whereas the type ``GaussInt`` itself, together with the relevant operations, is an
-instance of the ``CommRing`` structure. The ``CommRing`` structure, in turn,
-extends the notational structures ``Zero``, ``One``, ``Add``,
-``Neg``, and ``Mul``.
+现在令人惊讶地容易证明高斯整数是一个交换环的实例。
+我们正在充分利用结构体的概念。
+每个特定的高斯整数是 ``GaussInt`` 结构体的一个实例，
+而类型 ``GaussInt`` 本身，连同相关的运算，是
+``CommRing`` 结构体的一个实例。而 ``CommRing`` 结构体又
+扩展了记号结构体 ``Zero``、``One``、``Add``、
+``Neg`` 和 ``Mul``。
 
-If you type ``instance : CommRing GaussInt := _``, click on the light bulb
-that appears in VS Code, and then ask Lean to fill in a skeleton for the
-structure definition, you will see a scary number of entries.
-Jumping to the definition of the structure, however, shows that many of the
-fields have default definitions that Lean will fill in for you automatically.
-The essential ones appear in the definition below.
-A special case are ``nsmul`` and ``zsmul`` which should be ignored for now
-and will be explained in the next chapter.
-In each case, the relevant
-identity is proved by unfolding definitions, using the ``ext`` tactic
-to reduce the identities to their real and imaginary components,
-simplifying, and, if necessary, carrying out the relevant ring calculation in
-the integers. Note that we could easily avoid repeating all this code, but
-this is not the topic of the current discussion.
+如果你输入 ``instance : CommRing GaussInt := _``，点击 VS Code 中
+出现的灯泡，然后要求 Lean 为该结构体定义填充一个骨架，
+你会看到数量惊人的条目。
+然而，跳转到该结构体的定义，可以看到许多
+字段都有默认定义，Lean 会自动为你填写。
+基本的条目出现在下面的定义中。
+特殊情况是 ``nsmul`` 和 ``zsmul``，现在应该忽略它们，
+下一章会解释。
+在每种情况下，相关的恒等式
+通过展开定义来证明，使用 ``ext`` 策略
+将恒等式归结为其实部和虚部分量，
+化简，并在必要时在整数中执行相关的环计算。
+注意我们本可以轻松地避免重复所有这些代码，但
+这不是当前讨论的主题。
 BOTH: -/
 -- QUOTE:
 instance instCommRing : CommRing GaussInt where
@@ -220,10 +219,9 @@ theorem sub_im (x y : GaussInt) : (x - y).im = x.im - y.im :=
   rfl
 
 /- TEXT:
-Lean's library defines the class of *nontrivial* types to be types with at
-least two distinct elements. In the context of a ring, this is equivalent
-to saying that the zero is not equal to the one. Since some common theorems
-depend on that fact, we may as well establish it now.
+Lean 的库将*非平凡*类型的类定义为至少有两个不同元素的类型。
+在环的语境中，这等价于零不等于一。由于一些常见定理
+依赖于该事实，我们不妨现在就建立它。
 BOTH: -/
 -- QUOTE:
 instance : Nontrivial GaussInt := by
@@ -235,21 +233,21 @@ instance : Nontrivial GaussInt := by
 end GaussInt
 
 /- TEXT:
-We will now show that the Gaussian integers have an important additional
-property. A *Euclidean domain* is a ring :math:`R` equipped with a *norm*
-function :math:`N : R \to \mathbb{N}` with the following two properties:
+我们现在将证明高斯整数具有一个重要的附加性质。
+*欧几里得整环*是一个配备了*范数*
+函数 :math:`N : R \to \mathbb{N}` 的环 :math:`R`，该函数具有以下两个性质：
 
-- For every :math:`a` and :math:`b \ne 0` in :math:`R`, there are
-  :math:`q` and :math:`r` in :math:`R` such that :math:`a = bq + r` and
-  either :math:`r = 0` or :math:`N(r) < N(b)`.
-- For every :math:`a` and :math:`b \ne 0`, :math:`N(a) \le N(ab)`.
+- 对 :math:`R` 中任意的 :math:`a` 和 :math:`b \ne 0`，存在
+  :math:`R` 中的 :math:`q` 和 :math:`r` 使得 :math:`a = bq + r` 且
+  要么 :math:`r = 0` 要么 :math:`N(r) < N(b)`。
+- 对任意的 :math:`a` 和 :math:`b \ne 0`，:math:`N(a) \le N(ab)`。
 
-The ring of integers :math:`\Bbb{Z}` with :math:`N(a) = |a|` is an
-archetypal example of a Euclidean domain.
-In that case, we can take :math:`q` to be the
-result of integer division of :math:`a` by :math:`b` and :math:`r`
-to be the remainder. These functions are defined in Lean so that the
-satisfy the following:
+具有 :math:`N(a) = |a|` 的整数环 :math:`\Bbb{Z}` 是
+欧几里得整环的一个原型例子。
+在那种情况下，我们可以取 :math:`q` 为
+:math:`a` 除以 :math:`b` 的整数除法结果，:math:`r`
+为余数。这些函数在 Lean 中被定义为满足
+以下条件：
 EXAMPLES: -/
 -- QUOTE:
 example (a b : ℤ) : a = b * (a / b) + a % b :=
@@ -263,113 +261,107 @@ example (a b : ℤ) : b ≠ 0 → a % b < |b| :=
 -- QUOTE.
 
 /- TEXT:
-In an arbitrary ring, an element :math:`a` is said to be a *unit* if it divides
-:math:`1`. A nonzero element :math:`a` is said to be *irreducible* if it cannot
-be written in the form :math:`a = bc`
-where neither :math:`b` nor :math:`c` is a unit. In the integers, every
-irreducible element :math:`a` is *prime*, which is to say, whenever :math:`a`
-divides a product :math:`bc`, it divides either :math:`b` or :math:`c`. But
-in other rings this property can fail. In the ring
-:math:`\Bbb{Z}[\sqrt{-5}]`, we have
+在任意环中，一个元素 :math:`a` 如果整除 :math:`1`，则被称为*单位*。
+一个非零元素 :math:`a` 如果不能写成形式 :math:`a = bc`
+（其中 :math:`b` 和 :math:`c` 都不是单位），则被称为*不可约的*。
+在整数中，每个不可约元素 :math:`a` 都是*素元*，也就是说，每当 :math:`a`
+整除一个乘积 :math:`bc` 时，它整除 :math:`b` 或 :math:`c`。但
+在其他环中，这个性质可能会失效。在环
+:math:`\Bbb{Z}[\sqrt{-5}]` 中，我们有
 
 .. math::
 
   6 = 2 \cdot 3 = (1 + \sqrt{-5})(1 - \sqrt{-5}),
 
-and the elements :math:`2`, :math:`3`, :math:`1 + \sqrt{-5}`, and
-:math:`1 - \sqrt{-5}` are all irreducible, but they are not prime. For example,
-:math:`2` divides the product :math:`(1 + \sqrt{-5})(1 - \sqrt{-5})`,
-but it does not divide either factor. In particular, we no longer have
-unique factorization: the number :math:`6` can be factored into irreducible
-elements in more than one way.
+且元素 :math:`2`、:math:`3`、:math:`1 + \sqrt{-5}` 和
+:math:`1 - \sqrt{-5}` 都是不可约的，但它们不是素元。例如，
+:math:`2` 整除乘积 :math:`(1 + \sqrt{-5})(1 - \sqrt{-5})`，
+但它不整除任何一个因子。特别地，我们不再有
+唯一分解：数字 :math:`6` 可以以不止一种方式分解为不可约元素。
 
-In contrast, every Euclidean domain is a unique factorization domain, which
-implies that every irreducible element is prime.
-The axioms for a Euclidean domain imply that one can write any nonzero element
-as a finite product of irreducible elements. They also imply that one can use
-the Euclidean algorithm to find a greatest common divisor of any two
-nonzero elements ``a`` and ``b``, i.e. an element that is divisible by any
-other common divisor. This, in turn, implies that factorization
-into irreducible elements is unique up to multiplication by units.
+相比之下，每个欧几里得整环都是唯一分解整环，这意味着
+每个不可约元素都是素元。
+欧几里得整环的公理意味着可以将任何非零元素
+写为不可约元素的有限乘积。它们也意味着可以使用
+欧几里得算法来找到任意两个非零元素 ``a`` 和 ``b`` 的最大公因数，
+即能被任何其他公因数整除的元素。这反过来又意味着分解为
+不可约元素在相差单位乘法的意义下是唯一的。
 
-We now show that the Gaussian integers are a Euclidean domain with
-the norm defined by :math:`N(a + bi) = (a + bi)(a - bi) = a^2 + b^2`.
-The Gaussian integer :math:`a - bi` is called the *conjugate* of :math:`a + bi`.
-It is not hard to check that for any complex numbers :math:`x` and :math:`y`,
-we have :math:`N(xy) = N(x)N(y)`.
+我们现在证明高斯整数是具有范数 :math:`N(a + bi) = (a + bi)(a - bi) = a^2 + b^2` 的
+欧几里得整环。
+高斯整数 :math:`a - bi` 被称为 :math:`a + bi` 的*共轭*。
+不难验证对任意复数 :math:`x` 和 :math:`y`，
+有 :math:`N(xy) = N(x)N(y)`。
 
-To see that this definition of the norm makes the Gaussian integers a Euclidean
-domain, only the first property is challenging. Suppose
-we want to write :math:`a + bi = (c + di) q + r` for suitable :math:`q`
-and :math:`r`. Treating :math:`a + bi` and :math:`c + di` as complex
-numbers, carry out the division
+要看出范数的这个定义使高斯整数成为一个欧几里得
+整环，只有第一个性质具有挑战性。假设
+我们想要为合适的 :math:`q` 和 :math:`r` 写出
+:math:`a + bi = (c + di) q + r`。
+将 :math:`a + bi` 和 :math:`c + di` 视为复数，进行除法
 
 .. math::
 
   \frac{a + bi}{c + di} = \frac{(a + bi)(c - di)}{(c + di)(c-di)} =
     \frac{ac + bd}{c^2 + d^2} + \frac{bc -ad}{c^2+d^2} i.
 
-The real and imaginary parts might not be integers, but we can round
-them to the nearest integers :math:`u` and :math:`v`. We can then express the
-right-hand side as :math:`(u + vi) + (u' + v'i)`, where
-:math:`u' + v'i` is the part left over. Note that we have
-:math:`|u'| \le 1/2` and :math:`|v'| \le 1/2`, and hence
+实部和虚部可能不是整数，但我们可以将它们四舍五入到最近的
+整数 :math:`u` 和 :math:`v`。然后我们可以将右边表示为
+:math:`(u + vi) + (u' + v'i)`，其中 :math:`u' + v'i` 是剩余部分。
+注意我们有 :math:`|u'| \le 1/2` 且 :math:`|v'| \le 1/2`，因此
 
 .. math::
 
   N(u' + v' i) = (u')^2 + (v')^2 \le 1/4 + 1/4 \le 1/2.
 
-Multiplying through by :math:`c + di`, we have
+两边乘以 :math:`c + di`，我们有
 
 .. math::
 
   a + bi = (c + di) (u + vi) + (c + di) (u' + v'i).
 
-Setting :math:`q = u + vi` and :math:`r = (c + di) (u' + v'i)`, we have
-:math:`a + bi = (c + di) q + r`, and we only need to
-bound :math:`N(r)`:
+令 :math:`q = u + vi` 和 :math:`r = (c + di) (u' + v'i)`，我们有
+:math:`a + bi = (c + di) q + r`，并且我们只需要
+界定 :math:`N(r)`：
 
 .. math::
 
   N(r) = N(c + di)N(u' + v'i) \le N(c + di) \cdot 1/2 < N(c + di).
 
-The argument we just carried out requires viewing the Gaussian integers
-as a subset of the complex numbers. One option for formalizing it in Lean
-is therefore to embed the Gaussian integers in the complex numbers, embed
-the integers in the Gaussian integers, define the rounding function from the
-real numbers to the integers, and take great care to pass back and forth
-between these number systems appropriately.
-In fact, this is exactly the approach that is followed in Mathlib,
-where the Gaussian integers themselves are constructed as a special case
-of a ring of *quadratic integers*.
-See the file `GaussianInt.lean
-<https://github.com/leanprover-community/mathlib4/blob/master/Mathlib/NumberTheory/Zsqrtd/GaussianInt.lean>`_.
+我们刚刚进行的论证需要将高斯整数视为复数的子集。
+因此，在 Lean 中形式化它的一个选项是将高斯整数嵌入到复数中，
+将整数嵌入到高斯整数中，定义从实数到整数的四舍五入函数，
+并非常小心地在这些数系之间
+适当地来回传递。
+实际上，这正是 Mathlib 中遵循的方法，
+其中高斯整数本身被构造为
+*二次整数*环的一个特例。
+参见文件 `GaussianInt.lean
+<https://github.com/leanprover-community/mathlib4/blob/master/Mathlib/NumberTheory/Zsqrtd/GaussianInt.lean>`_。
 
-Here we will instead carry out an argument that stays in the integers.
-This illustrates a choice one commonly faces when formalizing mathematics.
-Given an argument that requires concepts or machinery that is not already
-in the library, one has two choices: either formalize the concepts and machinery
-needed, or adapt the argument to make use of concepts and machinery you
-already have.
-The first choice is generally a good investment of time when the results
-can be used in other contexts.
-Pragmatically speaking, however, sometimes seeking a more elementary proof
-is more efficient.
+这里我们将改为进行一个保持在整数范围内的论证。
+这展示了形式化数学时人们通常面临的一种选择。
+给定一个需要库中没有的概念或工具的论证，
+人们有两种选择：要么形式化所需的概念和工具，
+要么调整论证以利用已有的概念和工具。
+第一种选择在结果可以用于其他上下文时
+通常是一个很好的时间投资。
+但务实地说，有时寻找一个更初等的证明
+更有效率。
 
-The usual quotient-remainder theorem for the integers says that for
-every :math:`a` and nonzero :math:`b`, there are :math:`q` and :math:`r`
-such that :math:`a = b q + r` and :math:`0 \le r < |b|`.
-Here we will make use of the following variation, which says that there
-are :math:`q'` and :math:`r'` such that
-:math:`a = b q' + r'` and :math:`|r'| \le |b|/2`.
-You can check that if the value of :math:`r` in the first statement
-satisfies :math:`r \le |b|/2`, we can take :math:`q' = q` and :math:`r' = r`,
-and otherwise we can take :math:`q' = q + 1` and :math:`r' = r - b`
-(for :math:`b` positive; otherwise mutatis mutandis).
-We are grateful to Heather Macbeth for suggesting the following more
-elegant approach, which avoids definition by cases.
-We simply add ``b / 2`` to ``a`` before dividing and then subtract it
-from the remainder.
+整数的通常带余除法定理说对于
+每个 :math:`a` 和非零的 :math:`b`，存在 :math:`q` 和 :math:`r`
+使得 :math:`a = b q + r` 和 :math:`0 \le r < |b|`。
+这里我们将利用以下变体，它说存在
+:math:`q'` 和 :math:`r'` 使得
+:math:`a = b q' + r'` 和 :math:`|r'| \le |b|/2`。
+你可以检查，如果第一个陈述中的 :math:`r` 的值
+满足 :math:`r \le |b|/2`，我们可以取 :math:`q' = q` 和 :math:`r' = r`，
+否则我们可以取 :math:`q' = q + 1` 和 :math:`r' = r - b`
+（对于 :math:`b` 为正的情况；否则做相应调整）。
+我们感谢 Heather Macbeth 建议了以下更优雅的方法，
+它避免了按情况定义。
+我们只是在除法之前将 ``b / 2`` 加到 ``a`` 上，然后从余数中
+减去它。
 BOTH: -/
 namespace Int
 
@@ -395,8 +387,8 @@ theorem abs_mod'_le (a b : ℤ) (h : 0 < b) : |mod' a b| ≤ b / 2 := by
 -- QUOTE.
 
 /- TEXT:
-Note the use of our old friend, ``linarith``. We will also need to express
-``mod'`` in terms of ``div'``.
+注意我们老朋友 ``linarith`` 的使用。我们还需要将
+``mod'`` 用 ``div'`` 来表示。
 BOTH: -/
 -- QUOTE:
 theorem mod'_eq (a b : ℤ) : mod' a b = a - b * div' a b := by linarith [div'_add_mod' a b]
@@ -405,9 +397,9 @@ theorem mod'_eq (a b : ℤ) : mod' a b = a - b * div' a b := by linarith [div'_a
 end Int
 
 /- TEXT:
-We will use the fact that :math:`x^2 + y^2` is equal to zero if and only if
-:math:`x` and :math:`y` are both zero. As an exercise, we ask you to prove
-that this holds in any ordered ring.
+我们将使用事实 :math:`x^2 + y^2` 等于零当且仅当
+:math:`x` 和 :math:`y` 都为零。作为练习，我们要求你证明
+这在任何有序环中成立。
 SOLUTIONS: -/
 private theorem aux {α : Type*} [Ring α] [LinearOrder α] [IsStrictOrderedRing α] {x y : α} (h : x ^ 2 + y ^ 2 = 0) : x = 0 :=
   haveI h' : x ^ 2 = 0 := by
@@ -435,11 +427,11 @@ SOLUTIONS: -/
 
 -- BOTH:
 /- TEXT:
-We will put all the remaining definitions and theorems in this section
-in the ``GaussInt`` namespace.
-First, we define the ``norm`` function and ask you to establish
-some of its properties.
-The proofs are all short.
+我们将本节中所有剩余的定义和定理
+放在 ``GaussInt`` 命名空间中。
+首先，我们定义 ``norm`` 函数并要求你建立
+它的一些性质。
+这些证明都很简短。
 BOTH: -/
 namespace GaussInt
 
@@ -482,7 +474,7 @@ SOLUTIONS: -/
 -- BOTH:
 -- QUOTE.
 /- TEXT:
-Next we define the conjugate function:
+接下来我们定义共轭函数：
 BOTH: -/
 -- QUOTE:
 def conj (x : GaussInt) : GaussInt :=
@@ -500,19 +492,19 @@ theorem norm_conj (x : GaussInt) : norm (conj x) = norm x := by simp [norm]
 -- QUOTE.
 
 /- TEXT:
-Finally, we define division for the Gaussian integers
-with the notation ``x / y``, that rounds the complex quotient to the nearest
-Gaussian integer. We use our bespoke ``Int.div'`` for that purpose.
-As we calculated above, if ``x`` is :math:`a + bi` and ``y`` is :math:`c + di`,
-then the real and imaginary parts of ``x / y`` are the nearest integers to
+最后，我们用记号 ``x / y`` 为高斯整数定义除法，
+它将复商四舍五入到最近的高斯整数。
+我们使用我们定制的 ``Int.div'`` 来实现这一目的。
+正如我们上面计算的，如果 ``x`` 是 :math:`a + bi` 且 ``y`` 是 :math:`c + di`，
+那么 ``x / y`` 的实部和虚部分别是最接近以下数值的
+整数：
 
 .. math::
 
-  \frac{ac + bd}{c^2 + d^2} \quad \text{and} \quad \frac{bc -ad}{c^2+d^2},
+  \frac{ac + bd}{c^2 + d^2} \quad \text{和} \quad \frac{bc -ad}{c^2+d^2},
 
-respectively. Here the numerators are the real and imaginary parts of
-:math:`(a + bi) (c - di)`, and the denominators are both equal to the norm
-of :math:`c + di`.
+这里分子是 :math:`(a + bi) (c - di)` 的实部和虚部，
+分母都等于 :math:`c + di` 的范数。
 BOTH: -/
 -- QUOTE:
 instance : Div GaussInt :=
@@ -520,10 +512,10 @@ instance : Div GaussInt :=
 -- QUOTE.
 
 /- TEXT:
-Having defined ``x / y``, we define ``x % y`` to be the remainder,
-``x - (x / y) * y``. As above, we record the definitions in the
-theorems ``div_def`` and
-``mod_def`` so that we can use them with ``simp`` and ``rw``.
+定义了 ``x / y`` 之后，我们定义 ``x % y`` 为余数，
+``x - (x / y) * y``。如上所述，我们将定义记录在
+定理 ``div_def`` 和
+``mod_def`` 中，以便我们可以用 ``simp`` 和 ``rw`` 使用它们。
 BOTH: -/
 -- QUOTE:
 instance : Mod GaussInt :=
@@ -538,33 +530,32 @@ theorem mod_def (x y : GaussInt) : x % y = x - y * (x / y) :=
 -- QUOTE.
 
 /- TEXT:
-These definitions immediately yield ``x = y * (x / y) + x % y`` for every
-``x`` and ``y``, so all we need to do is show that the norm of ``x % y`` is
-less than the norm of ``y`` when ``y`` is not zero.
+这些定义立即对每个 ``x`` 和 ``y`` 产生
+``x = y * (x / y) + x % y``，因此我们需要做的只是证明当 ``y`` 不为零时，
+``x % y`` 的范数小于 ``y`` 的范数。
 
-We just defined the real and imaginary parts of ``x / y`` to be
-``div' (x * conj y).re (norm y)`` and ``div' (x * conj y).im (norm y)``,
-respectively.
-Calculating, we have
+我们刚刚将 ``x / y`` 的实部和虚部分别定义为
+``div' (x * conj y).re (norm y)`` 和 ``div' (x * conj y).im (norm y)``。
+计算可得，我们有
 
   ``(x % y) * conj y = (x - x / y * y) * conj y = x * conj y - x / y * (y * conj y)``
 
-The real and imaginary parts of the right-hand side are exactly ``mod' (x * conj y).re (norm y)`` and ``mod' (x * conj y).im (norm y)``.
-By the properties of ``div'`` and ``mod'``,
-these are guaranteed to be less than or equal to ``norm y / 2``.
-So we have
+右边表达式的实部和虚部正好是 ``mod' (x * conj y).re (norm y)`` 和 ``mod' (x * conj y).im (norm y)``。
+根据 ``div'`` 和 ``mod'`` 的性质，
+这些被保证小于或等于 ``norm y / 2``。
+所以我们有
 
-  ``norm ((x % y) * conj y) ≤ (norm y / 2)^2 + (norm y / 2)^2 ≤ (norm y / 2) * norm y``.
+  ``norm ((x % y) * conj y) ≤ (norm y / 2)^2 + (norm y / 2)^2 ≤ (norm y / 2) * norm y``。
 
-On the other hand, we have
+另一方面，我们有
 
-  ``norm ((x % y) * conj y) = norm (x % y) * norm (conj y) = norm (x % y) * norm y``.
+  ``norm ((x % y) * conj y) = norm (x % y) * norm (conj y) = norm (x % y) * norm y``。
 
-Dividing through by ``norm y`` we have ``norm (x % y) ≤ (norm y) / 2 < norm y``,
-as required.
+两边除以 ``norm y``，我们得到 ``norm (x % y) ≤ (norm y) / 2 < norm y``，
+正如所需要的那样。
 
-This messy calculation is carried out in the next proof. We encourage you
-to step through the details and see if you can find a nicer argument.
+这个混乱的计算在下一个证明中完成。我们鼓励你
+逐步检查细节，看看你能否找到更好的论证。
 BOTH: -/
 -- QUOTE:
 theorem norm_mod_lt (x : GaussInt) {y : GaussInt} (hy : y ≠ 0) :
@@ -588,13 +579,13 @@ theorem norm_mod_lt (x : GaussInt) {y : GaussInt} (hy : y ≠ 0) :
 -- QUOTE.
 
 /- TEXT:
-We are in the home stretch. Our ``norm`` function maps Gaussian integers to
-nonnegative integers. We need a function that maps Gaussian integers to natural
-numbers, and we obtain that by composing ``norm`` with the function
-``Int.natAbs``, which maps integers to the natural numbers.
-The first of the next two lemmas establishes that mapping the norm to the
-natural numbers and back to the integers does not change the value.
-The second one re-expresses the fact that the norm is decreasing.
+我们快要完成了。我们的 ``norm`` 函数将高斯整数映射到
+非负整数。我们需要一个将高斯整数映射到自然数的函数，
+我们通过将 ``norm`` 与函数
+``Int.natAbs`` 组合来获得，后者将整数映射到自然数。
+接下来两个引理中的第一个建立了将范数映射到自然数
+再映射回整数不会改变其值。
+第二个重新表达了范数递减的事实。
 BOTH: -/
 -- QUOTE:
 theorem coe_natAbs_norm (x : GaussInt) : (x.norm.natAbs : ℤ) = x.norm :=
@@ -608,8 +599,8 @@ theorem natAbs_norm_mod_lt (x y : GaussInt) (hy : y ≠ 0) :
 -- QUOTE.
 
 /- TEXT:
-We also need to establish the second key property of the norm function
-on a Euclidean domain.
+我们还需要建立欧几里得整环上范数函数的
+第二个关键性质。
 BOTH: -/
 -- QUOTE:
 theorem not_norm_mul_left_lt_norm (x : GaussInt) {y : GaussInt} (hy : y ≠ 0) :
@@ -623,16 +614,15 @@ theorem not_norm_mul_left_lt_norm (x : GaussInt) {y : GaussInt} (hy : y ≠ 0) :
 -- QUOTE.
 
 /- TEXT:
-We can now put it together to show that the Gaussian integers are an
-instance of a Euclidean domain. We use the quotient and remainder function we
-have defined.
-The Mathlib definition of a Euclidean domain is more general than the one
-above in that it allows us to show that remainder decreases with respect
-to any well-founded measure.
-Comparing the values of a norm function that returns natural numbers is
-just one instance of such a measure,
-and in that case, the required properties are the theorems
-``natAbs_norm_mod_lt`` and ``not_norm_mul_left_lt_norm``.
+我们现在可以将它们组合起来，证明高斯整数是
+欧几里得整环的一个实例。我们使用我们定义的商和余数函数。
+Mathlib 中欧几里得整环的定义比上面的更一般，
+因为它允许我们证明余数相对于任何良基测度
+递减。
+比较一个返回自然数的范数的值是
+这种测度的仅仅一个实例，
+而在那种情况下，所需的性质就是定理
+``natAbs_norm_mod_lt`` 和 ``not_norm_mul_left_lt_norm``。
 BOTH: -/
 -- QUOTE:
 instance : EuclideanDomain GaussInt :=
@@ -651,8 +641,8 @@ instance : EuclideanDomain GaussInt :=
 -- QUOTE.
 
 /- TEXT:
-An immediate payoff is that we now know that, in the Gaussian integers,
-the notions of being prime and being irreducible coincide.
+一个直接的收获是，我们现在知道，在高斯整数中，
+素元和不可约元的概念是一致的。
 BOTH: -/
 -- QUOTE:
 example (x : GaussInt) : Irreducible x ↔ Prime x :=

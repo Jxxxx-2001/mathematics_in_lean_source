@@ -101,4 +101,3 @@ example {m n k r : ℕ} (nnz : n ≠ 0) (pow_eq : m ^ k = r * n ^ k) {p : ℕ} :
   rw [this]
   apply Nat.dvd_sub <;>
   apply Nat.dvd_mul_right
-

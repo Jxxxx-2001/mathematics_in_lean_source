@@ -4,7 +4,7 @@
       "Bash(elan --version)",
       "Bash(elan show *)",
       "Read(//c/Users/Jxxxx/.elan/toolchains/**)",
-      "Bash(cd e:\\\\\\\\lean\\\\\\\\PKU\\\\\\\\mil_0523)",
+      "Bash(cd e:\\\\\\\\lean\\\\\\\\PKU\\\\\\\\mathematics_in_lean_source)",
       "Bash(elan toolchain *)",
       "Bash(glean --version)",
       "Bash(glean --help)",
@@ -17,7 +17,13 @@
       "Bash(git branch *)",
       "Bash(git checkout *)",
       "Bash(git stash *)",
-      "Bash(git add *)"
+      "Bash(git add *)",
+      "Bash(git commit -m '整合本地修改：添加完整练习解答、中文注释、开发环境配置 *)",
+      "Bash(git push *)",
+      "Bash(git commit *)",
+      "Bash(git config *)",
+      "Read(//e/lean/PKU/**)",
+      "Bash(mv mathematics_in_lean_source *)"
     ]
   }
 }

@@ -2,14 +2,14 @@
 
 .. index:: differential calculus
 
-Differential Calculus
-=====================
+微分学
+======
 
-We now consider the formalization of notions from *analysis*,
-starting with differentiation in this chapter
-and turning integration and measure theory in the next.
-In :numref:`elementary_differential_calculus`, we stick with the
-setting of functions from the real numbers to the real numbers,
-which is familiar from any introductory calculus class.
-In :numref:`normed_spaces`, we then consider the notion of a derivative in
-a much broader setting.
+我们现在考虑 *分析* 中概念的形式化，
+本章从微分开始，
+下一章转向积分和测度论。
+在 :numref:`elementary_differential_calculus` 中，我们停留在
+从实数到实数的函数设定中，
+这是任何入门微积分课程中都熟悉的。
+在 :numref:`normed_spaces` 中，我们将在更广泛的背景下
+考虑导数的概念。

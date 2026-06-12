@@ -15,13 +15,13 @@ variable {W : Type*} [AddCommGroup W] [Module K W]
 open Polynomial Module LinearMap End
 
 example (φ ψ : End K V) : φ * ψ = φ ∘ₗ ψ :=
-  End.mul_eq_comp φ ψ -- `rfl` would also work
+  End.mul_eq_comp φ ψ -- `rfl` 也可以
 
--- evaluating `P` on `φ`
+-- 在 `φ` 上求值 `P`
 example (P : K[X]) (φ : End K V) : V →ₗ[K] V :=
   aeval φ P
 
--- evaluating `X` on `φ` gives back `φ`
+-- 在 `φ` 上求值 `X` 将返回 `φ`
 example (φ : End K V) : aeval φ (X : K[X]) = φ :=
   aeval_X φ
 
@@ -49,12 +49,12 @@ example (P Q : K[X]) (h : IsCoprime P Q) (φ : End K V) :
   apply le_antisymm
   · apply sup_le
     · rw [mul_comm, map_mul]
-      apply ker_le_ker_comp -- or alternative below:
+      apply ker_le_ker_comp -- 或者下面的替代方法：
       -- intro x hx
       -- rw [mul_comm, mem_ker] at *
       -- simp [hx]
     · rw [map_mul]
-      apply ker_le_ker_comp -- or alternative as above
+      apply ker_le_ker_comp -- 或者与上面一样的替代方法
   · intro x hx
     rcases h with ⟨U, V, hUV⟩
     have key : x = aeval φ (U*P) x + aeval φ (V*Q) x := by simpa using congr((aeval φ) $hUV.symm x)
@@ -64,4 +64,3 @@ example (P Q : K[X]) (h : IsCoprime P Q) (φ : End K V) :
           map_zero]
     · rw [← mul_apply, ← map_mul, show Q*(U*P) = U*(P*Q) by ring, map_mul, mul_apply, hx,
           map_zero]
-

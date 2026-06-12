@@ -6,32 +6,26 @@ set_option autoImplicit true
 /- TEXT:
 .. _section_hierarchies_subobjects:
 
-Sub-objects
+子对象
 -----------
 
-After defining some algebraic structure and its morphisms, the next step is to consider sets
-that inherit this algebraic structure, for instance subgroups or subrings.
-This largely overlaps with our previous topic. Indeed a set in ``X`` is implemented as a function from
-``X`` to ``Prop`` so sub-objects are function satisfying a certain predicate.
-Hence we can reuse of lot of the ideas that led to the ``DFunLike`` class and its descendants.
-We won't reuse ``DFunLike`` itself because this would break the abstraction barrier from ``Set X``
-to ``X → Prop``. Instead there is a ``SetLike`` class. Instead of wrapping an injection into a
-function type, that class wraps an injection into a ``Set`` type and defines the corresponding
-coercion and ``Membership`` instance.
+在定义了某种代数结构及其态射之后，下一步是考虑继承此代数结构的集合，例如子群或子环。
+这与我们之前的话题有很大重叠。事实上，``X`` 中的一个集合被实现为从 ``X`` 到 ``Prop`` 的函数，因此子对象是满足某个谓词的函数。
+因此我们可以重用许多导致 ``DFunLike`` 类及其后代的思想。我们不会重用 ``DFunLike`` 本身，因为这会破坏从 ``Set X`` 到 ``X → Prop`` 的抽象屏障。取而代之的是有一个 ``SetLike`` 类。这个类不是将一个单射包装成函数类型，而是将单射包装成 ``Set`` 类型，并定义相应的强制转换和 ``Membership`` 实例。
 
 BOTH: -/
 
 -- QUOTE:
 @[ext]
 structure Submonoid₁ (M : Type) [Monoid M] where
-  /-- The carrier of a submonoid. -/
+  /-- 子幺半群的承载集. -/
   carrier : Set M
-  /-- The product of two elements of a submonoid belongs to the submonoid. -/
+  /-- 子幺半群中两个元素的乘积仍属于该子幺半群. -/
   mul_mem {a b} : a ∈ carrier → b ∈ carrier → a * b ∈ carrier
-  /-- The unit element belongs to the submonoid. -/
+  /-- 单位元属于该子幺半群. -/
   one_mem : 1 ∈ carrier
 
-/-- Submonoids in `M` can be seen as sets in `M`. -/
+/-- `M` 中的子幺半群可以被视为 `M` 中的集合。 -/
 instance [Monoid M] : SetLike (Submonoid₁ M) M where
   coe := Submonoid₁.carrier
   coe_injective' _ _ := Submonoid₁.ext
@@ -39,9 +33,8 @@ instance [Monoid M] : SetLike (Submonoid₁ M) M where
 -- QUOTE.
 
 /- TEXT:
-Equipped with the above ``SetLike`` instance, we can already state naturally that
-a submonoid ``N`` contains ``1`` without using ``N.carrier``.
-We can also silently treat ``N`` as a set in ``M`` as take its direct image under a map.
+配备了上述 ``SetLike`` 实例，我们已经可以自然地陈述子幺半群 ``N`` 包含 ``1`` 而不使用 ``N.carrier``。
+我们也可以默默地将 ``N`` 视为 ``M`` 中的集合，并在映射下取其直接像。
 BOTH: -/
 
 -- QUOTE:
@@ -51,8 +44,7 @@ example [Monoid M] (N : Submonoid₁ M) (α : Type) (f : M → α) := f '' N
 -- QUOTE.
 
 /- TEXT:
-We also have a coercion to ``Type`` which uses ``Subtype`` so, given a submonoid ``N`` we can write
-a parameter ``(x : N)`` which can be coerced to an element of ``M`` belonging to ``N``.
+我们还有到 ``Type`` 的强制转换，它使用 ``Subtype``，因此给定一个子幺半群 ``N``，我们可以写一个参数 ``(x : N)``，它可以被强制转换为属于 ``N`` 的 ``M`` 的元素。
 
 BOTH: -/
 
@@ -61,10 +53,7 @@ example [Monoid M] (N : Submonoid₁ M) (x : N) : (x : M) ∈ N := x.property
 -- QUOTE.
 
 /- TEXT:
-Using this coercion to ``Type`` we can also tackle the task of equipping a submonoid with a
-monoid structure. We will use the coercion from the type associated to ``N`` as above, and the
-lemma ``SetCoe.ext`` asserting this coercion is injective. Both are provided by the ``SetLike``
-instance.
+使用这个到 ``Type`` 的强制转换，我们也可以处理为子幺半群配备幺半群结构的任务。我们将使用从关联于 ``N`` 的类型到 ``M`` 的强制转换，以及断言此强制转换是单射的引理 ``SetCoe.ext``。这两者都由 ``SetLike`` 实例提供。
 
 BOTH: -/
 
@@ -78,8 +67,7 @@ instance SubMonoid₁Monoid [Monoid M] (N : Submonoid₁ M) : Monoid N where
 -- QUOTE.
 
 /- TEXT:
-Note that, in the above instance, instead of using the coercion to ``M`` and calling the
-``property`` field, we could have used destructuring binders as follows.
+注意，在上面的实例中，我们可以不使用到 ``M`` 的强制转换和调用 ``property`` 字段，而是使用解构绑定，如下所示。
 
 BOTH: -/
 
@@ -94,9 +82,7 @@ example [Monoid M] (N : Submonoid₁ M) : Monoid N where
 
 /- TEXT:
 
-In order to apply lemmas about submonoids to subgroups or subrings, we need a class, just
-like for morphisms. Note this class take a ``SetLike`` instance as a parameter so it does not need
-a carrier field and can use the membership notation in its fields.
+为了将关于子幺半群的引理应用于子群或子环，我们需要一个类，就像态射一样。注意，这个类接受一个 ``SetLike`` 实例作为参数，因此它不需要承载集字段，并可以在其字段中使用成员关系记号。
 BOTH: -/
 
 -- QUOTE:
@@ -111,18 +97,16 @@ instance [Monoid M] : SubmonoidClass₁ (Submonoid₁ M) M where
 
 /- TEXT:
 
-As an exercise you should define a ``Subgroup₁`` structure, endow it with a ``SetLike`` instance
-and a ``SubmonoidClass₁`` instance, put a ``Group`` instance on the subtype associated to a
-``Subgroup₁`` and define a ``SubgroupClass₁`` class.
+作为练习，你应该定义一个 ``Subgroup₁`` 结构体，赋予它一个 ``SetLike`` 实例和一个 ``SubmonoidClass₁`` 实例，在关联于 ``Subgroup₁`` 的子类型上放置一个 ``Group`` 实例，并定义一个 ``SubgroupClass₁`` 类。
 
 SOLUTIONS: -/
 @[ext]
 structure Subgroup₁ (G : Type) [Group G] extends Submonoid₁ G where
-  /-- The inverse of an element of a subgroup belongs to the subgroup. -/
+  /-- 子群中元素的逆元仍属于该子群. -/
   inv_mem {a} : a ∈ carrier → a⁻¹ ∈ carrier
 
 
-/-- Subgroups in `M` can be seen as sets in `M`. -/
+/-- `M` 中的子群可以被视为 `M` 中的集合。 -/
 instance [Group G] : SetLike (Subgroup₁ G) G where
   coe := fun H ↦ H.toSubmonoid₁.carrier
   coe_injective' _ _ := Subgroup₁.ext
@@ -145,10 +129,7 @@ instance [Group G] : SubgroupClass₁ (Subgroup₁ G) G :=
   inv_mem := Subgroup₁.inv_mem }
 
 /- TEXT:
-Another very important thing to know about subobjects of a given algebraic object in Mathlib
-always form a complete lattice, and this structure is used a lot. For instance you may look for
-the lemma saying that an intersection of submonoids is a submonoid. But this won't be a lemma,
-this will be an infimum construction. Let us do the case of two submonoids.
+关于 Mathlib 中给定代数对象的子对象，另一件非常重要的事情是，它们总是形成一个完备格，并且这个结构被大量使用。例如，你可能会寻找一个引理，说明子幺半群的交集是子幺半群。但这不会是一个引理，这将是一个下确界构造。让我们考虑两个子幺半群的情况。
 
 BOTH: -/
 
@@ -161,7 +142,7 @@ instance [Monoid M] : Min (Submonoid₁ M) :=
 -- QUOTE.
 
 /- TEXT:
-This allows to get the intersections of two submonoids as a submonoid.
+这允许将两个子幺半群的交集作为子幺半群获得。
 
 BOTH: -/
 
@@ -170,27 +151,11 @@ example [Monoid M] (N P : Submonoid₁ M) : Submonoid₁ M := N ⊓ P
 -- QUOTE.
 
 /- TEXT:
-You may think it's a shame that we had to use the inf symbol ``⊓`` in the above example instead
-of the intersection symbol ``∩``. But think about the supremum. The union of two submonoids is not
-a submonoid. However submonoids still form a lattice (even a complete one). Actually ``N ⊔ P`` is
-the submonoid generated by the union of ``N`` and ``P`` and of course it would be very confusing to
-denote it by ``N ∪ P``. So you can see the use of ``N ⊓ P`` as much more consistent. It is also
-a lot more consistent across various kind of algebraic structures. It may look a bit weird at first
-to see the sum of two vector subspace ``E`` and ``F`` denoted by ``E ⊔ F`` instead of ``E + F``.
-But you will get used to it. And soon you will consider the ``E + F`` notation as a distraction
-emphasizing the anecdotal fact that elements of ``E ⊔ F`` can be written as a sum of an element of
-``E`` and an element of ``F`` instead of emphasizing the fundamental fact that ``E ⊔ F`` is the
-smallest vector subspace containing both ``E`` and ``F``.
+你可能会想，在上面的例子中我们不得不使用下确界符号 ``⊓`` 而不是交集符号 ``∩``，这很可惜。但想想上确界。两个子幺半群的并集不是子幺半群。然而，子幺半群仍然形成一个格（甚至是一个完备格）。实际上 ``N ⊔ P`` 是由 ``N`` 和 ``P`` 的并集生成的子幺半群，当然将其记为 ``N ∪ P`` 会非常混淆。所以你可以看到 ``N ⊓ P`` 的使用更加一致。它也在各种代数结构中更加一致。一开始看到两个向量子空间 ``E`` 和 ``F`` 的和被记为 ``E ⊔ F`` 而不是 ``E + F`` 可能会觉得有点奇怪。但你会习惯的。很快你就会认为 ``E + F`` 记号是一种分散注意力的东西，它强调了 ``E ⊔ F`` 的元素可以写成 ``E`` 的一个元素和 ``F`` 的一个元素之和这一轶事性质，而不是强调 ``E ⊔ F`` 是包含 ``E`` 和 ``F`` 的最小子空间这一基本事实。
 
-Our last topic for this chapter is that of quotients. Again we want to explain how
-convenient notation are built and code duplication is avoided in Mathlib. Here the main device
-is the ``HasQuotient`` class which allows notations like ``M ⧸ N``. Beware the quotient symbol
-``⧸`` is a special unicode character, not a regular ASCII division symbol.
+本章的最后一个主题是商。我们再次想解释 Mathlib 中是如何构建方便的记号以及如何避免代码重复的。这里的主要工具是 ``HasQuotient`` 类，它允许像 ``M ⧸ N`` 这样的记号。注意商符号 ``⧸`` 是一个特殊的 unicode 字符，不是常规的 ASCII 除法符号。
 
-As an example, we will build the quotient of a commutative monoid by a submonoid, leave proofs
-to you. In the last example, you can use ``Setoid.refl`` but it won't automatically pick up
-the relevant ``Setoid`` structure. You can fix this issue by providing all arguments using
-the ``@`` syntax, as in ``@Setoid.refl M N.Setoid``.
+作为示例，我们将构建交换幺半群商掉子幺半群的商，把证明留给你。在最后一个例子中，你可以使用 ``Setoid.refl``，但它不会自动找到相关的 ``Setoid`` 结构。你可以通过使用 ``@`` 语法提供所有参数来解决这个问题，如 ``@Setoid.refl M N.Setoid``。
 
 BOTH: -/
 

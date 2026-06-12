@@ -6,135 +6,126 @@ namespace C06S02
 /- TEXT:
 .. _section_algebraic_structures:
 
-Algebraic Structures
+代数结构
 --------------------
 
-To clarify what we mean by the phrase *algebraic structure*,
-it will help to consider some examples.
+为了澄清我们所说的*代数结构*这个短语的含义，
+考虑一些例子会有所帮助。
 
-#. A *partially ordered set* consists of a set :math:`P` and
-   a binary relation :math:`\le` on :math:`P` that is transitive,
-   reflexive and antisymmetric.
+#. *偏序集*由一个集合 :math:`P` 和 :math:`P` 上的一个二元关系 :math:`\le` 组成，
+   该关系是传递的、自反的和反对称的。
 
-#. A *group* consists of a set :math:`G` with an associative
-   binary operation, an identity element
-   :math:`1`, and a function :math:`g \mapsto g^{-1}` that returns
-   an inverse for each :math:`g` in :math:`G`.
-   A group is *abelian* or *commutative* if the operation is commutative.
+#. *群*由一个集合 :math:`G` 以及一个结合的二元运算、一个单位元
+   :math:`1`，以及一个函数 :math:`g \mapsto g^{-1}` 组成，该函数为
+   :math:`G` 中的每个 :math:`g` 返回一个逆元。
+   如果运算可交换，则称为*阿贝尔群*或*交换群*。
 
-#. A *lattice* is a partially ordered set with meets and joins.
+#. *格*是具有交和并的偏序集。
 
-#. A *ring* consists of an (additively written) abelian group
+#. *环*由一个（加法书写的）阿贝尔群
    :math:`(R, +, 0, x \mapsto -x)`
-   together with an associative multiplication operation
-   :math:`\cdot` and an identity :math:`1`,
-   such that multiplication distributes over addition.
-   A ring is *commutative* if the multiplication is commutative.
+   以及一个结合的乘法运算
+   :math:`\cdot` 和一个单位元 :math:`1` 组成，
+   满足乘法对加法分配。
+   如果乘法可交换，则环是*交换的*。
 
-#. An *ordered ring* :math:`(R, +, 0, -, \cdot, 1, \le)` consists of a ring
-   together with a partial order on its elements, such that :math:`a \le b` implies
-   :math:`a + c \le b + c` for every :math:`a`, :math:`b`, and :math:`c` in :math:`R`,
-   and :math:`0 \le a` and :math:`0 \le b` implies :math:`0 \le a b` for
-   every :math:`a` and :math:`b` in :math:`R`.
+#. *有序环* :math:`(R, +, 0, -, \cdot, 1, \le)` 由一个环
+   以及其元素上的一个偏序组成，满足对 :math:`R` 中任意的 :math:`a`、:math:`b` 和 :math:`c`，
+   若 :math:`a \le b` 则 :math:`a + c \le b + c`，
+   且对 :math:`R` 中任意的 :math:`a` 和 :math:`b`，
+   若 :math:`0 \le a` 且 :math:`0 \le b` 则 :math:`0 \le a b`。
 
-#. A *metric space* consists of a set :math:`X` and a function
-   :math:`d : X \times X \to \mathbb{R}` such that the following hold:
+#. *度量空间*由一个集合 :math:`X` 和一个函数
+   :math:`d : X \times X \to \mathbb{R}` 组成，满足以下条件：
 
-   - :math:`d(x, y) \ge 0` for every :math:`x` and :math:`y` in :math:`X`.
-   - :math:`d(x, y) = 0` if and only if :math:`x = y`.
-   - :math:`d(x, y) = d(y, x)` for every :math:`x` and :math:`y` in :math:`X`.
-   - :math:`d(x, z) \le d(x, y) + d(y, z)` for every :math:`x`, :math:`y`, and
-     :math:`z` in :math:`X`.
+   - 对 :math:`X` 中任意的 :math:`x` 和 :math:`y`，:math:`d(x, y) \ge 0`。
+   - :math:`d(x, y) = 0` 当且仅当 :math:`x = y`。
+   - 对 :math:`X` 中任意的 :math:`x` 和 :math:`y`，:math:`d(x, y) = d(y, x)`。
+   - 对 :math:`X` 中任意的 :math:`x`、:math:`y` 和 :math:`z`，
+     :math:`d(x, z) \le d(x, y) + d(y, z)`。
 
-#. A *topological space* consists of a set :math:`X` and a collection :math:`\mathcal T`
-   of subsets of :math:`X`, called the *open subsets of* :math:`X`, such that
-   the following hold:
+#. *拓扑空间*由一个集合 :math:`X` 和 :math:`X` 的子集的集合 :math:`\mathcal T`
+   组成，这些子集称为 :math:`X` 的*开子集*，满足以下条件：
 
-   - The empty set and :math:`X` are open.
-   - The intersection of two open sets is open.
-   - An arbitrary union of open sets is open.
+   - 空集和 :math:`X` 是开集。
+   - 两个开集的交是开集。
+   - 任意多个开集的并是开集。
 
-In each of these examples, the elements of the structure belong to a
-set, the *carrier set*,
-that sometimes stands proxy for the entire structure.
-For example, when we say "let :math:`G` be a group" and then
-"let :math:`g \in G`," we are using :math:`G` to stand for both
-the structure and its carrier.
-Not every algebraic structure is associated with a single carrier set in this way.
-For example, a *bipartite graph* involves a relation between two sets,
-as does a *Galois connection*.
-A *category* also involves two sets of interest, commonly called the *objects*
-and the *morphisms*.
+在这些例子的每一个中，结构的元素属于一个集合，
+即*基集*，该集合有时代表整个结构。
+例如，当我们说"设 :math:`G` 是一个群"然后
+"设 :math:`g \in G`，"我们将 :math:`G` 用于代表
+结构及其基集。
+并不是每个代数结构都以这种方式与单个基集相关联。
+例如，一个*二部图*涉及两个集合之间的关系，
+*伽罗瓦连接*也是如此。
+一个*范畴*也涉及两个感兴趣的集合，通常称为*对象*
+和*态射*。
 
-The examples indicate some of the things that a proof assistant has to do
-in order to support algebraic reasoning.
-First, it needs to recognize concrete instances of structures.
-The number systems :math:`\mathbb{Z}`, :math:`\mathbb{Q}`,
-and :math:`\mathbb{R}` are all ordered rings,
-and we should be able to apply a generic theorem about ordered rings
-in any of these instances.
-Sometimes a concrete set may be an instance of a structure in more than one way.
-For example, in addition to the usual topology on :math:`\mathbb{R}`,
-which forms the basis for real analysis,
-we can also consider the *discrete* topology on :math:`\mathbb{R}`,
-in which every set is open.
+这些例子指出了证明助手为了支持代数推理
+而必须做的一些事情。
+首先，它需要识别结构的具体实例。
+数系 :math:`\mathbb{Z}`、:math:`\mathbb{Q}`
+和 :math:`\mathbb{R}` 都是有序环，
+我们应该能够在任何这些实例中应用关于有序环的泛型定理。
+有时一个具体的集合可能以不止一种方式成为一个结构的实例。
+例如，除了 :math:`\mathbb{R}` 上构成实分析基础的通常拓扑外，
+我们还可以考虑 :math:`\mathbb{R}` 上的*离散*拓扑，
+其中每个集合都是开集。
 
-Second, a proof assistant needs to support generic notation on structures.
-In Lean, the notation ``*``
-is used for multiplication in all the usual number systems,
-as well as for multiplication in generic groups and rings.
-When we use an expression like ``f x * y``,
-Lean has to use information about the types of ``f``, ``x``, and ``y``
-to determine which multiplication we have in mind.
+其次，证明助手需要支持结构上的泛型记号。
+在 Lean 中，记号 ``*``
+用于所有通常数系中的乘法，
+以及泛型群和环中的乘法。
+当我们使用像 ``f x * y`` 这样的表达式时，
+Lean 必须使用关于 ``f``、``x`` 和 ``y`` 的类型信息
+来确定我们心中所想的乘法是哪一个。
 
-Third, it needs to deal with the fact that structures can inherit
-definitions, theorems, and notation from other structures in various ways.
-Some structures extend others by adding more axioms.
-A commutative ring is still a ring, so any definition
-that makes sense in a ring also makes sense in a commutative ring,
-and any theorem that holds in a ring also holds in a commutative ring.
-Some structures extend others by adding more data.
-For example, the additive part of any ring is an additive group.
-The ring structure adds a multiplication and an identity,
-as well as axioms that govern them and relate them to the additive part.
-Sometimes we can define one structure in terms of another.
-Any metric space has a canonical topology associated with it,
-the *metric space topology*, and there are various topologies that can be
-associated with any linear ordering.
+第三，它需要处理结构可以以各种方式
+从其他结构继承定义、定理和记号的事实。
+一些结构通过添加更多公理来扩展其他结构。
+交换环仍然是环，因此任何在环中有意义的定义
+在交换环中也有意义，
+且任何在环中成立的定理在交换环中也成立。
+一些结构通过添加更多数据来扩展其他结构。
+例如，任何环的加法部分都是一个加法群。
+环结构添加了乘法和一个单位元，
+以及控制它们并将其与加法部分联系起来的公理。
+有时我们可以用另一个结构来定义一个结构。
+任何度量空间都有一个与之关联的规范拓扑，
+即*度量空间拓扑*，并且有各种可以与
+任何线性序相关联的拓扑。
 
-Finally, it is important to keep in mind that mathematics allows us to
-use functions and operations to define structures in the same way we
-use functions and operations to define numbers.
-Products and powers of groups are again groups.
-For every :math:`n`, the integers modulo :math:`n` form a ring,
-and for every :math:`k > 0`, the :math:`k \times k` matrices of polynomials
-with coefficients in that ring again form a ring.
-Thus we can calculate with structures just as easily as we can calculate
-with their elements.
-This means that algebraic structures lead dual lives in mathematics,
-as containers for collections of objects and as objects in their own right.
-A proof assistant has to accommodate this dual role.
+最后，重要的是要记住数学允许我们使用函数和运算
+来定义结构，就像我们使用函数和运算来定义数字一样。
+群的乘积和幂再次是群。
+对每个 :math:`n`，模 :math:`n` 的整数构成一个环，
+且对每个 :math:`k > 0`，系数在该环中的多项式的 :math:`k \times k` 矩阵
+再次构成一个环。
+因此，我们可以像计算结构的元素一样轻松地计算结构本身。
+这意味着代数结构在数学中过着双重生活，
+既作为对象集合的容器，又作为其自身的对象。
+证明助手必须适应这种双重角色。
 
-When dealing with elements of a type that has an algebraic structure
-associated with it,
-a proof assistant needs to recognize the structure and find the relevant
-definitions, theorems, and notation.
-All this should sound like a lot of work, and it is.
-But Lean uses a small collection of fundamental mechanisms to
-carry out these tasks.
-The goal of this section is to explain these mechanisms and show you
-how to use them.
+当处理具有与之关联的代数结构的
+类型的元素时，
+证明助手需要识别该结构并找到相关的
+定义、定理和记号。
+所有这些听起来应该像是大量的工作，而事实也确实如此。
+但 Lean 使用一小组基本机制来
+执行这些任务。
+本节的目标是解释这些机制并向你展示
+如何使用它们。
 
-The first ingredient is almost too obvious to mention:
-formally speaking, algebraic structures are structures in the sense
-of :numref:`section_structures`.
-An algebraic structure is a specification of a bundle of data satisfying
-some axiomatic hypotheses, and we saw in :numref:`section_structures` that
-this is exactly what the ``structure`` command is designed to accommodate.
-It's a marriage made in heaven!
+第一个要素几乎显而易见，以至于不需要提及：
+从形式上讲，代数结构就是
+:numref:`section_structures` 意义上的结构体。
+代数结构是满足某些公理假设的数据束的规范说明，
+我们在 :numref:`section_structures` 中看到
+这正是 ``structure`` 命令被设计来容纳的。
+这真是天作之合！
 
-Given a data type ``α``, we can define a group structure on ``α``
-as follows.
+给定一个数据类型 ``α``，我们可以如下在 ``α`` 上定义一个群结构。
 EXAMPLES: -/
 -- QUOTE:
 structure Group₁ (α : Type*) where
@@ -147,36 +138,34 @@ structure Group₁ (α : Type*) where
   inv_mul_cancel : ∀ x : α, mul (inv x) x = one
 -- QUOTE.
 
--- OMIT: TODO: explain the extends command later, and also redundant inheritance
+-- OMIT: TODO: 稍后解释 extends 命令，以及冗余继承
 /- TEXT:
-Notice that the type ``α`` is a *parameter* in the definition of ``Group₁``.
-So you should think of an object ``struc : Group₁ α`` as being
-a group structure on ``α``.
-We saw in :numref:`proving_identities_in_algebraic_structures`
-that the counterpart ``mul_inv_cancel`` to ``inv_mul_cancel``
-follows from the other group axioms, so there is no need
-to add it to the definition.
+请注意类型 ``α`` 是 ``Group₁`` 定义中的一个*参数*。
+所以你应该将对象 ``struc : Group₁ α`` 视为
+``α`` 上的一个群结构。
+我们在 :numref:`proving_identities_in_algebraic_structures` 中看到
+与 ``inv_mul_cancel`` 对应的 ``mul_inv_cancel``
+可以从其他群公理推出，因此无需
+将其添加到定义中。
 
-This definition of a group is similar to the definition of ``Group`` in
-Mathlib,
-and we have chosen the name ``Group₁`` to distinguish our version.
-If you write ``#check Group`` and ctrl-click on the definition,
-you will see that the Mathlib version of ``Group`` is defined to
-extend another structure; we will explain how to do that later.
-If you type ``#print Group`` you will also see that the Mathlib
-version of ``Group`` has a number of extra fields.
-For reasons we will explain later, sometimes it is useful to add
-redundant information to a structure,
-so that there are additional fields for objects and functions
-that can be defined from the core
-data. Don't worry about that for now.
-Rest assured that our simplified version ``Group₁`` is
-morally the same as the definition of a group that Mathlib uses.
+这个群的定义类似于 Mathlib 中 ``Group`` 的定义，
+我们选择了名称 ``Group₁`` 以区别于我们的版本。
+如果你写 ``#check Group`` 并在定义上按 ctrl-click，
+你会看到 Mathlib 中的 ``Group`` 被定义为扩展另一个结构体；
+我们将在后面解释如何做到这一点。
+如果你输入 ``#print Group``，你还会看到 Mathlib
+中的 ``Group`` 有许多额外的字段。
+由于我们稍后将解释的原因，有时向结构体添加
+冗余信息是有用的，
+这样就有额外的字段用于可以从核心数据
+定义的对象和函数。
+现在不用担心这个。
+请放心，我们简化的版本 ``Group₁`` 在本质上
+与 Mathlib 使用的群的定义是相同的。
 
-It is sometimes useful to bundle
-the type together with the structure, and Mathlib also
-contains a definition of a ``Grp`` structure that is equivalent to
-the following:
+有时将类型与结构体捆绑在一起是有用的，Mathlib 还
+包含一个 ``Grp`` 结构的定义，它等价于
+以下内容：
 EXAMPLES: -/
 -- QUOTE:
 structure Grp₁ where
@@ -185,28 +174,28 @@ structure Grp₁ where
 -- QUOTE.
 
 /- TEXT:
-The Mathlib version is found in ``Mathlib.Algebra.Category.Grp.Basic``,
-and you can ``#check`` it if you add this to the imports at the
-beginning of the examples file.
+Mathlib 版本位于 ``Mathlib.Algebra.Category.Grp.Basic``，
+如果你将它添加到示例文件开头的导入中，就可以
+``#check`` 它。
 
-For reasons that will become clearer below, it is more often
-useful to keep the type ``α`` separate from the structure ``Group α``.
-We refer to the two objects together as a *partially bundled structure*,
-since the representation combines most, but not all, of the components
-into one structure. It is common in Mathlib
-to use capital roman letters like ``G`` for a type
-when it is used as the carrier type for a group.
+由于下面将变得更清晰的原因，更常见的是
+将类型 ``α`` 与结构 ``Group α`` 分开，
+这更有用。
+我们将这两个对象一起称为*部分打包的结构体*，
+因为该表示将大部分（但不是全部）分量
+组合到一个结构体中。在 Mathlib 中，
+当类型被用作群的基类型时，
+通常使用大写罗马字母如 ``G`` 来表示。
 
-Let's construct a group, which is to say, an element of the ``Group₁`` type.
-For any pair of types ``α`` and ``β``, Mathlib defines the type ``Equiv α β``
-of *equivalences* between ``α`` and ``β``.
-Mathlib also defines the suggestive notation ``α ≃ β`` for this type.
-An element ``f : α ≃ β`` is a bijection between ``α`` and ``β``
-represented by four components:
-a function ``f.toFun`` from ``α`` to ``β``,
-the inverse function ``f.invFun`` from ``β`` to ``α``,
-and two properties that specify these functions are indeed inverse
-to one another.
+让我们构造一个群，也就是说，构造 ``Group₁`` 类型的一个元素。
+对于任意一对类型 ``α`` 和 ``β``，Mathlib 定义了 ``α`` 和 ``β`` 之间
+*等价关系*的类型 ``Equiv α β``。
+Mathlib 还为该类型定义了提示性的记号 ``α ≃ β``。
+一个元素 ``f : α ≃ β`` 是 ``α`` 和 ``β`` 之间的双射，
+由四个分量表示：
+从 ``α`` 到 ``β`` 的函数 ``f.toFun``，
+从 ``β`` 到 ``α`` 的逆函数 ``f.invFun``，
+以及两个指定这些函数确实互逆的性质。
 EXAMPLES: -/
 section
 -- QUOTE:
@@ -224,15 +213,15 @@ variable (f : α ≃ β) (g : β ≃ γ)
 -- QUOTE.
 
 /- TEXT:
-Notice the creative naming of the last three constructions. We think of the
-identity function ``Equiv.refl``, the inverse operation ``Equiv.symm``,
-and the composition operation ``Equiv.trans`` as explicit evidence
-that the property of being in bijective correspondence is an equivalence relation.
+请注意最后三个构造的创造性命名。我们将
+恒等函数 ``Equiv.refl``、逆运算 ``Equiv.symm``
+和复合运算 ``Equiv.trans`` 视为存在双射对应关系
+这一性质是等价关系的显式证据。
 
-Notice also that ``f.trans g`` requires composing the forward functions
-in reverse order. Mathlib has declared a *coercion* from ``Equiv α β``
-to the function type ``α → β``, so we can omit writing ``.toFun``
-and have Lean insert it for us.
+还请注意 ``f.trans g`` 需要按逆序复合前向函数。
+Mathlib 声明了一个从 ``Equiv α β``
+到函数类型 ``α → β`` 的*强制转换*，因此我们可以省略写 ``.toFun``
+而让 Lean 为我们插入它。
 EXAMPLES: -/
 -- QUOTE:
 example (x : α) : (f.trans g).toFun x = g.toFun (f.toFun x) :=
@@ -248,8 +237,7 @@ example : (f.trans g : α → γ) = g ∘ f :=
 end
 
 /- TEXT:
-Mathlib also defines the type ``Perm α`` of equivalences between
-``α`` and itself.
+Mathlib 还定义了 ``α`` 与自身的等价关系的类型 ``Perm α``。
 EXAMPLES: -/
 -- QUOTE:
 example (α : Type*) : Equiv.Perm α = (α ≃ α) :=
@@ -257,11 +245,11 @@ example (α : Type*) : Equiv.Perm α = (α ≃ α) :=
 -- QUOTE.
 
 /- TEXT:
-It should be clear that ``Equiv.Perm α`` forms a group under composition
-of equivalences. We orient things so that ``mul f g`` is
-equal to ``g.trans f``, whose forward function is ``f ∘ g``.
-In other words, multiplication is what we ordinarily think of as
-composition of the bijections. Here we define this group:
+很明显，``Equiv.Perm α`` 在等价关系的复合下构成一个群。
+我们以这样的方式定向，使得 ``mul f g`` 等于 ``g.trans f``，
+其前向函数是 ``f ∘ g``。
+换句话说，乘法就是我们通常认为的
+双射的复合。这里我们定义这个群：
 EXAMPLES: -/
 -- QUOTE:
 def permGroup {α : Type*} : Group₁ (Equiv.Perm α)
@@ -276,45 +264,44 @@ def permGroup {α : Type*} : Group₁ (Equiv.Perm α)
 -- QUOTE.
 
 /- TEXT:
-In fact, Mathlib defines exactly this ``Group`` structure on ``Equiv.Perm α``
-in the file ``Algebra.Group.End``.
-As always, you can hover over the theorems used in the definition of
-``permGroup`` to see their statements,
-and you can jump to their definitions in the original file to learn
-more about how they are implemented.
+实际上，Mathlib 在文件 ``Algebra.Group.End`` 中正好在 ``Equiv.Perm α`` 上
+定义了这个 ``Group`` 结构。
+一如既往，你可以将鼠标悬停在 ``permGroup`` 的定义中所使用的定理上
+来查看它们的陈述，
+你也可以跳转到原始文件中它们的定义来了解更多
+关于它们是如何实现的。
 
-In ordinary mathematics, we generally think of notation as
-independent of structure.
-For example, we can consider groups :math:`(G_1, \cdot, 1, \cdot^{-1})`,
-:math:`(G_2, \circ, e, i(\cdot))`, and :math:`(G_3, +, 0, -)`.
-In the first case, we write the binary operation as :math:`\cdot`,
-the identity as :math:`1`, and the inverse function as :math:`x \mapsto x^{-1}`.
-In the second and third cases, we use the notational alternatives shown.
-When we formalize the notion of a group in Lean, however,
-the notation is more tightly linked to the structure.
-In Lean, the components of any ``Group`` are named
-``mul``, ``one``, and ``inv``,
-and in a moment we will see how multiplicative notation is
-set up to refer to them.
-If we want to use additive notation, we instead use an isomorphic structure
-``AddGroup`` (the structure underlying additive groups). Its components are named ``add``, ``zero``,
-and ``neg``, and the associated notation is what you would expect it to be.
+在通常的数学中，我们通常认为记号是
+独立于结构的。
+例如，我们可以考虑群 :math:`(G_1, \cdot, 1, \cdot^{-1})`、
+:math:`(G_2, \circ, e, i(\cdot))` 和 :math:`(G_3, +, 0, -)`。
+在第一种情况下，我们将二元运算写作 :math:`\cdot`，
+单位元写作 :math:`1`，逆函数写作 :math:`x \mapsto x^{-1}`。
+在第二和第三种情况下，我们使用所示的记号替代方案。
+然而，当我们在 Lean 中形式化群的概念时，
+记号更紧密地与结构相关联。
+在 Lean 中，任何 ``Group`` 的分量被命名为
+``mul``、``one`` 和 ``inv``，
+稍后我们将看到乘法记号是
+如何设置为引用它们的。
+如果我们想使用加法记号，我们改为使用同构的结构体
+``AddGroup``（加法群底层的结构体）。其分量命名为 ``add``、``zero``
+和 ``neg``，关联的记号正如你所期望的那样。
 
-Recall the type ``Point`` that we defined in :numref:`section_structures`,
-and the addition function that we defined there.
-These definitions are reproduced in the examples file that accompanies
-this section.
-As an exercise, define an ``AddGroup₁`` structure that is similar
-to the ``Group₁`` structure we defined above, except that it uses the
-additive naming scheme just described.
-Define negation and a zero on the ``Point`` data type,
-and define the ``AddGroup₁`` structure on ``Point``.
+回忆我们在 :numref:`section_structures` 中定义的类型 ``Point``，
+以及我们在那里定义的加法函数。
+这些定义在本节附带的示例文件中被重现。
+作为练习，定义一个类似于我们上面定义的
+``Group₁`` 结构体的 ``AddGroup₁`` 结构体，只是它使用刚才描述的
+加法命名方案。
+在 ``Point`` 数据类型上定义负元和一个零元，
+并在 ``Point`` 上定义 ``AddGroup₁`` 结构体。
 BOTH: -/
 -- QUOTE:
 structure AddGroup₁ (α : Type*) where
 /- EXAMPLES:
   (add : α → α → α)
-  -- fill in the rest
+  -- 填写剩余部分
 SOLUTIONS: -/
   add : α → α → α
   zero : α
@@ -364,18 +351,18 @@ end Point
 -- QUOTE.
 
 /- TEXT:
-We are making progress.
-Now we know how to define algebraic structures in Lean,
-and we know how to define instances of those structures.
-But we also want to associate notation with structures
-so that we can use it with each instance.
-Moreover, we want to arrange it so that we can define an operation
-on a structure and use it with any particular instance,
-and we want to arrange it so that we can prove a theorem about
-a structure and use it with any instance.
+我们正在取得进展。
+现在我们知道如何在 Lean 中定义代数结构，
+也知道如何定义这些结构的实例。
+但我们也想将记号与结构关联起来，
+以便我们可以对每个实例使用它。
+此外，我们想安排它使得我们可以定义一个
+结构上的运算并将其用于任何特定实例，
+并且我们想安排它使得我们可以证明一个关于
+结构的定理并将其用于任何实例。
 
-In fact, Mathlib is already set up to use generic group notation,
-definitions, and theorems for ``Equiv.Perm α``.
+实际上，Mathlib 已经设置为对 ``Equiv.Perm α`` 使用泛型群记号、
+定义和定理。
 EXAMPLES: -/
 section
 -- QUOTE:
@@ -384,7 +371,7 @@ variable {α : Type*} (f g : Equiv.Perm α) (n : ℕ)
 #check f * g
 #check mul_assoc f g g⁻¹
 
--- group power, defined for any group
+-- 群幂，对任何群定义
 #check g ^ n
 
 example : f * g * g⁻¹ = f := by rw [mul_assoc, mul_inv_cancel, mul_one]
@@ -399,72 +386,70 @@ example {α : Type*} (f g : Equiv.Perm α) : g.symm.trans (g.trans f) = f :=
 end
 
 /- TEXT:
-You can check that this is not the case for the additive group structure
-on ``Point`` that we asked you to define above.
-Our task now is to understand that magic that goes on under the hood
-in order to make the examples for ``Equiv.Perm α`` work the way they do.
+你可以检查，对于我们上面要求你在 ``Point`` 上定义的加法群结构，
+情况并非如此。
+我们现在的任务是理解在幕后发生的魔法，
+以使 ``Equiv.Perm α`` 的例子按它们的方式工作。
 
-The issue is that Lean needs to be able to *find* the relevant
-notation and the implicit group structure,
-using the information that is found in the expressions that we type.
-Similarly, when we write ``x + y`` with expressions ``x`` and ``y``
-that have type ``ℝ``, Lean needs to interpret the ``+``
-symbol as the relevant addition function on the reals.
-It also has to recognize the type ``ℝ`` as an instance of a commutative ring,
-so that all the definitions and theorems for a commutative ring are available.
-For another example,
-continuity is defined in Lean relative to any two topological spaces.
-When we have ``f : ℝ → ℂ`` and we write ``Continuous f``, Lean has to find the
-relevant topologies on ``ℝ`` and ``ℂ``.
+问题在于 Lean 需要能够使用我们在
+输入的表达式中所找到的信息来*找到*相关的记号和隐含的群结构。
+类似地，当我们用类型为 ``ℝ`` 的表达式 ``x`` 和 ``y`` 写出 ``x + y`` 时，
+Lean 需要将 ``+`` 符号解释为实数上的相关加法函数。
+它还必须认出类型 ``ℝ`` 是交换环的一个实例，
+以便交换环的所有定义和定理都可用。
+另一个例子，
+连续性在 Lean 中是相对于任意两个拓扑空间定义的。
+当我们有 ``f : ℝ → ℂ`` 并写 ``Continuous f`` 时，Lean 必须找到
+``ℝ`` 和 ``ℂ`` 上的相关拓扑。
 
-The magic is achieved with a combination of three things.
+这个魔法是通过三样东西的组合实现的。
 
-#. *Logic.* A definition that should be interpreted in any group takes, as
-   arguments, the type of the group and the group structure as arguments.
-   Similarly, a theorem about the elements of an arbitrary group
-   begins with universal quantifiers over
-   the type of the group and the group structure.
+#. *逻辑。* 一个应该在任意群中解释的定义，
+   将群的类型和群结构作为参数。
+   类似地，一个关于任意群的元素的定理
+   以关于群的类型和群结构的
+   全称量词开始。
 
-#. *Implicit arguments.* The arguments for the type and the structure
-   are generally left implicit, so that we do not have to write them
-   or see them in the Lean information window. Lean fills the
-   information in for us silently.
+#. *隐式参数。* 类型和结构的参数
+   通常保持隐式，这样我们就不必写它们
+   或在 Lean 信息窗口中看到它们。Lean 默默地
+   为我们填写信息。
 
-#. *Type class inference.* Also known as *class inference*,
-   this is a simple but powerful mechanism
-   that enables us to register information for Lean to use later on.
-   When Lean is called on to fill in implicit arguments to a
-   definition, theorem, or piece of notation,
-   it can make use of information that has been registered.
+#. *类型类推断。* 也称为*类推断*，
+   这是一个简单但强大的机制，
+   使我们能够注册信息以供 Lean 以后使用。
+   当 Lean 被要求填写定义、定理或记号的
+   隐式参数时，
+   它可以使用已注册的信息。
 
-Whereas an annotation ``(grp : Group G)`` tells Lean that it should
-expect to be given that argument explicitly and the annotation
-``{grp : Group G}`` tells Lean that it should try to figure it out
-from contextual cues in the expression,
-the annotation ``[grp : Group G]`` tells Lean that the corresponding
-argument should be synthesized using type class inference.
-Since the whole point to the use of such arguments is that
-we generally do not need to refer to them explicitly,
-Lean allows us to write ``[Group G]`` and leave the name anonymous.
-You have probably already noticed that Lean chooses names like ``_inst_1``
-automatically.
-When we use the anonymous square-bracket annotation with the ``variable`` command,
-then as long as the variables are still in scope,
-Lean automatically adds the argument ``[Group G]`` to any definition or
-theorem that mentions ``G``.
+注解 ``(grp : Group G)`` 告诉 Lean 它应该
+期望被显式地给定该参数，注解
+``{grp : Group G}`` 告诉 Lean 它应该尝试从表达式中的
+上下文线索来推断它，
+而注解 ``[grp : Group G]`` 告诉 Lean 相应的
+参数应该使用类型类推断来合成。
+由于使用此类参数的全部意义在于
+我们通常不需要显式地引用它们，
+Lean 允许我们写 ``[Group G]`` 并将名称保持为匿名。
+你可能已经注意到 Lean 自动选择像 ``_inst_1`` 这样的
+名称。
+当我们将匿名方括号注解与 ``variable`` 命令一起使用时，
+那么只要变量仍然在作用域内，
+Lean 自动将参数 ``[Group G]`` 添加到任何提及 ``G`` 的定义或
+定理中。
 
-How do we register the information that Lean needs to use to carry
-out the search?
-Returning to our group example, we need only make two changes.
-First, instead of using the ``structure`` command to define the group structure,
-we use the keyword ``class`` to indicate that it is a candidate
-for class inference.
-Second, instead of defining particular instances with ``def``,
-we use the keyword ``instance`` to register the particular instance with
-Lean. As with the names of class variables, we are allowed to leave the
-name of an instance definition anonymous,
-since in general we intend Lean to find it and put it to use
-without troubling us with the details.
+我们如何注册 Lean 用于执行搜索
+所需的信息？
+回到我们的群例子，我们只需要做两个更改。
+首先，不使用 ``structure`` 命令来定义群结构，
+我们使用关键字 ``class`` 来指示它是
+类推断的候选。
+其次，不使用 ``def`` 定义特定实例，
+我们使用关键字 ``instance`` 向 Lean 注册特定实例。
+与类变量的名称一样，我们允许将
+实例定义的名称保持匿名，
+因为一般来说我们打算让 Lean 找到它并使用它，
+而不用细节来困扰我们。
 EXAMPLES: -/
 -- QUOTE:
 class Group₂ (α : Type*) where
@@ -487,7 +472,7 @@ instance {α : Type*} : Group₂ (Equiv.Perm α) where
 -- QUOTE.
 
 /- TEXT:
-The following illustrates their use.
+以下示例说明了它们的用法。
 EXAMPLES: -/
 -- QUOTE:
 #check Group₂.mul
@@ -510,36 +495,35 @@ end
 -- QUOTE.
 
 /- TEXT:
-The ``#check`` command shows that ``Group₂.mul`` has an implicit argument
-``[Group₂ α]`` that we expect to be found by class inference,
-where ``α`` is the type of the arguments to ``Group₂.mul``.
-In other words, ``{α : Type*}`` is the implicit argument for the type
-of the group elements and ``[Group₂ α]`` is the implicit argument for the
-group structure on ``α``.
-Similarly, when we define a generic squaring function ``my_square``
-for ``Group₂``, we use an implicit argument ``{α : Type*}`` for
-the type of the elements and an implicit argument ``[Group₂ α]`` for
-the ``Group₂`` structure.
+``#check`` 命令显示 ``Group₂.mul`` 有一个隐式参数
+``[Group₂ α]``，我们期望通过类推断找到它，
+其中 ``α`` 是 ``Group₂.mul`` 的参数的类型。
+换句话说，``{α : Type*}`` 是群元素类型的隐式参数，
+``[Group₂ α]`` 是 ``α`` 上群结构的隐式参数。
+类似地，当我们为 ``Group₂`` 定义一个泛型平方函数 ``my_square`` 时，
+我们使用隐式参数 ``{α : Type*}`` 表示元素类型，
+并使用隐式参数 ``[Group₂ α]`` 表示
+``Group₂`` 结构。
 
-In the first example,
-when we write ``Group₂.mul f g``, the type of ``f`` and ``g``
-tells Lean that in the argument ``α`` to ``Group₂.mul``
-has to be instantiated to ``Equiv.Perm β``.
-That means that Lean has to find an element of ``Group₂ (Equiv.Perm β)``.
-The previous ``instance`` declaration tells Lean exactly how to do that.
-Problem solved!
+在第一个例子中，
+当我们写 ``Group₂.mul f g`` 时，``f`` 和 ``g`` 的类型
+告诉 Lean ``Group₂.mul`` 中参数 ``α``
+必须实例化为 ``Equiv.Perm β``。
+这意味着 Lean 必须找到 ``Group₂ (Equiv.Perm β)`` 的一个元素。
+前面的 ``instance`` 声明正好告诉 Lean 如何做到这一点。
+问题解决了！
 
-This simple mechanism for registering information so that Lean can find it
-when it needs it is remarkably useful.
-Here is one way it comes up.
-In Lean's foundation, a data type ``α`` may be empty.
-In a number of applications, however, it is useful to know that a
-type has at least one element.
-For example, the function ``List.headI``, which returns the first
-element of a list, can return the default value when the list is empty.
-To make that work, the Lean library defines a class ``Inhabited α``,
-which does nothing more than store a default value.
-We can show that the ``Point`` type is an instance:
+这种为了在 Lean 需要时找到信息而注册信息
+的简单机制非常有用。
+这里有一种它的应用方式。
+在 Lean 的基础中，数据类型 ``α`` 可能为空。
+然而，在许多应用中，知道一个类型至少有一个元素
+是有用的。
+例如，函数 ``List.headI`` 返回列表的第一个元素，
+当列表为空时可以返回默认值。
+为了实现这一点，Lean 库定义了一个类 ``Inhabited α``，
+它仅仅存储一个默认值。
+我们可以证明 ``Point`` 类型是一个实例：
 EXAMPLES: -/
 -- QUOTE:
 instance : Inhabited Point where default := ⟨0, 0, 0⟩
@@ -551,13 +535,13 @@ example : ([] : List Point).headI = default :=
 -- QUOTE.
 
 /- TEXT:
-The class inference mechanism is also used for generic notation.
-The expression ``x + y`` is an abbreviation for ``Add.add x y``
-where---you guessed it---``Add α`` is a class that stores
-a binary function on ``α``.
-Writing ``x + y`` tells Lean to find a registered instance of ``[Add.add α]``
-and use the corresponding function.
-Below, we register the addition function for ``Point``.
+类推断机制也用于泛型记号。
+表达式 ``x + y`` 是 ``Add.add x y`` 的缩写，
+其中——你猜对了——``Add α`` 是一个存储
+``α`` 上一个二元函数的类。
+写 ``x + y`` 告诉 Lean 找到一个已注册的 ``[Add.add α]`` 实例
+并使用相应的函数。
+下面，我们为 ``Point`` 注册加法函数。
 EXAMPLES: -/
 -- QUOTE:
 instance : Add Point where add := Point.add
@@ -574,16 +558,14 @@ end
 -- QUOTE.
 
 /- TEXT:
-In this way, we can assign the notation ``+`` to binary operations on other
-types as well.
+这样，我们也可以将记号 ``+`` 分配给其他类型的二元运算。
 
-But we can do even better. We have seen that ``*`` can be used in any
-group, ``+`` can be used in any additive group, and both can be used in
-any ring.
-When we define a new instance of a ring in Lean,
-we don't have to define ``+`` and ``*`` for that instance,
-because Lean knows that these are defined for every ring.
-We can use this method to specify notation for our ``Group₂`` class:
+但我们还可以做得更好。我们已经看到 ``*`` 可以在任何群中使用，
+``+`` 可以在任何加法群中使用，两者都可以在任何环中使用。
+当我们在 Lean 中定义环的新实例时，
+我们不必为该实例定义 ``+`` 和 ``*``，
+因为 Lean 知道这些对每个环都是已定义的。
+我们可以使用这种方法为我们的 ``Group₂`` 类指定记号：
 EXAMPLES: -/
 -- QUOTE:
 instance {α : Type*} [Group₂ α] : Mul α :=
@@ -607,47 +589,44 @@ end
 -- QUOTE.
 
 /- TEXT:
-What makes this approach work is that Lean carries out a recursive search.
-According to the instances we have declared, Lean can find an instance of
-``Mul (Equiv.Perm α)`` by finding an
-instance of ``Group₂ (Equiv.Perm α)``, and it can find an instance of
-``Group₂ (Equiv.Perm α)`` because we have provided one.
-Lean is capable of finding these two facts and chaining them together.
+使这种方法有效的原因是 Lean 执行递归搜索。
+根据我们已声明的实例，Lean 可以通过找到
+一个 ``Group₂ (Equiv.Perm α)`` 的实例来找到 ``Mul (Equiv.Perm α)`` 的实例，
+而它可以找到 ``Group₂ (Equiv.Perm α)`` 的实例，因为我们提供了它。
+Lean 能够找到这两个事实并将它们链接在一起。
 
-The example we have just given is dangerous, because Lean's
-library also has an instance of ``Group (Equiv.Perm α)``, and
-multiplication is defined on any group.
-So it is ambiguous as to which instance is found.
-In fact, Lean favors more recent declarations unless you explicitly
-specify a different priority.
-Also, there is another way to tell Lean that one structure is an
-instance of another, using the ``extends`` keyword.
-This is how Mathlib specifies that, for example,
-every commutative ring is a ring.
-You can find more information in :numref:`hierarchies` and in a
-`section on class inference <https://leanprover.github.io/theorem_proving_in_lean4/Type-Classes/#managing-type-class-inference>`_ in *Theorem Proving in Lean*.
+我们刚刚给出的例子是危险的，因为 Lean 的
+库中也有一个 ``Group (Equiv.Perm α)`` 的实例，并且
+乘法是在任何群上定义的。
+因此关于找到哪个实例是不明确的。
+实际上，除非你显式指定不同的优先级，Lean 更倾向于最近声明的实例。
+另外，还有另一种方法告诉 Lean 一个结构体是另一个结构体的
+实例，使用 ``extends`` 关键字。
+这就是 Mathlib 指定例如每个交换环
+都是环的方式。
+你可以在 :numref:`hierarchies` 和 *Theorem Proving in Lean* 中关于
+`类推断的章节 <https://leanprover.github.io/theorem_proving_in_lean4/Type-Classes/#managing-type-class-inference>`_ 找到更多信息。
 
-In general, it is a bad idea to specify a value of
-``*`` for an instance of an algebraic structure that already has
-the notation defined.
-Redefining the notion of ``Group`` in Lean is an artificial example.
-In this case, however, both interpretations of the group notation unfold to
-``Equiv.trans``, ``Equiv.refl``, and ``Equiv.symm``, in the same way.
+一般来说，为已经定义了记号的
+代数结构的实例指定 ``*`` 的值
+是一个坏主意。
+在 Lean 中重新定义 ``Group`` 的概念是一个人为的例子。
+然而，在这种情况下，两种对群记号的解释都以相同的方式展开为
+``Equiv.trans``、``Equiv.refl`` 和 ``Equiv.symm``。
 
-As a similarly artificial exercise,
-define a class ``AddGroup₂`` in analogy to ``Group₂``.
-Define the usual notation for addition, negation, and zero
-on any ``AddGroup₂``
-using the classes ``Add``, ``Neg``, and ``Zero``.
-Then show ``Point`` is an instance of ``AddGroup₂``.
-Try it out and make sure that the additive group notation works for
-elements of ``Point``.
+作为一个类似的人为练习，
+在 ``Group₂`` 的类比中定义一个类 ``AddGroup₂``。
+对任何 ``AddGroup₂`` 使用 ``Add``、``Neg`` 和 ``Zero`` 类
+定义通常的加法、负元和零的记号。
+然后证明 ``Point`` 是 ``AddGroup₂`` 的一个实例。
+试试看，确保加法群记号对
+``Point`` 的元素有效。
 BOTH: -/
 -- QUOTE:
 class AddGroup₂ (α : Type*) where
 /- EXAMPLES:
   add : α → α → α
-  -- fill in the rest
+  -- 填写剩余部分
 -- QUOTE.
 SOLUTIONS: -/
   add : α → α → α
@@ -684,14 +663,13 @@ variable (x y : Point)
 end
 
 /- TEXT:
-It is not a big problem that we have already declared instances
-``Add``, ``Neg``, and ``Zero`` for ``Point`` above.
-Once again, the two ways of synthesizing the notation should come up
-with the same answer.
+我们已经在上面对 ``Point`` 声明了 ``Add``、``Neg`` 和 ``Zero`` 的实例，
+这不算什么大问题。
+再次，两种合成记号的方式应该得出相同的答案。
 
-Class inference is subtle, and you have to be careful when using it,
-because it configures automation that invisibly governs the interpretation of
-the expressions we type.
-When used wisely, however, class inference is a powerful tool.
-It is what makes algebraic reasoning possible in Lean.
+类推断是微妙的，你在使用时必须小心，
+因为它配置了自动化，无形地支配着我们输入的
+表达式的解释。
+然而，当明智地使用时，类推断是一个强大的工具。
+它使得在 Lean 中进行代数推理成为可能。
 TEXT. -/

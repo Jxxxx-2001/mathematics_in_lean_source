@@ -7,45 +7,37 @@ set_option autoImplicit true
 /- TEXT:
 .. _section_hierarchies_basics:
 
-Basics
+基础知识
 ------
 
-At the very bottom of all hierarchies in Lean, we find data-carrying
-classes. The following class records that the given type ``α`` is endowed with
-a distinguished element called ``one``. At this stage, it has no property at all.
+在 Lean 中所有层级的最底层，我们找到的是承载数据的类。下面的类记录了给定类型 ``α`` 具有一个称为 ``one`` 的特定元素。在这个阶段，它还没有任何性质。
 BOTH: -/
 
 -- QUOTE:
 class One₁ (α : Type) where
-  /-- The element one -/
+  /-- 元素 one -/
   one : α
 -- QUOTE.
 
 /- TEXT:
-Since we'll make a much heavier use of classes in this chapter, we need to understand some
-more details about what the ``class`` command is doing.
-First, the ``class`` command above defines a structure ``One₁`` with parameter ``α : Type`` and
-a single field ``one``. It also mark this structure as a class so that arguments of type
-``One₁ α`` for some type ``α`` will be inferrable using the instance resolution procedure,
-as long as they are marked as instance-implicit, i.e. appear between square brackets.
-Those two effects could also have been achieved using the ``structure`` command with ``class``
-attribute, i.e. writing ``@[class] structure`` instance of ``class``. But the class command also
-ensures that ``One₁ α`` appears as an instance-implicit argument in its own fields. Compare:
+由于我们在本章中将更大量地使用类，我们需要更详细地了解 ``class`` 命令到底做了什么。
+首先，上面的 ``class`` 命令定义了一个带有参数 ``α : Type`` 和单个字段 ``one`` 的结构体 ``One₁``。它还将此结构体标记为类，这样对于某个类型 ``α`` 的参数 ``One₁ α`` 就可以通过实例解析过程来推断，只要它们被标记为实例隐式参数（即出现在方括号中）。
+这两种效果也可以通过使用带有 ``class`` 属性的 ``structure`` 命令来实现，即写成 ``@[class] structure`` 而不是 ``class``。但 class 命令还确保 ``One₁ α`` 在其自身的字段中作为实例隐式参数出现。请比较：
 BOTH: -/
 
 -- QUOTE:
 #check One₁.one -- One₁.one {α : Type} [self : One₁ α] : α
 
 @[class] structure One₂ (α : Type) where
-  /-- The element one -/
+  /-- 元素 one -/
   one : α
 
 #check One₂.one
 -- QUOTE.
 
 /- TEXT:
-In the second check, we can see that ``self : One₂ α`` is an explicit argument.
-Let us make sure the first version is indeed usable without any explicit argument.
+在第二次检查中，我们可以看到 ``self : One₂ α`` 是一个显式参数。
+让我们确保第一个版本确实可以在没有任何显式参数的情况下使用。
 BOTH: -/
 
 -- QUOTE:
@@ -53,33 +45,20 @@ example (α : Type) [One₁ α] : α := One₁.one
 -- QUOTE.
 
 /- TEXT:
-Remark: in the above example, the argument ``One₁ α`` is marked as instance-implicit,
-which is a bit silly since this affects only *uses* of the declaration and declaration created by
-the ``example`` command cannot be used. However it allows us to avoid giving a name to that
-argument and, more importantly, it starts installing the good habit of marking ``One₁ α``
-arguments as instance-implicit.
+备注：在上面的例子中，参数 ``One₁ α`` 被标记为实例隐式参数，这有点傻，因为这只会影响声明的*使用*，而 ``example`` 命令创建的声明是不能被使用的。然而，它使我们能够避免给该参数命名，更重要的是，它开始培养将 ``One₁ α`` 参数标记为实例隐式参数的好习惯。
 
-Another remark is that all this will work only when Lean knows what is ``α``. In the above
-example, leaving out the type ascription ``: α`` would generate an error message like:
+另一个备注是，所有这些只有在 Lean 知道 ``α`` 是什么时才会工作。在上面的例子中，省略类型标注 ``: α`` 会产生类似这样的错误信息：
 ``typeclass instance problem is stuck, it is often due to metavariables One₁ (?m.263 α)``
-where ``?m.263 α`` means "some type depending on ``α``" (and 263 is simply an auto-generated
-index that would be useful to distinguish between several unknown things). Another way
-to avoid this issue would be to use a type annotation, as in:
+其中 ``?m.263 α`` 的意思是"某个依赖于 ``α`` 的类型"（263 只是一个自动生成的索引，用于区分多个未知的事物）。另一种避免此问题的方法是使用类型标注，如：
 BOTH: -/
 -- QUOTE:
 example (α : Type) [One₁ α] := (One₁.one : α)
 -- QUOTE.
 
 /- TEXT:
-You may have already encountered that issue when playing with limits of sequences
-in :numref:`sequences_and_convergence` if you tried to state for instance that
-``0 < 1`` without telling Lean whether you meant this inequality to be about natural numbers
-or real numbers.
+你可能已经在 :numref:`sequences_and_convergence` 中玩序列极限时遇到过了这个问题，如果你尝试声明 ``0 < 1`` 而没有告诉 Lean 这个不等式是关于自然数还是实数的话。
 
-Our next task is to assign a notation to ``One₁.one``. Since we don't want collisions
-with the builtin notation for ``1``, we will use ``𝟙``. This is achieved by the following
-command where the first line tells Lean to use the documentation
-of ``One₁.one`` as documentation for the symbol ``𝟙``.
+我们的下一个任务是为 ``One₁.one`` 分配一个记号。由于我们不想与内置的 ``1`` 记号冲突，我们将使用 ``𝟙``。这是通过以下命令实现的，其中第一行告诉 Lean 使用 ``One₁.one`` 的文档作为符号 ``𝟙`` 的文档。
 BOTH: -/
 -- QUOTE:
 @[inherit_doc]
@@ -91,8 +70,7 @@ example {α : Type} [One₁ α] : (𝟙 : α) = 𝟙 := rfl
 -- QUOTE.
 
 /- TEXT:
-We now want a data-carrying class recording a binary operation. We don't want to choose
-between addition and multiplication for now so we'll use diamond.
+现在我们想要一个记录二元运算的数据类。现在我们还不想在加法和乘法之间做选择，所以我们将使用菱形。
 BOTH: -/
 
 -- QUOTE:
@@ -103,27 +81,22 @@ infixl:70 " ⋄ "   => Dia₁.dia
 -- QUOTE.
 
 /- TEXT:
-As in the ``One₁`` example, the operation has no property at all at this stage. Let us
-now define the class of semigroup structures where the operation is denoted by ``⋄``.
-For now, we define it by hand as a structure with two fields, a ``Dia₁`` instance and some
-``Prop``-valued field ``dia_assoc`` asserting associativity of ``⋄``.
+如同 ``One₁`` 的例子，这个运算在这个阶段还没有任何性质。现在让我们定义半群结构的类，其中运算用 ``⋄`` 表示。
+现在，我们手工将其定义为一个具有两个字段的结构体：一个 ``Dia₁`` 实例和一个取值为 ``Prop`` 的字段 ``dia_assoc``，它断言 ``⋄`` 的结合律。
 BOTH: -/
 
 -- QUOTE:
 class Semigroup₀ (α : Type) where
   toDia₁ : Dia₁ α
-  /-- Diamond is associative -/
+  /-- 菱形运算是结合的 -/
   dia_assoc : ∀ a b c : α, a ⋄ b ⋄ c = a ⋄ (b ⋄ c)
 -- QUOTE.
 
 /- TEXT:
-Note that while stating `dia_assoc`, the previously defined field `toDia₁` is in the local
-context hence can be used when Lean searches for an instance of `Dia₁ α` to make sense
-of `a ⋄ b`. However this `toDia₁` field does not become part of the type class instances database.
-Hence doing ``example {α : Type} [Semigroup₁ α] (a b : α) : α := a ⋄ b`` would fail with
-error message ``failed to synthesize instance Dia₁ α``.
+注意，在声明 `dia_assoc` 时，之前定义的字段 `toDia₁` 在局部上下文中，因此当 Lean 搜索 `Dia₁ α` 的实例以解释 `a ⋄ b` 的含义时可以使用它。然而，这个 `toDia₁` 字段并不会成为类型类实例数据库的一部分。
+因此，执行 ``example {α : Type} [Semigroup₁ α] (a b : α) : α := a ⋄ b`` 时会失败，并显示错误信息 ``failed to synthesize instance Dia₁ α``。
 
-We can fix this by adding the ``instance`` attribute later.
+我们可以通过之后添加 ``instance`` 属性来修复这个问题。
 BOTH: -/
 
 -- QUOTE:
@@ -133,56 +106,47 @@ example {α : Type} [Semigroup₀ α] (a b : α) : α := a ⋄ b
 -- QUOTE.
 
 /- TEXT:
-Before building up, we need to use a different syntax to add this `toDia₁` field,
-to tell Lean that `Dia₁ α` should be treated as if its fields were fields of `Semigroup₁` itself.
-This also conveniently adds the `toDia₁` instance automatically.
-The ``class`` command supports this using the ``extends`` syntax as in:
+在继续构建之前，我们需要使用一种不同的语法来添加这个 `toDia₁` 字段，以告诉 Lean `Dia₁ α` 应该被视为 `Semigroup₁` 自身的字段一样来处理。
+这也方便地自动添加了 `toDia₁` 实例。
+``class`` 命令支持使用 ``extends`` 语法来实现这一点，如：
 BOTH: -/
 
 -- QUOTE:
 class Semigroup₁ (α : Type) extends toDia₁ : Dia₁ α where
-  /-- Diamond is associative -/
+  /-- 菱形运算是结合的 -/
   dia_assoc : ∀ a b c : α, a ⋄ b ⋄ c = a ⋄ (b ⋄ c)
 
 example {α : Type} [Semigroup₁ α] (a b : α) : α := a ⋄ b
 -- QUOTE.
 
 /- TEXT:
-Note this syntax is also available in the ``structure`` command, although in that
-case it fixes only the hurdle of writing fields such as `toDia₁` since there
-is no instance to define in that case.
+注意，这种语法在 ``structure`` 命令中也可用，尽管在这种情况下它只解决了编写 `toDia₁` 等字段的麻烦，因为在那种情况下没有要定义的实例。
 
-The field name `toDia₁` is optional in the `extends` syntax.
-By default it takes the name of the class being extended and prefixes it with "to".
+`toDia₁` 字段名在 `extends` 语法中是可选的。
+默认情况下，它取被扩展的类的名称并在前面加上 "to"。
 BOTH: -/
 
 -- QUOTE:
 class Semigroup₂ (α : Type) extends Dia₁ α where
-  /-- Diamond is associative -/
+  /-- 菱形运算是结合的 -/
   dia_assoc : ∀ a b c : α, a ⋄ b ⋄ c = a ⋄ (b ⋄ c)
 -- QUOTE.
 
 /- TEXT:
-Let us now try to combine a diamond operation and a distinguished one element with axioms saying
-this element is neutral on both sides.
+现在让我们尝试将菱形运算和特定的一元元素结合起来，并加上断言此元素是双边单位元的公理。
 BOTH: -/
 -- QUOTE:
 class DiaOneClass₁ (α : Type) extends One₁ α, Dia₁ α where
-  /-- One is a left neutral element for diamond. -/
+  /-- 壹是菱形运算的左单位元. -/
   one_dia : ∀ a : α, 𝟙 ⋄ a = a
-  /-- One is a right neutral element for diamond -/
+  /-- 壹是菱形运算的右单位元 -/
   dia_one : ∀ a : α, a ⋄ 𝟙 = a
 
 -- QUOTE.
 
 /- TEXT:
-In the next example, we tell Lean that ``α`` has a ``DiaOneClass₁`` structure and state a
-property that uses both a `Dia₁` instance and a `One₁` instance. In order to see how Lean finds
-those instances we set a tracing option whose result can be seen in the Infoview. This result
-is rather terse by default but it can be expanded by clicking on lines ending with black arrows.
-It includes failed attempts where Lean tried to find instances before having enough type
-information to succeed. The successful attempts do involve the instances generated by the
-``extends`` syntax.
+在下一个例子中，我们告诉 Lean ``α`` 具有 ``DiaOneClass₁`` 结构，并陈述一个同时使用 `Dia₁` 实例和 `One₁` 实例的性质。为了观察 Lean 如何找到这些实例，我们设置了一个追踪选项，其结果可以在信息视图中看到。这个结果默认情况下相当简略，但可以通过点击以黑色箭头结尾的行来展开。
+它包括 Lean 在有足够的类型信息成功之前尝试查找实例的失败尝试。成功的尝试确实涉及由 ``extends`` 语法生成的实例。
 BOTH: -/
 
 -- QUOTE:
@@ -191,8 +155,7 @@ example {α : Type} [DiaOneClass₁ α] (a b : α) : Prop := a ⋄ b = 𝟙
 -- QUOTE.
 
 /- TEXT:
-Note that we don't need to include extra fields where combining existing classes. Hence we can
-define monoids as:
+注意，我们在组合现有类时不需要包含额外的字段。因此我们可以将幺半群定义为：
 BOTH: -/
 
 -- QUOTE:
@@ -200,12 +163,9 @@ class Monoid₁ (α : Type) extends Semigroup₁ α, DiaOneClass₁ α
 -- QUOTE.
 
 /- TEXT:
-While the above definition seems straightforward, it hides an important subtlety. Both
-``Semigroup₁ α`` and ``DiaOneClass₁ α`` extend ``Dia₁ α``, so one could fear that having
-a ``Monoid₁ α`` instance gives two unrelated diamond operations on ``α``, one coming from
-a field ``Monoid₁.toSemigroup₁`` and one coming from a field ``Monoid₁.toDiaOneClass₁``.
+虽然上述定义看起来很简单，但它隐藏了一个重要的微妙之处。``Semigroup₁ α`` 和 ``DiaOneClass₁ α`` 都扩展了 ``Dia₁ α``，所以有人可能会担心，拥有一个 ``Monoid₁ α`` 实例会在 ``α`` 上给出两个不相关的菱形运算：一个来自字段 ``Monoid₁.toSemigroup₁``，另一个来自字段 ``Monoid₁.toDiaOneClass₁``。
 
-Indeed if we try to build a monoid class by hand using:
+事实上，如果我们尝试手工构建一个幺半群类，使用：
 BOTH: -/
 
 -- QUOTE:
@@ -215,10 +175,10 @@ class Monoid₂ (α : Type) where
 -- QUOTE.
 
 /- TEXT:
-then we get two completely unrelated diamond operations
-``Monoid₂.toSemigroup₁.toDia₁.dia`` and ``Monoid₂.toDiaOneClass₁.toDia₁.dia``.
+那么我们会得到两个完全不相关的菱形运算
+``Monoid₂.toSemigroup₁.toDia₁.dia`` 和 ``Monoid₂.toDiaOneClass₁.toDia₁.dia``。
 
-The version generated using the ``extends`` syntax does not have this defect.
+使用 ``extends`` 语法生成的版本没有这个缺陷。
 BOTH: -/
 
 -- QUOTE:
@@ -227,8 +187,7 @@ example {α : Type} [Monoid₁ α] :
 -- QUOTE.
 
 /- TEXT:
-So the ``class`` command did some magic for us (and the ``structure`` command would have done it
-too). An easy way to see what are the fields of our classes is to check their constructor. Compare:
+所以 ``class`` 命令为我们做了一些魔法（``structure`` 命令也会这样做）。一个查看我们类的字段是什么的简单方法是检查它们的构造函数。请比较：
 BOTH: -/
 
 -- QUOTE:
@@ -240,11 +199,7 @@ BOTH: -/
 -- QUOTE.
 
 /- TEXT:
-So we see that ``Monoid₁`` takes ``Semigroup₁ α`` argument as expected but then it won't
-take a would-be overlapping ``DiaOneClass₁ α`` argument but instead tears it apart and includes
-only the non-overlapping parts. And it also auto-generated an instance ``Monoid₁.toDiaOneClass₁``
-which is *not* a field but has the expected signature which, from the end-user point of view,
-restores the symmetry between the two extended classes ``Semigroup₁`` and ``DiaOneClass₁``.
+所以我们看到 ``Monoid₁`` 如预期那样接受 ``Semigroup₁ α`` 参数，但它不会接受可能重叠的 ``DiaOneClass₁ α`` 参数，而是将其拆开，只包含不重叠的部分。它还自动生成了一个实例 ``Monoid₁.toDiaOneClass₁``，它*不是*一个字段，但具有预期的签名，从最终用户的角度来看，它恢复了两个扩展类 ``Semigroup₁`` 和 ``DiaOneClass₁`` 之间的对称性。
 BOTH: -/
 
 -- QUOTE:
@@ -253,15 +208,12 @@ BOTH: -/
 -- QUOTE.
 
 /- TEXT:
-We are now very close to defining groups. We could add to the monoid structure a field asserting
-the existence of an inverse for every element. But then we would need to work to access these
-inverses. In practice it is more convenient to add it as data. To optimize reusability,
-we define a new data-carrying class, and then give it some notation.
+我们现在非常接近定义群了。我们可以在幺半群结构中添加一个断言每个元素都存在逆元的字段。但那时我们需要努力去访问这些逆元。在实践中，将其作为数据添加更方便。为了优化可重用性，我们定义一个新的承载数据的类，然后给它一些记号。
 BOTH: -/
 
 -- QUOTE:
 class Inv₁ (α : Type) where
-  /-- The inversion function -/
+  /-- 求逆函数 -/
   inv : α → α
 
 @[inherit_doc]
@@ -272,8 +224,8 @@ class Group₁ (G : Type) extends Monoid₁ G, Inv₁ G where
 -- QUOTE.
 
 /- TEXT:
-The above definition may seem too weak, we only ask that ``a⁻¹`` is a left-inverse of ``a``.
-But the other side is automatic. In order to prove that, we need a preliminary lemma.
+上述定义可能看起来太弱了，我们只要求 ``a⁻¹`` 是 ``a`` 的左逆元。
+但另一边是自动成立的。为了证明这一点，我们需要一个预备引理。
 BOTH: -/
 
 -- QUOTE:
@@ -282,9 +234,7 @@ lemma left_inv_eq_right_inv₁ {M : Type} [Monoid₁ M] {a b c : M} (hba : b ⋄
 -- QUOTE.
 
 /- TEXT:
-In this lemma, it is pretty annoying to give full names, especially since it requires knowing
-which part of the hierarchy provides those facts. One way to fix this is to use the ``export``
-command to copy those facts as lemmas in the root name space.
+在这个引理中，使用全名是相当烦人的，特别是因为这需要知道层级结构的哪一部分提供了那些事实。解决这个问题的一种方法是使用 ``export`` 命令将这些事实作为引理复制到根命名空间中。
 BOTH: -/
 
 -- QUOTE:
@@ -294,7 +244,7 @@ export Group₁ (inv_dia)
 -- QUOTE.
 
 /- TEXT:
-We can then rewrite the above proof as:
+然后我们可以将上述证明重写为：
 BOTH: -/
 
 -- QUOTE:
@@ -303,7 +253,7 @@ example {M : Type} [Monoid₁ M] {a b c : M} (hba : b ⋄ a = 𝟙) (hac : a ⋄
 -- QUOTE.
 
 /- TEXT:
-It is now your turn to prove things about our algebraic structures.
+现在轮到你来证明关于我们代数结构的一些事情了。
 BOTH: -/
 
 -- QUOTE:
@@ -322,21 +272,9 @@ SOLUTIONS: -/
 -- QUOTE.
 
 /- TEXT:
-At this stage we would like to move on to define rings, but there is a serious issue.
-A ring structure on a type contains both an additive group structure and a multiplicative
-monoid structure, and some properties about their interaction. But so far we hard-coded
-a notation ``⋄`` for all our operations. More fundamentally, the type class system
-assumes every type has only one instance of each type class. There are various
-ways to solve this issue. Surprisingly Mathlib uses the naive idea to duplicate
-everything for additive and multiplicative theories with the help of some code-generating
-attribute. Structures and classes are defined in both additive and multiplicative notation
-with an attribute ``to_additive`` linking them. In case of multiple inheritance like for
-semi-groups, the auto-generated "symmetry-restoring" instances need also to be marked.
-This is a bit technical; you don't need to understand details. The important point is that
-lemmas are then only stated in multiplicative notation and marked with the attribute ``to_additive``
-to generate the additive version as ``left_inv_eq_right_inv'`` with its auto-generated additive
-version ``left_neg_eq_right_neg'``. In order to check the name of this additive version we
-used the ``whatsnew in`` command on top of ``left_inv_eq_right_inv'``.
+在这个阶段，我们想继续定义环，但有一个严重的问题。
+一个类型上的环结构既包含加法群结构，也包含乘法幺半群结构，还包含关于它们相互作用的一些性质。但到目前为止，我们为所有运算硬编码了一个记号 ``⋄``。更根本的是，类型类系统假设每个类型对于每种类型类只有一个实例。有多种方法可以解决这个问题。令人惊讶的是，Mathlib 使用了一种朴素的想法：借助一些代码生成属性，为加法理论和乘法理论复制所有内容。结构体和类在加法和乘法记号中都有定义，并通过一个 ``to_additive`` 属性将它们关联起来。在多重继承的情况下，比如半群，自动生成的"恢复对称性"实例也需要被标记。
+这有点技术性；你不需要理解细节。重要的一点是，引理只以乘法记号陈述，并标记 ``to_additive`` 属性以生成加法版本，如 ``left_inv_eq_right_inv'`` 及其自动生成的加法版本 ``left_neg_eq_right_neg'``。为了检查这个加法版本的名称，我们在 ``left_inv_eq_right_inv'`` 之上使用了 ``whatsnew in`` 命令。
 BOTH: -/
 
 -- QUOTE:
@@ -344,12 +282,12 @@ BOTH: -/
 
 
 class AddSemigroup₃ (α : Type) extends Add α where
-  /-- Addition is associative -/
+  /-- 加法是结合的 -/
   add_assoc₃ : ∀ a b c : α, a + b + c = a + (b + c)
 
 @[to_additive AddSemigroup₃]
 class Semigroup₃ (α : Type) extends Mul α where
-  /-- Multiplication is associative -/
+  /-- 乘法是结合的 -/
   mul_assoc₃ : ∀ a b c : α, a * b * c = a * (b * c)
 
 class AddMonoid₃ (α : Type) extends AddSemigroup₃ α, AddZeroClass α
@@ -369,8 +307,7 @@ lemma left_inv_eq_right_inv' {M : Type} [Monoid₃ M] {a b c : M} (hba : b * a =
 -- QUOTE.
 
 /- TEXT:
-Equipped with this technology, we can easily define also commutative semigroups, monoids and
-groups, and then define rings.
+有了这项技术，我们也可以轻松地定义交换半群、幺半群和群，进而定义环。
 
 BOTH: -/
 -- QUOTE:
@@ -395,7 +332,7 @@ class Group₃ (G : Type) extends Monoid₃ G, Inv G where
 -- QUOTE.
 
 /- TEXT:
-We should remember to tag lemmas with ``simp`` when appropriate.
+我们应该记得在适当的时候用 ``simp`` 标记引理。
 BOTH: -/
 
 -- QUOTE:
@@ -404,8 +341,7 @@ attribute [simp] Group₃.inv_mul AddGroup₃.neg_add
 -- QUOTE.
 
 /- TEXT:
-Then we need to repeat ourselves a bit since we switch to standard notations, but at least
-``to_additive`` does the work of translating from the multiplicative notation to the additive one.
+然后我们需要稍微重复一下自己，因为我们切换到了标准记号，但至少 ``to_additive`` 做了从乘法记号到加法记号的翻译工作。
 BOTH: -/
 
 -- QUOTE:
@@ -419,8 +355,7 @@ SOLUTIONS: -/
 -- QUOTE.
 
 /- TEXT:
-Note that ``to_additive`` can be asked to tag a lemma with ``simp`` and propagate that attribute
-to the additive version as follows.
+注意，``to_additive`` 可以被要求用 ``simp`` 标记一个引理，并将该属性传播到加法版本，如下所示。
 BOTH: -/
 
 -- QUOTE:
@@ -456,21 +391,15 @@ class CommGroup₃ (G : Type) extends Group₃ G, CommMonoid₃ G
 -- QUOTE.
 
 /- TEXT:
-We are now ready for rings. For demonstration purposes we won't assume that addition is
-commutative, and then immediately provide an instance of ``AddCommGroup₃``. Mathlib does not
-play this game, first because in practice this does not make any ring instance easier and
-also because Mathlib's algebraic hierarchy goes through semirings which are like rings but without
-opposites so that the proof below does not work for them. What we gain here, besides a nice exercise
-if you have never seen it, is an example of building an instance using the syntax that allows
-to provide a parent structure as an instance parameter and then supply the extra fields.
-Here the `Ring₃ R` argument supplies anything `AddCommGroup₃ R` wants except for `add_comm`.
+我们现在准备好定义环了。为了演示目的，我们将不假设加法是交换的，然后立即提供一个 ``AddCommGroup₃`` 的实例。Mathlib 不会玩这种把戏，首先是因为在实践中这并不会使任何环实例变得更容易，其次是因为 Mathlib 的代数层级结构会经过半环（semirings），半环类似于环但没有相反元素，所以下面的证明对它们不适用。我们在这里得到的，除了一个你没见过的不错的练习之外，还是一个使用允许将父结构作为实例参数提供然后再提供额外字段的语法来构建实例的例子。
+这里，`Ring₃ R` 参数提供了除 `add_comm` 之外 ``AddCommGroup₃ R`` 所想要的一切。
 BOTH: -/
 
 -- QUOTE:
 class Ring₃ (R : Type) extends AddGroup₃ R, Monoid₃ R, MulZeroClass R where
-  /-- Multiplication is left distributive over addition -/
+  /-- 乘法对加法有左分配律 -/
   left_distrib : ∀ a b c : R, a * (b + c) = a * b + a * c
-  /-- Multiplication is right distributive over addition -/
+  /-- 乘法对加法有右分配律 -/
   right_distrib : ∀ a b c : R, (a + b) * c = a * c + b * c
 
 instance {R : Type} [Ring₃ R] : AddCommGroup₃ R :=
@@ -490,8 +419,7 @@ SOLUTIONS: -/
     exact add_right_cancel₃ (add_left_cancel₃ this) }
 -- QUOTE.
 /- TEXT:
-Of course we can also build concrete instances, such as a ring structure on integers (of course
-the instance below uses that all the work is already done in Mathlib).
+当然我们也可以构建具体的实例，比如整数上的环结构（当然下面的实例使用了 Mathlib 中已经完成的所有工作）。
 BOTH: -/
 
 -- QUOTE:
@@ -514,15 +442,12 @@ instance : Ring₃ ℤ where
   right_distrib := Int.add_mul
 -- QUOTE.
 /- TEXT:
-As an exercise you can now set up a simple hierarchy for order relations, including a class
-for ordered commutative monoids, which have both a partial order and a commutative monoid structure
-such that ``∀ a b : α, a ≤ b → ∀ c : α, c * a ≤ c * b``. Of course you need to add fields and maybe
-``extends`` clauses to the following classes.
+作为练习，你现在可以为序关系建立一个简单的层级结构，包括一个有序交换幺半群的类，它同时具有偏序和交换幺半群结构，且满足 ``∀ a b : α, a ≤ b → ∀ c : α, c * a ≤ c * b``。当然你需要向以下类添加字段，也许还需要 ``extends`` 子句。
 BOTH: -/
 -- QUOTE:
 
 class LE₁ (α : Type) where
-  /-- The Less-or-Equal relation. -/
+  /-- 小于等于关系. -/
   le : α → α → Prop
 
 @[inherit_doc] infix:50 " ≤₁ " => LE₁.le
@@ -564,25 +489,21 @@ instance : OrderedCommMonoid₁ ℕ where
 
 
 
-We now want to discuss algebraic structures involving several types. The prime example
-is modules over rings. If you don't know what is a module, you can pretend it means vector space
-and think that all our rings are fields. Those structures are commutative additive groups
-equipped with a scalar multiplication by elements of some ring.
+现在我们想讨论涉及多种类型的代数结构。最典型的例子是环上的模。如果你不知道什么是模，你可以假装它指的是向量空间，并认为我们所有的环都是域。这些结构是带有某个环中元素标量乘法的交换加法群。
 
-We first define the data-carrying type class of scalar multiplication by some type ``α`` on some
-type ``β``, and give it a right associative notation.
+我们首先定义某个类型 ``α`` 在某个类型 ``β`` 上的标量乘法的数据承载类型类，并赋予它右结合的记号。
 BOTH: -/
 
 -- QUOTE:
 class SMul₃ (α : Type) (β : Type) where
-  /-- Scalar multiplication -/
+  /-- 标量乘法 -/
   smul : α → β → β
 
 infixr:73 " • " => SMul₃.smul
 -- QUOTE.
 
 /- TEXT:
-Then we can define modules (again think about vector spaces if you don't know what is a module).
+然后我们可以定义模（再次强调，如果你不知道什么是模，就把它想成向量空间）。
 BOTH: -/
 
 -- QUOTE:
@@ -595,27 +516,15 @@ class Module₁ (R : Type) [Ring₃ R] (M : Type) [AddCommGroup₃ M] extends SM
 -- QUOTE.
 
 /- TEXT:
-There is something interesting going on here. While it isn't too surprising that the
-ring structure on ``R`` is a parameter in this definition, you probably expected ``AddCommGroup₃ M``
-to be part of the ``extends`` clause just as ``SMul₃ R M`` is.  Trying to do that would lead
-to a field ``Module₃.toAddCommGroup₃`` marked as an instance. This instance
-would have the signature:
-``(R : Type) → [inst : Ring₃ R] → {M : Type} → [self : Module₁ R M] → AddCommGroup₃ M``.
-With such an instance in the type class database, each time Lean would look for a
-``AddCommGroup₃ M`` instance for some ``M``, it would need to go hunting for a completely
-unspecified type ``R`` and a ``Ring₃ R`` instance before embarking on the main quest of finding a
-``Module₁ R M`` instance. Those two side-quests are represented by the meta-variables mentioned in
-the error message and denoted by ``?R`` and ``?inst✝`` there. Such a ``Module₃.toAddCommGroup₃``
-instance would then be a huge trap for the instance resolution procedure.
+这里有一些有趣的事情发生。虽然 ``R`` 上的环结构是这个定义中的一个参数并不太令人惊讶，但你可能期望 ``AddCommGroup₃ M`` 是 ``extends`` 子句的一部分，就像 ``SMul₃ R M`` 那样。尝试这样做会导致字段 ``Module₃.toAddCommGroup₃`` 被标记为实例。这个实例将具有签名：
+``(R : Type) → [inst : Ring₃ R] → {M : Type} → [self : Module₁ R M] → AddCommGroup₃ M``。
+有了这样的实例在类型类数据库中，每次 Lean 为某个 ``M`` 寻找 ``AddCommGroup₃ M`` 实例时，它都需要去搜寻一个完全未指定的类型 ``R`` 和一个 ``Ring₃ R`` 实例，然后才能开始寻找 ``Module₁ R M`` 实例的主要任务。这两个支线任务由错误信息中提到的元变量表示，并在那里用 ``?R`` 和 ``?inst✝`` 表示。这样的 ``Module₃.toAddCommGroup₃`` 实例将成为实例解析过程的一个巨大陷阱。
 
-What about ``extends SMul₃ R M`` then? That one creates a field
+那么 ``extends SMul₃ R M`` 呢？那个创建了字段
 ``Module₁.toSMul₃ : {R : Type} →  [inst : Ring₃ R] → {M : Type} → [inst_1 : AddCommGroup₃ M] → [self : Module₁ R M] → SMul₃ R M``
-whose end result ``SMul₃ R M`` mentions both ``R`` and ``M`` so this field can
-safely be used as an instance. The rule is easy to remember: each class appearing in the
-``extends`` clause should mention every type appearing in the parameters.
+其最终结果 ``SMul₃ R M`` 同时提到了 ``R`` 和 ``M``，因此这个字段可以安全地用作实例。规则很容易记住：每个出现在 ``extends`` 子句中的类都应该提到参数中出现的每一个类型。
 
-Let us create our first module instance: a ring is a module over itself using its multiplication
-as a scalar multiplication.
+让我们创建我们的第一个模实例：一个环通过其乘法作为标量乘法，是自身上的模。
 BOTH: -/
 -- QUOTE:
 instance selfModule (R : Type) [Ring₃ R] : Module₁ R R where
@@ -627,11 +536,8 @@ instance selfModule (R : Type) [Ring₃ R] : Module₁ R R where
   smul_add := Ring₃.left_distrib
 -- QUOTE.
 /- TEXT:
-As a second example, every abelian group is a module over ``ℤ`` (this is one of the reason to
-generalize the theory of vector spaces by allowing non-invertible scalars). First one can define
-scalar multiplication by a natural number for any type equipped with a zero and an addition:
-``n • a`` is defined as ``a + ⋯ + a`` where ``a`` appears ``n`` times. Then this is extended
-to scalar multiplication by an integer by ensuring ``(-1) • a = -a``.
+作为第二个例子，每个交换群都是 ``ℤ`` 上的模（这是通过允许不可逆标量来推广向量空间理论的原因之一）。首先，可以为任何配备了零和加法的类型定义自然数标量乘法：
+``n • a`` 定义为 ``a + ⋯ + a``，其中 ``a`` 出现 ``n`` 次。然后将其扩展到整数标量乘法，通过确保 ``(-1) • a = -a``。
 BOTH: -/
 -- QUOTE:
 
@@ -644,10 +550,7 @@ def zsmul₁ {M : Type*} [Zero M] [Add M] [Neg M] : ℤ → M → M
   | Int.negSucc n, a => -nsmul₁ n.succ a
 -- QUOTE.
 /- TEXT:
-Proving this gives rise to a module structure is a bit tedious and not interesting for the
-current discussion, so we will sorry all axioms. You are *not* asked to replace those sorries
-with proofs. If you insist on doing it then you will probably want to state and prove several
-intermediate lemmas about ``nsmul₁`` and ``zsmul₁``.
+证明这会产生一个模结构是有些繁琐的，并且对于当前的讨论不感兴趣，所以我们将对所有公理使用 sorry。你*不*被要求用证明替换这些 sorries。如果你坚持要这样做，那么你可能需要陈述并证明一些关于 ``nsmul₁`` 和 ``zsmul₁`` 的中间引理。
 BOTH: -/
 -- QUOTE:
 
@@ -660,14 +563,7 @@ instance abGrpModule (A : Type) [AddCommGroup₃ A] : Module₁ ℤ A where
   smul_add := sorry
 -- QUOTE.
 /- TEXT:
-A much more important issue is that we now have two module structures over the ring ``ℤ``
-for ``ℤ`` itself: ``abGrpModule ℤ`` since ``ℤ`` is a abelian group, and ``selfModule ℤ`` since
-``ℤ`` is a ring. Those two module structure correspond to the same abelian group structure,
-but it is not obvious that they have the same scalar multiplication. They actually do, but
-this isn't true by definition, it requires a proof. This is very bad news for the type class
-instance resolution procedure and will lead to very frustrating failures for users of this
-hierarchy. When directly asked to find an instance, Lean will pick one, and we can see
-which one using:
+一个更为重要的问题是，我们现在对 ``ℤ`` 自身有两个模结构：``abGrpModule ℤ`` 因为 ``ℤ`` 是一个交换群，以及 ``selfModule ℤ`` 因为 ``ℤ`` 是一个环。这两个模结构对应于同一个交换群结构，但它们是否具有相同的标量乘法并不明显。它们实际上有，但这并不是根据定义成立的，它需要一个证明。这对类型类实例解析过程来说是非常坏的消息，并将导致这个层级结构的用户遭遇非常令人沮丧的失败。当直接要求寻找一个实例时，Lean 会选择一个，我们可以使用以下命令看到是哪一个：
 BOTH: -/
 -- QUOTE:
 
@@ -675,47 +571,33 @@ BOTH: -/
 
 -- QUOTE.
 /- TEXT:
-But in a more indirect context it can happen that Lean infers the other one and then gets confused.
-This situation is known as a bad diamond. This has nothing to do with the diamond operation
-we used above, it refers to the way one can draw the paths from ``ℤ`` to its ``Module₁ ℤ``
-going through either ``AddCommGroup₃ ℤ`` or ``Ring₃ ℤ``.
+但在更间接的上下文中，Lean 可能会推断出另一个，然后就会感到困惑。
+这种情况被称为坏菱形。这和我们上面使用的菱形运算无关，它指的是从 ``ℤ`` 出发到其 ``Module₁ ℤ`` 的路径可以通过 ``AddCommGroup₃ ℤ`` 或 ``Ring₃ ℤ`` 绘制的图形。
 
-It is important to understand that not all diamonds are bad. In fact there are diamonds everywhere
-in Mathlib, and also in this chapter. Already at the very beginning we saw one can go
-from ``Monoid₁ α`` to ``Dia₁ α`` through either ``Semigroup₁ α`` or ``DiaOneClass₁ α`` and
-thanks to the work done by the ``class`` command, the resulting two ``Dia₁ α`` instances
-are definitionally equal. In particular a diamond having a ``Prop``-valued class at the bottom
-cannot be bad since any two proofs of the same statement are definitionally equal.
+重要的是要理解，并非所有菱形都是坏的。事实上，Mathlib 中到处都是菱形，本章中也是如此。在最初的开始，我们就看到可以从 ``Monoid₁ α`` 通过 ``Semigroup₁ α`` 或 ``DiaOneClass₁ α`` 到达 ``Dia₁ α``，并且由于 ``class`` 命令所做的工作，得到的两个 ``Dia₁ α`` 实例是定义相等的。特别地，底部是 ``Prop`` 值类的菱形不可能是坏的，因为同一陈述的任何两个证明都是定义相等的。
 
-But the diamond we created with modules is definitely bad. The offending piece is the ``smul``
-field which is data, not a proof, and we have two constructions that are not definitionally equal.
-The robust way of fixing this issue is to make sure that going from a rich structure to a
-poor structure is always done by forgetting data, not by defining data. This well-known pattern
-has been named "forgetful inheritance" and extensively discussed in
-https://inria.hal.science/hal-02463336v2.
+但我们用模创建的这个菱形绝对是坏的。问题出在 ``smul`` 字段上，它是数据，不是证明，而我们有两个不是定义相等的构造。
+修复这个问题的稳健方法是确保从丰富结构到贫乏结构的过程总是通过遗忘数据来完成，而不是通过定义数据来完成。这种众所周知的模式被称为"遗忘继承"（forgetful inheritance），并在
+https://inria.hal.science/hal-02463336v2 中有广泛讨论。
 
-In our concrete case, we can modify the definition of ``AddMonoid₃`` to include a ``nsmul`` data
-field and some ``Prop``-valued fields ensuring this operation is provably the one we constructed
-above. Those fields are given default values using ``:=`` after their type in the definition below.
-Thanks to these default values, most instances would be constructed exactly as with our previous
-definitions. But in the special case of ``ℤ`` we will be able to provide specific values.
+在我们的具体情况中，我们可以修改 ``AddMonoid₃`` 的定义，以包含一个 ``nsmul`` 数据字段和一些 ``Prop`` 值字段，确保这个运算在可证明的意义上等同于我们上面构造的运算。这些字段在下面定义中的类型后面使用 ``:=`` 给出了默认值。
+得益于这些默认值，大多数实例的构造方式将与我们之前的定义完全相同。但在 ``ℤ`` 的特殊情况下，我们将能够提供特定的值。
 BOTH: -/
 -- QUOTE:
 
 class AddMonoid₄ (M : Type) extends AddSemigroup₃ M, AddZeroClass M where
-  /-- Multiplication by a natural number. -/
+  /-- 自然数乘法. -/
   nsmul : ℕ → M → M := nsmul₁
-  /-- Multiplication by `(0 : ℕ)` gives `0`. -/
+  /-- 乘以 `(0 : ℕ)` 得到 `0`。 -/
   nsmul_zero : ∀ x, nsmul 0 x = 0 := by intros; rfl
-  /-- Multiplication by `(n + 1 : ℕ)` behaves as expected. -/
+  /-- 乘以 `(n + 1 : ℕ)` 的行为符合预期。 -/
   nsmul_succ : ∀ (n : ℕ) (x), nsmul (n + 1) x = x + nsmul n x := by intros; rfl
 
 instance mySMul {M : Type} [AddMonoid₄ M] : SMul ℕ M := ⟨AddMonoid₄.nsmul⟩
 -- QUOTE.
 /- TEXT:
 
-Let us check we can still construct a product monoid instance without providing the ``nsmul``
-related fields.
+让我们检查一下，我们仍然可以在不提供 ``nsmul`` 相关字段的情况下构造一个积幺半群实例。
 BOTH: -/
 -- QUOTE:
 
@@ -727,9 +609,7 @@ instance (M N : Type) [AddMonoid₄ M] [AddMonoid₄ N] : AddMonoid₄ (M × N) 
   add_zero := fun a ↦ by ext <;> apply add_zero
 -- QUOTE.
 /- TEXT:
-And now let us handle the special case of ``ℤ`` where we want to build ``nsmul`` using the coercion
-of ``ℕ`` to ``ℤ`` and the multiplication on ``ℤ``. Note in particular how the proof fields
-contain more work than in the default value above.
+现在让我们处理 ``ℤ`` 的特殊情况，其中我们想使用 ``ℕ`` 到 ``ℤ`` 的强制转换和 ``ℤ`` 上的乘法来构建 ``nsmul``。特别注意，证明字段比上面的默认值包含更多的工作。
 BOTH: -/
 -- QUOTE:
 
@@ -745,29 +625,21 @@ instance : AddMonoid₄ ℤ where
     by rw [Int.add_mul, Int.add_comm, Int.one_mul]
 -- QUOTE.
 /- TEXT:
-Let us check we solved our issue. Because Lean already has a definition of scalar multiplication
-of a natural number and an integer, and we want to make sure our instance is used, we won't use
-the ``•`` notation but call ``SMul.mul`` and explicitly provide our instance defined above.
+让我们检查一下我们是否解决了问题。因为 Lean 已经有自然数和整数的标量乘法定义，而我们想确保我们的实例被使用，我们将不使用 ``•`` 记号，而是调用 ``SMul.mul`` 并显式提供我们上面定义的实例。
 BOTH: -/
 -- QUOTE:
 
 example (n : ℕ) (m : ℤ) : SMul.smul (self := mySMul) n m = n * m := rfl
 -- QUOTE.
 /- TEXT:
-This story then continues with incorporating a ``zsmul`` field into the definition of groups
-and similar tricks. You are now ready to read the definition of monoids, groups, rings and modules
-in Mathlib. There are more complicated than what we have seen here, because they are part of a huge
-hierarchy, but all principles have been explained above.
+这个故事随后会继续，将 ``zsmul`` 字段纳入群的定义中，以及类似的技巧。你现在已经准备好去阅读 Mathlib 中关于幺半群、群、环和模的定义了。它们比我们在这里看到的更复杂，因为它们是一个庞大层级结构的一部分，但所有的原理都已经在上面解释过了。
 
-As an exercise, you can come back to the order relation hierarchy you built above and try
-to incorporate a type class ``LT₁`` carrying the Less-Than notation ``<₁`` and make sure
-that every preorder comes with a ``<₁`` which has a default value built from ``≤₁`` and a
-``Prop``-valued field asserting the natural relation between those two comparison operators.
+作为练习，你可以回到上面构建的序关系层级结构，尝试纳入一个类型类 ``LT₁``，它承载着小于记号 ``<₁``，并确保每个预序都带有一个从 ``≤₁`` 和 ``Prop`` 值字段构建的具有默认值的 ``<₁``，该字段断言这两个比较运算符之间的自然关系。
 TEXT. -/
 
 -- SOLUTIONS:
 class LT₁ (α : Type) where
-  /-- The Less-Than relation -/
+  /-- 小于关系 -/
   lt : α → α → Prop
 
 @[inherit_doc] infix:50 " <₁ " => LT₁.lt

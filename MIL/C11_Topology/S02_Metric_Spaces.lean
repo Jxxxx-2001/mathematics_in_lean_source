@@ -10,14 +10,14 @@ open Topology Filter
 
 .. _metric_spaces:
 
-Metric spaces
+度量空间
 --------------
 
-Examples in the previous section focus on sequences of real numbers. In this section we will go up a bit in generality and focus on
-metric spaces. A metric space is a type ``X`` equipped with a distance function ``dist : X → X → ℝ`` which is a generalization of
-the function ``fun x y ↦ |x - y|`` from the case where ``X = ℝ``.
+上一节的例子侧重于实数序列。在本节中，我们将稍微提高一下普遍性，关注
+度量空间。度量空间是一个类型 ``X``，配备了一个距离函数 ``dist : X → X → ℝ``，它是
+函数 ``fun x y ↦ |x - y|`` 从 ``X = ℝ`` 的情况的推广。
 
-Introducing such a space is easy and we will check all properties required from the distance function.
+引入这样一个空间很容易，我们将检查距离函数所需的所有性质。
 BOTH: -/
 -- QUOTE:
 variable {X : Type*} [MetricSpace X] (a b c : X)
@@ -30,25 +30,25 @@ variable {X : Type*} [MetricSpace X] (a b c : X)
 -- QUOTE.
 
 /- TEXT:
-Note we also have variants where the distance can be infinite or where ``dist a b`` can be zero without having ``a = b`` or both.
-They are called ``EMetricSpace``, ``PseudoMetricSpace`` and ``PseudoEMetricSpace`` respectively (here "e" stands for "extended").
+注意，我们还有距离可以是无穷的，或者 ``dist a b`` 可以为零但 ``a = b`` 不成立，或两者兼有的变体。
+它们分别称为 ``EMetricSpace``、``PseudoMetricSpace`` 和 ``PseudoEMetricSpace``（这里 "e" 代表 "extended"）。
 
 BOTH: -/
--- Note the next three lines are not quoted, their purpose is to make sure those things don't get renamed while we're looking elsewhere.
+-- 注意，接下来三行没有被引用，它们的目的是确保在我们关注其他地方时这些东西不会被重命名。
 #check EMetricSpace
 #check PseudoMetricSpace
 #check PseudoEMetricSpace
 
 /- TEXT:
-Note that our journey from ``ℝ`` to metric spaces jumped over the special case of normed spaces that also require linear algebra and
-will be explained as part of the calculus chapter.
+注意，我们从 ``ℝ`` 到度量空间的旅程跳过了赋范空间的特例，后者也需要线性代数，
+并将在微积分章节中作为一部分加以解释。
 
-Convergence and continuity
+收敛与连续性
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Using distance functions, we can already define convergent sequences and continuous functions between metric spaces.
-They are actually defined in a more general setting covered in the next section,
-but we have lemmas recasting the definition in terms of distances.
+使用距离函数，我们已经可以定义度量空间之间的收敛序列和连续函数。
+它们实际上在下一节涵盖的更一般背景中定义，
+但我们有引理用距离重新表述这个定义。
 BOTH: -/
 -- QUOTE:
 example {u : ℕ → X} {a : X} :
@@ -65,11 +65,11 @@ example {X Y : Type*} [MetricSpace X] [MetricSpace Y] {f : X → Y} :
 .. index:: continuity, tactics ; continuity
 
 
-A *lot* of lemmas have some continuity assumptions, so we end up proving a lot of continuity results and there
-is a ``continuity`` tactic devoted to this task. Let's prove a continuity statement that will be needed
-in an exercise below. Notice that Lean knows how to treat a product of two metric spaces as a metric space, so
-it makes sense to consider continuous functions from ``X × X`` to ``ℝ``.
-In particular the (uncurried version of the) distance function is such a function.
+很多引理都有一些连续性假设，因此我们最终要证明很多连续性结果，并且有一个
+``continuity`` 策略专门用于此任务。让我们证明一个在下面的练习中需要的连续性陈述。
+注意，Lean 知道如何将两个度量空间的积视为度量空间，因此
+考虑从 ``X × X`` 到 ``ℝ`` 的连续函数是有意义的。
+特别地，距离函数的（非柯里化版本）就是这样一个函数。
 
 BOTH: -/
 -- QUOTE:
@@ -78,17 +78,17 @@ example {X Y : Type*} [MetricSpace X] [MetricSpace Y] {f : X → Y} (hf : Contin
 -- QUOTE.
 
 /- TEXT:
-This tactic is a bit slow, so it is also useful to know
-how to do it by hand. We first need to use that ``fun p : X × X ↦ f p.1`` is continuous because it
-is the composition of ``f``, which is continuous by assumption ``hf``, and the projection ``prod.fst`` whose continuity
-is the content of the lemma ``continuous_fst``. The composition property is ``Continuous.comp`` which is
-in the ``Continuous`` namespace so we can use dot notation to compress
-``Continuous.comp hf continuous_fst`` into ``hf.comp continuous_fst`` which is actually more readable
-since it really reads as composing our assumption and our lemma.
-We can do the same for the second component to get continuity of ``fun p : X × X ↦ f p.2``. We then assemble
-those two continuities using ``Continuous.prod_mk`` to get
+这个策略有点慢，因此知道如何手工完成也是有用的。
+我们首先需要使用 ``fun p : X × X ↦ f p.1`` 是连续的，因为它
+是 ``f``（由假设 ``hf`` 是连续的）与投影 ``prod.fst``（其连续性
+是引理 ``continuous_fst`` 的内容）的复合。复合性质是 ``Continuous.comp``，它在
+``Continuous`` 命名空间中，因此我们可以使用点记号将
+``Continuous.comp hf continuous_fst`` 压缩为 ``hf.comp continuous_fst``，后者实际上更可读，
+因为它确实读作将我们的假设和我们的引理复合。
+我们可以对第二个分量做同样的处理，得到 ``fun p : X × X ↦ f p.2`` 的连续性。然后我们
+使用 ``Continuous.prod_mk`` 将这两个连续性组合起来，得到
 ``(hf.comp continuous_fst).prod_mk (hf.comp continuous_snd) : Continuous (fun p : X × X ↦ (f p.1, f p.2))``
-and compose once more to get our full proof.
+并再复合一次来得到我们的完整证明。
 BOTH: -/
 -- QUOTE:
 example {X Y : Type*} [MetricSpace X] [MetricSpace Y] {f : X → Y} (hf : Continuous f) :
@@ -97,20 +97,20 @@ example {X Y : Type*} [MetricSpace X] [MetricSpace Y] {f : X → Y} (hf : Contin
 -- QUOTE.
 
 /- TEXT:
-The combination of ``Continuous.prod_mk`` and ``continuous_dist`` via ``Continuous.comp`` feels clunky,
-even when heavily using dot notation as above. A more serious issue is that this nice proof requires a lot of
-planning. Lean accepts the above proof term because it is a full term proving a statement which is
-definitionally equivalent to our goal, the crucial definition to unfold being that of a composition of functions.
-Indeed our target function ``fun p : X × X ↦ dist (f p.1) (f p.2)`` is not presented as a composition.
-The proof term we provided proves continuity of ``dist ∘ (fun p : X × X ↦ (f p.1, f p.2))`` which happens
-to be definitionally equal to our target function. But if we try to build this proof gradually using
-tactics starting with ``apply continuous_dist.comp`` then Lean's elaborator will fail to recognize a
-composition and refuse to apply this lemma. It is especially bad at this when products of types are involved.
+即使像上面那样大量使用点记号，``Continuous.prod_mk`` 和 ``continuous_dist`` 通过 ``Continuous.comp`` 的组合
+也显得笨拙。一个更严重的问题是，这个漂亮的证明需要大量的
+规划。Lean 接受上面的证明项是因为它是一个完整的项，证明了一个与我们的目标
+按定义等价的陈述，需要展开的关键定义是函数的复合。
+实际上，我们的目标函数 ``fun p : X × X ↦ dist (f p.1) (f p.2)`` 并没有表现为一个复合。
+我们提供的证明项证明了 ``dist ∘ (fun p : X × X ↦ (f p.1, f p.2))`` 的连续性，而后者
+恰好与我们的目标函数按定义相等。但如果我们尝试使用策略逐步构建这个证明，
+从 ``apply continuous_dist.comp`` 开始，那么 Lean 的 elaborator 将无法识别
+复合并拒绝应用这个引理。当涉及类型的积时，它在这方面尤其糟糕。
 
-A better lemma to apply here is
-``Continuous.dist {f g : X → Y} : Continuous f → Continuous g → Continuous (fun x ↦ dist (f x) (g x))``
-which is nicer to Lean's elaborator and also provides a shorter proof when directly providing a full
-proof term, as can be seen from the following two new proofs of the above statement:
+这里更好的应用引理是
+``Continuous.dist {f g : X → Y} : Continuous f → Continuous g → Continuous (fun x ↦ dist (f x) (g x))``，
+它对 Lean 的 elaborator 更友好，并且在直接提供完整
+证明项时也给出了更短的证明，这可以从上述陈述的以下两个新证明中看出：
 BOTH: -/
 -- QUOTE:
 example {X Y : Type*} [MetricSpace X] [MetricSpace Y] {f : X → Y} (hf : Continuous f) :
@@ -125,14 +125,14 @@ example {X Y : Type*} [MetricSpace X] [MetricSpace Y] {f : X → Y} (hf : Contin
 -- QUOTE.
 
 /- TEXT:
-Note that, without the elaboration issue coming from composition, another way to compress
-our proof would be to use ``Continuous.prod_map`` which is sometimes useful and gives
-as an alternate proof term ``continuous_dist.comp (hf.prod_map hf)`` which even shorter to type.
+注意，在没有复合带来的 elaborator 问题的情况下，另一种压缩
+我们证明的方法是使用 ``Continuous.prod_map``，它有时很有用，并给出
+替代证明项 ``continuous_dist.comp (hf.prod_map hf)``，输入起来甚至更短。
 
-Since it is sad to decide between a version which is better for elaboration and a version which is shorter
-to type, let us wrap this discussion with a last bit of compression offered
-by ``Continuous.fst'`` which allows to compress ``hf.comp continuous_fst`` to ``hf.fst'`` (and the same with ``snd``)
-and get our final proof, now bordering obfuscation.
+由于在对 elaborator 更友好的版本和输入更短的版本之间做出选择令人遗憾，
+让我们用 ``Continuous.fst'`` 所提供的最后一点压缩来结束这个讨论，
+它允许将 ``hf.comp continuous_fst`` 压缩为 ``hf.fst'``（``snd`` 同理），
+并得到我们最终的证明，此时已近乎难以辨认。
 
 BOTH: -/
 -- QUOTE:
@@ -142,8 +142,8 @@ example {X Y : Type*} [MetricSpace X] [MetricSpace Y] {f : X → Y} (hf : Contin
 -- QUOTE.
 
 /- TEXT:
-It's your turn now to prove some continuity lemma. After trying the continuity tactic, you will need
-``Continuous.add``, ``continuous_pow`` and ``continuous_id`` to do it by hand.
+现在轮到你来证明一些连续性引理了。在尝试 continuity 策略之后，你将需要
+``Continuous.add``、``continuous_pow`` 和 ``continuous_id`` 来手工完成。
 
 BOTH: -/
 -- QUOTE:
@@ -156,7 +156,7 @@ SOLUTIONS: -/
 -- QUOTE.
 
 /- TEXT:
-So far we saw continuity as a global notion, but one can also define continuity at a point.
+到目前为止，我们将连续性视为全局概念，但也可以定义在一点处的连续性。
 BOTH: -/
 -- QUOTE:
 example {X Y : Type*} [MetricSpace X] [MetricSpace Y] (f : X → Y) (a : X) :
@@ -166,10 +166,10 @@ example {X Y : Type*} [MetricSpace X] [MetricSpace Y] (f : X → Y) (a : X) :
 
 /- TEXT:
 
-Balls, open sets and closed sets
+球、开集与闭集
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Once we have a distance function, the most important geometric definitions are (open) balls and closed balls.
+一旦有了距离函数，最重要的几何定义是（开）球和闭球。
 
 BOTH: -/
 -- QUOTE:
@@ -183,7 +183,7 @@ example : Metric.closedBall a r = { b | dist b a ≤ r } :=
 -- QUOTE.
 
 /- TEXT:
-Note that `r` is any real number here, there is no sign restriction. Of course some statements do require a radius condition.
+注意这里 `r` 是任意实数，没有符号限制。当然，有些陈述确实需要半径条件。
 BOTH: -/
 -- QUOTE:
 example (hr : 0 < r) : a ∈ Metric.ball a r :=
@@ -194,8 +194,8 @@ example (hr : 0 ≤ r) : a ∈ Metric.closedBall a r :=
 -- QUOTE.
 
 /- TEXT:
-Once we have balls, we can define open sets. They are actually defined in a more general setting covered in the next section,
-but we have lemmas recasting the definition in terms of balls.
+有了球之后，我们可以定义开集。它们实际上在下一节涵盖的更一般背景中定义，
+但我们有引理用球重新表述这个定义。
 
 BOTH: -/
 -- QUOTE:
@@ -204,7 +204,7 @@ example (s : Set X) : IsOpen s ↔ ∀ x ∈ s, ∃ ε > 0, Metric.ball x ε ⊆
 -- QUOTE.
 
 /- TEXT:
-Then closed sets are sets whose complement is open. Their important property is they are closed under limits. The closure of a set is the smallest closed set containing it.
+然后闭集是其补集为开集的集合。它们的重要性质是对极限封闭。一个集合的闭包是包含它的最小闭集。
 BOTH: -/
 -- QUOTE:
 example {s : Set X} : IsClosed s ↔ IsOpen (sᶜ) :=
@@ -219,7 +219,7 @@ example {s : Set X} : a ∈ closure s ↔ ∀ ε > 0, ∃ b ∈ s, a ∈ Metric.
 -- QUOTE.
 
 /- TEXT:
-Do the next exercise without using `mem_closure_iff_seq_limit`
+完成下一个练习时不要使用 `mem_closure_iff_seq_limit`。
 BOTH: -/
 -- QUOTE:
 example {u : ℕ → X} (hu : Tendsto u atTop (𝓝 a)) {s : Set X} (hs : ∀ n, u n ∈ s) :
@@ -239,11 +239,11 @@ SOLUTIONS: -/
 
 /- TEXT:
 
-Remember from the filters sections that neighborhood filters play a big role in Mathlib.
-In the metric space context, the crucial point is that balls provide bases for those filters.
-The main lemmas here are ``Metric.nhds_basis_ball`` and ``Metric.nhds_basis_closedBall``
-that claim this for open and closed balls with positive radius. The center point is an implicit
-argument so we can invoke ``Filter.HasBasis.mem_iff`` as in the following example.
+回忆一下滤子部分中邻域滤子在 Mathlib 中扮演着重要角色。
+在度量空间语境中，关键点是球为这些滤子提供了基。
+这里的主要引理是 ``Metric.nhds_basis_ball`` 和 ``Metric.nhds_basis_closedBall``，
+它们声称这对具有正半径的开球和闭球成立。中心点是隐式
+参数，因此我们可以像下面的例子一样调用 ``Filter.HasBasis.mem_iff``。
 
 BOTH: -/
 -- QUOTE:
@@ -256,22 +256,22 @@ example {x : X} {s : Set X} : s ∈ 𝓝 x ↔ ∃ ε > 0, Metric.closedBall x �
 
 /- TEXT:
 
-Compactness
+紧性
 ^^^^^^^^^^^
 
-Compactness is an important topological notion. It distinguishes subsets of a metric space
-that enjoy the same kind of properties as segments in the reals compared to other intervals:
+紧性是一个重要的拓扑概念。它区分度量空间的子集中那些
+享有与实数中的区间相比其他区间所具有的同类性质的子集：
 
-* Any sequence with values in a compact set has a subsequence that converges in this set.
-* Any continuous function on a nonempty compact set with values in real numbers is bounded and
-  attains its bounds somewhere (this is called the extreme value theorem).
-* Compact sets are closed sets.
+* 取值在紧集中的任何序列都有在该集合中收敛的子列。
+* 非空紧集上的任何取实数值的连续函数是有界的，并且
+  在某处达到其界（这称为极值定理）。
+* 紧集是闭集。
 
-Let us first check that the unit interval in the reals is indeed a compact set, and then check the above
-claims for compact sets in general metric spaces. In the second statement we only
-need continuity on the given set so we will use ``ContinuousOn`` instead of ``Continuous``, and
-we will give separate statements for the minimum and the maximum. Of course all these results
-are deduced from more general versions, some of which will be discussed in later sections.
+让我们首先验证实数中的单位闭区间确实是一个紧集，然后检查上述
+关于一般度量空间中紧集的断言。在第二个陈述中，我们只需要
+在给定集合上的连续性，因此我们将使用 ``ContinuousOn`` 而不是 ``Continuous``，并且
+我们将为最小值和最大值分别给出陈述。当然，所有这些结果
+都是从更一般的版本推导出来的，其中一些将在后面的章节中讨论。
 
 BOTH: -/
 -- QUOTE:
@@ -298,7 +298,7 @@ example {s : Set X} (hs : IsCompact s) : IsClosed s :=
 
 /- TEXT:
 
-We can also specify that a metric spaces is globally compact, using an extra ``Prop``-valued type class:
+我们也可以使用一个额外的 ``Prop`` 值类型类来指定度量空间是全局紧的：
 
 BOTH: -/
 -- QUOTE:
@@ -308,18 +308,18 @@ example {X : Type*} [MetricSpace X] [CompactSpace X] : IsCompact (univ : Set X) 
 
 /- TEXT:
 
-In a compact metric space any closed set is compact, this is ``IsClosed.isCompact``.
+在紧度量空间中，任何闭集都是紧的，这是 ``IsClosed.isCompact``。
 
 BOTH: -/
 #check IsCompact.isClosed
 
 /- TEXT:
-Uniformly continuous functions
+一致连续函数
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-We now turn to uniformity notions on metric spaces : uniformly continuous functions, Cauchy sequences and completeness.
-Again those are defined in a more general context but we have lemmas in the metric name space to access their elementary definitions.
-We start with uniform continuity.
+现在我们转向度量空间上的一致性质：一致连续函数、Cauchy 列和完备性。
+同样，这些是在更一般的语境中定义的，但我们在度量命名空间中有引理来获取它们的初等定义。
+我们从一致连续性开始。
 
 BOTH: -/
 -- QUOTE:
@@ -330,22 +330,22 @@ example {X : Type*} [MetricSpace X] {Y : Type*} [MetricSpace Y] {f : X → Y} :
 -- QUOTE.
 
 /- TEXT:
-In order to practice manipulating all those definitions, we will prove that continuous
-functions from a compact metric space to a metric space are uniformly continuous
-(we will see a more general version in a later section).
+为了练习操作所有这些定义，我们将证明从紧度量空间到度量空间的连续
+函数是一致连续的
+（我们将在后面的章节中看到一个更一般的版本）。
 
-We will first give an informal sketch. Let ``f : X → Y`` be a continuous function from
-a compact metric space to a metric space.
-We fix ``ε > 0`` and start looking for some ``δ``.
+我们首先给出一个非正式的草图。设 ``f : X → Y`` 是从
+紧度量空间到度量空间的连续函数。
+我们固定 ``ε > 0`` 并开始寻找某个 ``δ``。
 
-Let ``φ : X × X → ℝ := fun p ↦ dist (f p.1) (f p.2)`` and let ``K := { p : X × X | ε ≤ φ p }``.
-Observe ``φ`` is continuous since ``f`` and distance are continuous.
-And ``K`` is clearly closed (use ``isClosed_le``) hence compact since ``X`` is compact.
+设 ``φ : X × X → ℝ := fun p ↦ dist (f p.1) (f p.2)`` 并设 ``K := { p : X × X | ε ≤ φ p }``。
+观察到 ``φ`` 是连续的，因为 ``f`` 和距离是连续的。
+而 ``K`` 显然是闭的（使用 ``isClosed_le``），因此是紧的，因为 ``X`` 是紧的。
 
-Then we discuss two possibilities using ``eq_empty_or_nonempty``.
-If ``K`` is empty then we are clearly done (we can set ``δ = 1`` for instance).
-So let's assume ``K`` is not empty, and use the extreme value theorem to choose ``(x₀, x₁)`` attaining the infimum
-of the distance function on ``K``. We can then set ``δ = dist x₀ x₁`` and check everything works.
+然后我们使用 ``eq_empty_or_nonempty`` 讨论两种可能性。
+如果 ``K`` 是空的，那么我们显然完成了（例如我们可以设 ``δ = 1``）。
+因此假设 ``K`` 非空，并使用极值定理选择 ``(x₀, x₁)`` 达到 ``K`` 上
+距离函数的下确界。然后我们可以设 ``δ = dist x₀ x₁`` 并检查一切成立。
 
 BOTH: -/
 -- QUOTE:
@@ -383,13 +383,13 @@ SOLUTIONS: -/
 -- QUOTE.
 
 /- TEXT:
-Completeness
+完备性
 ^^^^^^^^^^^^
 
-A Cauchy sequence in a metric space is a sequence whose terms get closer and closer to each other.
-There are a couple of equivalent ways to state that idea.
-In particular converging sequences are Cauchy. The converse is true only in so-called *complete*
-spaces.
+度量空间中的 Cauchy 列是其项彼此越来越接近的序列。
+有几种等价的方式来陈述这个想法。
+特别地，收敛序列是 Cauchy 列。逆命题仅对所谓的*完备*
+空间成立。
 
 
 BOTH: -/
@@ -409,10 +409,10 @@ example [CompleteSpace X] (u : ℕ → X) (hu : CauchySeq u) :
 
 /- TEXT:
 
-We'll practice using this definition by proving a convenient criterion which is a special case of a
-criterion appearing in Mathlib. This is also a good opportunity to practice using big sums in
-a geometric context. In addition to the explanations from the filters section, you will probably need
-``tendsto_pow_atTop_nhds_zero_of_lt_one``, ``Tendsto.mul`` and ``dist_le_range_sum_dist``.
+我们将通过证明一个方便的判据来练习使用这个定义，该判据是
+Mathlib 中出现的一个判据的特例。这也是在几何语境中练习使用大求和的好机会。
+除了滤子部分的解释外，你大概还需要
+``tendsto_pow_atTop_nhds_zero_of_lt_one``、``Tendsto.mul`` 和 ``dist_le_range_sum_dist``。
 BOTH: -/
 open BigOperators
 
@@ -469,10 +469,10 @@ theorem cauchySeq_of_le_geometric_two' {u : ℕ → X}
 
 /- TEXT:
 
-We are ready for the final boss of this section: Baire's theorem for complete metric spaces!
-The proof skeleton below shows interesting techniques. It uses the ``choose`` tactic in its exclamation
-mark variant (you should experiment with removing this exclamation mark) and it shows how to
-define something inductively in the middle of a proof using ``Nat.rec_on``.
+我们准备好了迎接本节的最终 Boss：完备度量空间的 Baire 定理！
+下面的证明框架展示了有趣的技巧。它使用了 ``choose`` 策略的感叹号
+变体（你应该尝试去掉这个感叹号），并展示了如何在证明
+中间使用 ``Nat.rec_on`` 归纳地定义某些东西。
 
 BOTH: -/
 -- QUOTE:
@@ -484,10 +484,10 @@ example [CompleteSpace X] (f : ℕ → Set X) (ho : ∀ n, IsOpen (f n)) (hd : �
   let B : ℕ → ℝ := fun n ↦ (1 / 2) ^ n
   have Bpos : ∀ n, 0 < B n
   sorry
-  /- Translate the density assumption into two functions `center` and `radius` associating
-    to any n, x, δ, δpos a center and a positive radius such that
-    `closedBall center radius` is included both in `f n` and in `closedBall x δ`.
-    We can also require `radius ≤ (1/2)^(n+1)`, to ensure we get a Cauchy sequence later. -/
+  /- 将稠密性假设转化为两个函数 `center` 和 `radius`，它们将
+    任何 n, x, δ, δpos 关联到一个中心和正半径，使得
+    `closedBall center radius` 既包含在 `f n` 中又包含在 `closedBall x δ` 中。
+    我们还可以要求 `radius ≤ (1/2)^(n+1)`，以确保稍后得到 Cauchy 序列。 -/
   have :
     ∀ (n : ℕ) (x : X),
       ∀ δ > 0, ∃ y : X, ∃ r > 0, r ≤ B (n + 1) ∧ closedBall y r ⊆ closedBall x δ ∩ f n :=
@@ -496,12 +496,11 @@ example [CompleteSpace X] (f : ℕ → Set X) (ho : ∀ n, IsOpen (f n)) (hd : �
   intro x
   rw [mem_closure_iff_nhds_basis nhds_basis_closedBall]
   intro ε εpos
-  /- `ε` is positive. We have to find a point in the ball of radius `ε` around `x`
-    belonging to all `f n`. For this, we construct inductively a sequence
-    `F n = (c n, r n)` such that the closed ball `closedBall (c n) (r n)` is included
-    in the previous ball and in `f n`, and such that `r n` is small enough to ensure
-    that `c n` is a Cauchy sequence. Then `c n` converges to a limit which belongs
-    to all the `f n`. -/
+  /- `ε` 是正的。我们需要在 `x` 周围半径为 `ε` 的球中找到一个属于所有 `f n` 的点。
+    为此，我们归纳地构造一个序列 `F n = (c n, r n)`，使得闭球
+    `closedBall (c n) (r n)` 包含在前一个球中且在 `f n` 中，并且使得
+    `r n` 足够小以确保 `c n` 是 Cauchy 序列。然后 `c n` 收敛到一个
+    属于所有 `f n` 的极限。 -/
   let F : ℕ → X × ℝ := fun n ↦
     Nat.recOn n (Prod.mk x (min ε (B 0)))
       fun n p ↦ Prod.mk (center n p.1 p.2) (radius n p.1 p.2)
@@ -513,10 +512,10 @@ example [CompleteSpace X] (f : ℕ → Set X) (ho : ∀ n, IsOpen (f n)) (hd : �
     sorry
   have cdist : ∀ n, dist (c n) (c (n + 1)) ≤ B n := by sorry
   have : CauchySeq c := cauchySeq_of_le_geometric_two' cdist
-  -- as the sequence `c n` is Cauchy in a complete space, it converges to a limit `y`.
+  -- 由于序列 `c n` 在完备空间中是 Cauchy 列，它收敛到一个极限 `y`。
   rcases cauchySeq_tendsto_of_complete this with ⟨y, ylim⟩
-  -- this point `y` will be the desired point. We will check that it belongs to all
-  -- `f n` and to `ball x ε`.
+  -- 这个点 `y` 将是我们所需的点。我们将检查它属于所有
+  -- `f n` 以及 `ball x ε`。
   use y
   have I : ∀ n, ∀ m ≥ n, closedBall (c m) (r m) ⊆ closedBall (c n) (r n) := by sorry
   have yball : ∀ n, y ∈ closedBall (c n) (r n) := by sorry
@@ -528,10 +527,10 @@ example [CompleteSpace X] (f : ℕ → Set X) (ho : ∀ n, IsOpen (f n)) (hd : �
     Dense (⋂ n, f n) := by
   let B : ℕ → ℝ := fun n ↦ (1 / 2) ^ n
   have Bpos : ∀ n, 0 < B n := fun n ↦ pow_pos (by linarith) n
-  /- Translate the density assumption into two functions `center` and `radius` associating
-    to any n, x, δ, δpos a center and a positive radius such that
-    `closedBall center radius` is included both in `f n` and in `closedBall x δ`.
-    We can also require `radius ≤ (1/2)^(n+1)`, to ensure we get a Cauchy sequence later. -/
+  /- 将稠密性假设转化为两个函数 `center` 和 `radius`，它们将
+    任何 n, x, δ, δpos 关联到一个中心和正半径，使得
+    `closedBall center radius` 既包含在 `f n` 中又包含在 `closedBall x δ` 中。
+    我们还可以要求 `radius ≤ (1/2)^(n+1)`，以确保稍后得到 Cauchy 序列。 -/
   have :
     ∀ (n : ℕ) (x : X),
       ∀ δ > 0, ∃ y : X, ∃ r > 0, r ≤ B (n + 1) ∧ closedBall y r ⊆ closedBall x δ ∩ f n := by
@@ -563,11 +562,11 @@ example [CompleteSpace X] (f : ℕ → Set X) (ho : ∀ n, IsOpen (f n)) (hd : �
           )
   choose! center radius Hpos HB Hball using this
   refine fun x ↦ (mem_closure_iff_nhds_basis nhds_basis_closedBall).2 fun ε εpos ↦ ?_
-  /- `ε` is positive. We have to find a point in the ball of radius `ε` around `x` belonging to all
-    `f n`. For this, we construct inductively a sequence `F n = (c n, r n)` such that the closed ball
-    `closedBall (c n) (r n)` is included in the previous ball and in `f n`, and such that
-    `r n` is small enough to ensure that `c n` is a Cauchy sequence. Then `c n` converges to a
-    limit which belongs to all the `f n`. -/
+  /- `ε` 是正的。我们需要在 `x` 周围半径为 `ε` 的球中找到一个属于所有
+    `f n` 的点。为此，我们归纳地构造一个序列 `F n = (c n, r n)`，使得闭球
+    `closedBall (c n) (r n)` 包含在前一个球中且在 `f n` 中，并且使得
+    `r n` 足够小以确保 `c n` 是 Cauchy 序列。然后 `c n` 收敛到一个
+    属于所有 `f n` 的极限。 -/
   let F : ℕ → X × ℝ := fun n ↦
     Nat.recOn n (Prod.mk x (min ε (B 0))) fun n p ↦ Prod.mk (center n p.1 p.2) (radius n p.1 p.2)
   let c : ℕ → X := fun n ↦ (F n).1
@@ -597,10 +596,10 @@ example [CompleteSpace X] (f : ℕ → Set X) (ho : ∀ n, IsOpen (f n)) (hd : �
 
     exact I A
   have : CauchySeq c := cauchySeq_of_le_geometric_two' cdist
-  -- as the sequence `c n` is Cauchy in a complete space, it converges to a limit `y`.
+  -- 由于序列 `c n` 在完备空间中是 Cauchy 列，它收敛到一个极限 `y`。
   rcases cauchySeq_tendsto_of_complete this with ⟨y, ylim⟩
-  -- this point `y` will be the desired point. We will check that it belongs to all
-  -- `f n` and to `ball x ε`.
+  -- 这个点 `y` 将是我们所需的点。我们将检查它属于所有
+  -- `f n` 以及 `ball x ε`。
   use y
   have I : ∀ n, ∀ m ≥ n, closedBall (c m) (r m) ⊆ closedBall (c n) (r n) := by
     intro n

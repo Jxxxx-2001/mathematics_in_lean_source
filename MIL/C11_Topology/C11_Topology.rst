@@ -2,77 +2,71 @@
 
 .. index:: topology
 
-Topology
-========
+拓扑
+====
 
-Calculus is based on the concept of a function, which is used to model
-quantities that depend on one another.
-For example, it is common to study quantities that change over time.
-The notion of a *limit* is also fundamental.
-We may say that the limit of a function :math:`f(x)` is a value :math:`b`
-as :math:`x` approaches a value :math:`a`,
-or that :math:`f(x)` *converges to* :math:`b` as :math:`x` approaches :math:`a`.
-Equivalently, we may say that :math:`f(x)` approaches :math:`b` as :math:`x`
-approaches a value :math:`a`, or that it *tends to* :math:`b`
-as :math:`x` tends to :math:`a`.
-We have already begun to consider such notions in :numref:`sequences_and_convergence`.
+微积分建立函数概念之上，函数用于对相互依赖的量进行建模。
+例如，通常研究随时间变化的量。
+*极限* 的概念也是基础。
+我们可以说函数 :math:`f(x)` 的极限是值 :math:`b`
+当 :math:`x` 趋近于值 :math:`a` 时，
+或者说当 :math:`x` 趋近于 :math:`a` 时 :math:`f(x)` *收敛到* :math:`b`。
+等价地，我们可以说当 :math:`x` 趋近于值 :math:`a` 时 :math:`f(x)` 趋近于 :math:`b`，
+或者说当 :math:`x` 趋近于 :math:`a` 时它 *趋向于* :math:`b`。
+我们已经在 :numref:`sequences_and_convergence` 中开始考虑这样的概念。
 
-*Topology* is the abstract study of limits and continuity.
-Having covered the essentials of formalization in Chapters :numref:`%s <basics>`
-to :numref:`%s <structures>`,
-in this chapter, we will explain how topological notions are formalized in Mathlib.
-Not only do topological abstractions apply in much greater generality,
-but they also, somewhat paradoxically, make it easier to reason about limits
-and continuity in concrete instances.
+*拓扑学* 是极限和连续性的抽象研究。
+在从第 :numref:`%s <basics>` 章
+到第 :numref:`%s <structures>` 章涵盖了形式化的要点之后，
+在本章中，我们将解释拓扑概念如何在 Mathlib 中形式化。
+拓扑抽象不仅适用于更广泛的场景，
+而且有些矛盾的是，它们还使得在具体实例中推理极限
+和连续性变得更容易。
 
-Topological notions build on quite a few layers of mathematical structure.
-The first layer is naive set theory,
-as described in :numref:`Chapter %s <sets_and_functions>`.
-The next layer is the theory of *filters*, which we will describe in :numref:`filters`.
-On top of that, we layer
-the theories of *topological spaces*, *metric spaces*, and a slightly more exotic
-intermediate notion called a *uniform space*.
+拓扑概念建立在相当多的数学结构层次之上。
+第一层是朴素集合论，
+如 :numref:`第 %s 章 <sets_and_functions>` 所述。
+下一层是 *滤子* 理论，我们将在 :numref:`filters` 中描述。
+在此之上，我们叠加
+*拓扑空间*、*度量空间* 以及一个稍微奇特一些的
+中间概念——*一致空间*。
 
-Whereas previous chapters relied on mathematical notions that were likely
-familiar to you,
-the notion of a filter is less well known,
-even to many working mathematicians.
-The notion is essential, however, for formalizing mathematics effectively.
-Let us explain why.
-Let ``f : ℝ → ℝ`` be any function. We can consider
-the limit of ``f x`` as ``x`` approaches some value ``x₀``,
-but we can also consider the limit of ``f x`` as ``x`` approaches infinity
-or negative infinity.
-We can moreover consider the limit of ``f x`` as ``x`` approaches ``x₀`` from
-the right, conventionally written ``x₀⁺``, or from the left,
-written  ``x₀⁻``. There are variations where ``x`` approaches ``x₀`` or ``x₀⁺``
-or ``x₀⁻`` but
-is not allowed to take on the value ``x₀`` itself.
-This results in at least eight ways that ``x`` can approach something.
-We can also restrict to rational values of ``x``
-or place other constraints on the domain, but let's stick to those 8 cases.
+之前的章节所依赖的数学概念你可能已经熟悉，
+但滤子的概念相对不那么为人所知，
+即使对许多从业数学家来说也是如此。
+然而，这个概念对于有效地形式化数学是必不可少的。
+让我们解释为什么。
+设 ``f : ℝ → ℝ`` 为任意函数。我们可以考虑
+当 ``x`` 趋近于某个值 ``x₀`` 时 ``f x`` 的极限，
+但我们也可以考虑当 ``x`` 趋近于无穷大
+或负无穷大时 ``f x`` 的极限。
+此外，我们还可以考虑当 ``x`` 从右侧趋近于 ``x₀`` 时
+（通常记作 ``x₀⁺``），或从左侧趋近时
+（记作 ``x₀⁻``） ``f x`` 的极限。还有变体，其中 ``x`` 趋近于 ``x₀`` 或 ``x₀⁺``
+或 ``x₀⁻`` 但不允许取 ``x₀`` 本身的值。
+这导致 ``x`` 可以有至少八种不同的趋近方式。
+我们还可以限制 ``x`` 为有理数值
+或对定义域施加其他约束，但让我们只关注这 8 种情况。
 
-We have a similar variety of options on the codomain:
-we can specify that ``f x`` approaches a value from the left or right,
-or that it approaches positive or negative infinity, and so on.
-For example, we may wish to say that ``f x`` tends to ``+∞``
-when ``x`` tends to ``x₀`` from the right without
-being equal to ``x₀``.
-This results in 64 different kinds of limit statements,
-and we haven't even begun to deal with limits of sequences,
-as we did in :numref:`sequences_and_convergence`.
+在值域上我们有类似的变化选择：
+我们可以指定 ``f x`` 从左侧或右侧趋近于一个值，
+或者趋近于正无穷大或负无穷大，等等。
+例如，我们可能希望表达当 ``x`` 从右侧趋近于 ``x₀``
+且不等于 ``x₀`` 时 ``f x`` 趋向于 ``+∞``。
+这导致了 64 种不同的极限命题，
+而我们甚至还没有开始处理序列的极限，
+正如我们在 :numref:`sequences_and_convergence` 中所做的。
 
-The problem is compounded even further when it comes to the supporting lemmas.
-For instance, limits compose: if
-``f x`` tends to ``y₀`` when ``x`` tends to ``x₀`` and
-``g y`` tends to ``z₀`` when ``y`` tends to ``y₀`` then
-``g ∘ f x`` tends to ``z₀`` when ``x`` tends to ``x₀``.
-There are three notions of "tends to" at play here,
-each of which can be instantiated in any of the eight ways described
-in the previous paragraph.
-This results in 512 lemmas, a lot to have to add to a library!
-Informally, mathematicians generally prove two or three of these
-and simply note that the rest can be proved "in the same way."
-Formalizing mathematics requires making the relevant notion of "sameness"
-fully explicit, and that is exactly what Bourbaki's theory of filters
-manages to do.
+当涉及到辅助引理时，问题甚至更加复杂。
+例如，极限可以复合：如果
+当 ``x`` 趋近于 ``x₀`` 时 ``f x`` 趋向于 ``y₀``，且
+当 ``y`` 趋近于 ``y₀`` 时 ``g y`` 趋向于 ``z₀``，则
+当 ``x`` 趋近于 ``x₀`` 时 ``g ∘ f x`` 趋向于 ``z₀``。
+这里涉及三种"趋向于"的概念，
+每一种都可以在前一段所述的八种方式中的任何一种下实例化。
+这导致了 512 条引理，太多而无法添加到库中！
+非正式地，数学家通常证明其中两三条，
+然后简单地指出其余的可以"以同样的方式"证明。
+形式化数学要求使"同样"的相关概念
+完全明确，而这正是 Bourbaki 的滤子理论
+所做到的。

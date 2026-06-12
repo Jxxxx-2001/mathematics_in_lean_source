@@ -13,17 +13,16 @@ noncomputable section
 
 .. _elementary_integration:
 
-Elementary Integration
-----------------------
+初等积分
+--------
 
-We first focus on integration of functions on finite intervals in ``ℝ``. We can integrate
-elementary functions.
+我们首先关注 ``ℝ`` 上有限区间上的函数积分。我们可以积分初等函数。
 EXAMPLES: -/
 -- QUOTE:
 open MeasureTheory intervalIntegral
 
 open Interval
--- this introduces the notation `[[a, b]]` for the segment from `min a b` to `max a b`
+-- 这引入了记号 `[[a, b]]`，表示从 `min a b` 到 `max a b` 的区间
 
 example (a b : ℝ) : (∫ x in a..b, x) = (b ^ 2 - a ^ 2) / 2 :=
   integral_id
@@ -33,12 +32,11 @@ example {a b : ℝ} (h : (0 : ℝ) ∉ [[a, b]]) : (∫ x in a..b, 1 / x) = Real
 -- QUOTE.
 
 /- TEXT:
-The fundamental theorem of calculus relates integration and differentiation.
-Below we give simplified statements of the two parts of this theorem. The first part
-says that integration provides an inverse to differentiation and the second one
-specifies how to compute integrals of derivatives.
-(These two parts are very closely related, but their optimal versions,
-which are not shown here, are not equivalent.)
+微积分基本定理将积分与微分联系起来。
+下面我们给出该定理两个部分的简化版本。第一部分
+说明积分提供了微分的逆运算，第二部分
+说明如何计算导数的积分。
+（这两部分联系非常紧密，但它们的最优版本（此处未展示）并不等价。）
 EXAMPLES: -/
 -- QUOTE:
 example (f : ℝ → ℝ) (hf : Continuous f) (a b : ℝ) : deriv (fun u ↦ ∫ x : ℝ in a..u, f x) b = f b :=
@@ -51,7 +49,7 @@ example {f : ℝ → ℝ} {a b : ℝ} {f' : ℝ → ℝ} (h : ∀ x ∈ [[a, b]]
 -- QUOTE.
 
 /- TEXT:
-Convolution is also defined in Mathlib and its basic properties are proved.
+卷积在 Mathlib 中也被定义了，并且其基本性质已被证明。
 EXAMPLES: -/
 -- QUOTE:
 open Convolution

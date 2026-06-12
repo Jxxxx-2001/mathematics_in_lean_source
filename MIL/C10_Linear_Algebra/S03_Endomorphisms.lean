@@ -8,15 +8,15 @@ import MIL.Common
 
 /- TEXT:
 
-Endomorphisms
+自同态
 --------------
 
-An important special case of linear maps are endomorphisms: linear maps from a vector space to itself.
-They are interesting because they form a ``K``-algebra. In particular we can evaluate polynomials
-with coefficients in ``K`` on them, and they can have eigenvalues and eigenvectors.
+线性映射的一个重要特例是自同态：从向量空间到自身的线性映射。
+它们之所以有趣，是因为它们构成一个 ``K``-代数。特别地，我们可以对其求值系数在 ``K`` 中的多项式，
+并且它们可以有特征值和特征向量。
 
-Mathlib uses the abbreviation ``Module.End K V := V →ₗ[K] V`` which is convenient when
-using a lot of these (especially after opening the ``Module`` namespace).
+Mathlib 使用缩写 ``Module.End K V := V →ₗ[K] V``，这在
+大量使用它们时很方便（尤其是在打开 ``Module`` 命名空间之后）。
 
 BOTH: -/
 
@@ -30,24 +30,24 @@ variable {W : Type*} [AddCommGroup W] [Module K W]
 open Polynomial Module LinearMap End
 
 example (φ ψ : End K V) : φ * ψ = φ ∘ₗ ψ :=
-  End.mul_eq_comp φ ψ -- `rfl` would also work
+  End.mul_eq_comp φ ψ -- `rfl` 也可以
 
--- evaluating `P` on `φ`
+-- 在 `φ` 上求值 `P`
 example (P : K[X]) (φ : End K V) : V →ₗ[K] V :=
   aeval φ P
 
--- evaluating `X` on `φ` gives back `φ`
+-- 在 `φ` 上求值 `X` 将返回 `φ`
 example (φ : End K V) : aeval φ (X : K[X]) = φ :=
   aeval_X φ
 
 
 -- QUOTE.
 /- TEXT:
-As an exercise manipulating endomorphisms, subspaces and polynomials, let us prove the
-(binary) kernels lemma: for any endomorphism :math:`φ` and any two relatively
-prime polynomials :math:`P` and :math:`Q`, we have :math:`\ker P(φ) ⊕ \ker Q(φ) = \ker \big(PQ(φ)\big)`.
+作为操作自同态、子空间和多项式的练习，让我们证明
+（二元）核引理：对任意自同态 :math:`φ` 和任意两个互素
+多项式 :math:`P` 和 :math:`Q`，我们有 :math:`\ker P(φ) ⊕ \ker Q(φ) = \ker \big(PQ(φ)\big)`。
 
-Note that ``IsCoprime x y`` is defined as ``∃ a b, a * x + b * y = 1``.
+注意，``IsCoprime x y`` 定义为 ``∃ a b, a * x + b * y = 1``。
 BOTH: -/
 -- QUOTE:
 
@@ -80,12 +80,12 @@ SOLUTIONS: -/
   apply le_antisymm
   · apply sup_le
     · rw [mul_comm, map_mul]
-      apply ker_le_ker_comp -- or alternative below:
+      apply ker_le_ker_comp -- 或者下面的替代方法：
       -- intro x hx
       -- rw [mul_comm, mem_ker] at *
       -- simp [hx]
     · rw [map_mul]
-      apply ker_le_ker_comp -- or alternative as above
+      apply ker_le_ker_comp -- 或者与上面一样的替代方法
   · intro x hx
     rcases h with ⟨U, V, hUV⟩
     have key : x = aeval φ (U*P) x + aeval φ (V*Q) x := by simpa using congr((aeval φ) $hUV.symm x)
@@ -98,12 +98,12 @@ SOLUTIONS: -/
 
 -- QUOTE.
 /- TEXT:
-We now move to the discussions of eigenspaces and eigenvalues. The eigenspace
-associated to an endomorphism :math:`φ` and a scalar :math:`a` is the kernel of :math:`φ - aId`.
-Eigenspaces are defined for all values of ``a``, although
-they are interesting only when they are non-zero.
-However an eigenvector is, by definition, a non-zero element of an eigenspace. The corresponding
-predicate is ``End.HasEigenvector``.
+现在我们转向特征空间和特征值的讨论。与自同态 :math:`φ` 和标量 :math:`a` 关联的特征空间
+是 :math:`φ - aId` 的核。
+特征空间对所有的 ``a`` 值都有定义，尽管
+它们只在非零时才有意义。
+然而，特征向量根据定义是特征空间中的非零元素。相应的
+谓词是 ``End.HasEigenvector``。
 EXAMPLES: -/
 -- QUOTE:
 example (φ : End K V) (a : K) : φ.eigenspace a = LinearMap.ker (φ - a • 1) :=
@@ -112,7 +112,7 @@ example (φ : End K V) (a : K) : φ.eigenspace a = LinearMap.ker (φ - a • 1) 
 
 -- QUOTE.
 /- TEXT:
-Then there is a predicate ``End.HasEigenvalue`` and the corresponding subtype ``End.Eigenvalues``.
+还有一个谓词 ``End.HasEigenvalue`` 和相应的子类型 ``End.Eigenvalues``。
 EXAMPLES: -/
 -- QUOTE:
 
@@ -125,16 +125,16 @@ example (φ : End K V) (a : K) : φ.HasEigenvalue a ↔ ∃ v, φ.HasEigenvector
 example (φ : End K V) : φ.Eigenvalues = {a // φ.HasEigenvalue a} :=
   rfl
 
--- Eigenvalue are roots of the minimal polynomial
+-- 特征值是极小多项式的根
 example (φ : End K V) (a : K) : φ.HasEigenvalue a → (minpoly K φ).IsRoot a :=
   φ.isRoot_of_hasEigenvalue
 
--- In finite dimension, the converse is also true (we will discuss dimension below)
+-- 在有限维情况下，逆命题也成立（我们将在下面讨论维数）
 example [FiniteDimensional K V] (φ : End K V) (a : K) :
     φ.HasEigenvalue a ↔ (minpoly K φ).IsRoot a :=
   φ.hasEigenvalue_iff_isRoot
 
--- Cayley-Hamilton
+-- Cayley-Hamilton 定理
 example [FiniteDimensional K V] (φ : End K V) : aeval φ φ.charpoly = 0 :=
   φ.aeval_self_charpoly
 

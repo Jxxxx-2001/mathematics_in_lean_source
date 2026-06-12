@@ -65,7 +65,7 @@ example : |a| - |b| ≤ |a - b| :=
     _ ≤ |a - b| := by rw [add_sub_cancel_right]
 
 
--- alternatively
+-- 替代方案
 example : |a| - |b| ≤ |a - b| := by
   have h := abs_add_le (a - b) b
   rw [sub_add_cancel] at h
@@ -114,4 +114,3 @@ example : Nat.gcd m n = Nat.gcd n m := by
     apply Nat.gcd_dvd_left
 
 end
-

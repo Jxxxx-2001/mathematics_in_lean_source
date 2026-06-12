@@ -2,4 +2,4 @@ import MIL.Common
 
 open Nat
 
--- There are no exercises in this section.
+-- 本节没有练习。

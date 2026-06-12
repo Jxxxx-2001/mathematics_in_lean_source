@@ -1,9 +1,8 @@
 .. _basics:
 
-Basics
-======
+基础
+====
 
-This chapter is designed to introduce you to the nuts and
-bolts of mathematical reasoning in Lean: calculating,
-applying lemmas and theorems,
-and reasoning about generic structures.
+本章旨在向你介绍 Lean 中数学推理的基本要素：计算、
+应用引理和定理、
+以及关于一般结构的推理。

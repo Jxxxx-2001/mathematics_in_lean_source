@@ -1,25 +1,23 @@
 .. _structures:
 
-Structures
-==========
+结构
+====
 
-Modern mathematics makes essential use of algebraic
-structures,
-which encapsulate patterns that can be instantiated in
-multiple settings.
-The subject provides various ways of defining such structures and
-constructing particular instances.
+现代数学不可或缺地使用代数结构，
+它们封装了可以在多种情境下实例化的模式。
+这门学科提供了多种方式来定义此类结构并
+构造具体的实例。
 
-Lean therefore provides corresponding ways of
-defining structures formally and working with them.
-You have already seen examples of algebraic structures in Lean,
-such as rings and lattices, which were discussed in
-:numref:`Chapter %s <basics>`.
-This chapter will explain the mysterious square bracket annotations
-that you saw there,
-``[Ring α]`` and ``[Lattice α]``.
-It will also show you how to define and use
-algebraic structures on your own.
+因此，Lean 提供了相应的方式来
+形式化地定义结构并使用它们。
+你已经在 Lean 中见过代数结构的例子，
+例如环和格，它们在
+:numref:`第 %s 章 <basics>` 中讨论过。
+本章将解释你在那里看到的
+神秘方括号标注
+``[Ring α]`` 和 ``[Lattice α]``。
+它还将向你展示如何自己定义和使用
+代数结构。
 
-For more technical detail, you can consult `Theorem Proving in Lean <https://leanprover.github.io/theorem_proving_in_lean/>`_,
-and a paper by Anne Baanen, `Use and abuse of instance parameters in the Lean mathematical library <https://arxiv.org/abs/2202.01629>`_.
+如需更多技术细节，你可以参考 `Theorem Proving in Lean <https://leanprover.github.io/theorem_proving_in_lean/>`_，
+以及 Anne Baanen 的论文 `Use and abuse of instance parameters in the Lean mathematical library <https://arxiv.org/abs/2202.01629>`_。

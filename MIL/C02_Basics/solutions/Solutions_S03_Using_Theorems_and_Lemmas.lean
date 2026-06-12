@@ -14,7 +14,7 @@ example (h₀ : d ≤ e) : c + exp (a + d) ≤ c + exp (a + e) := by
   rw [exp_le_exp]
   apply add_le_add_right h₀
 
--- an alternative using `linarith`.
+-- 使用 `linarith` 的替代方案。
 example (h₀ : d ≤ e) : c + exp (a + d) ≤ c + exp (a + e) := by
   have : exp (a + d) ≤ exp (a + e) := by
     rw [exp_le_exp]
@@ -26,12 +26,12 @@ example (h : a ≤ b) : log (1 + exp a) ≤ log (1 + exp b) := by
   apply log_le_log h₀
   apply add_le_add_right (exp_le_exp.mpr h)
 
--- SOLUTION.
+-- 解答。
 example (h : a ≤ b) : c - exp b ≤ c - exp a := by
   apply sub_le_sub_left
   exact exp_le_exp.mpr h
 
--- alternatively:
+-- 替代方案：
 example (h : a ≤ b) : c - exp b ≤ c - exp a := by
   linarith [exp_le_exp.mpr h]
 
@@ -57,4 +57,3 @@ example : |a*b| ≤ (a^2 + b^2)/2 := by
     apply fact1
   rw [le_div_iff₀ h]
   apply fact2
-

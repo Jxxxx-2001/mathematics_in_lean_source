@@ -9,33 +9,33 @@ BOTH: -/
 /- TEXT:
 .. _section_irrational_roots:
 
-Irrational Roots
+无理根
 ----------------
 
-Let's start with a fact known to the ancient Greeks, namely,
-that the square root of 2 is irrational.
-If we suppose otherwise,
-we can write :math:`\sqrt{2} = a / b` as a fraction
-in lowest terms. Squaring both sides yields :math:`a^2 = 2 b^2`,
-which implies that :math:`a` is even.
-If we write :math:`a = 2c`, then we get :math:`4c^2 = 2 b^2`
-and hence :math:`b^2 = 2 c^2`.
-This implies that :math:`b` is also even, contradicting
-the fact that we have assumed that :math:`a / b` has been
-reduced to lowest terms.
+让我们从一个古希腊人已知的事实开始，即
+2 的平方根是无理数。
+如果我们假设相反，
+我们可以将 :math:`\sqrt{2} = a / b` 写成一个
+最简分数。两边平方得到 :math:`a^2 = 2 b^2`，
+这意味着 :math:`a` 是偶数。
+如果我们写出 :math:`a = 2c`，那么我们得到 :math:`4c^2 = 2 b^2`
+从而 :math:`b^2 = 2 c^2`。
+这意味着 :math:`b` 也是偶数，与
+我们假设 :math:`a / b` 已化到最简
+的事实矛盾。
 
-Saying that :math:`a / b` is a fraction in lowest terms means
-that :math:`a` and :math:`b` do not have any factors in common,
-which is to say, they are *coprime*.
-Mathlib defines the predicate ``Nat.Coprime m n`` to be ``Nat.gcd m n = 1``.
-Using Lean's anonymous projection notation, if ``s`` and ``t`` are
-expressions of type ``Nat``, we can write ``s.Coprime t`` instead of
-``Nat.Coprime s t``, and similarly for ``Nat.gcd``.
-As usual, Lean will often unfold the definition of ``Nat.Coprime`` automatically
-when necessary,
-but we can also do it manually by rewriting or simplifying with
-the identifier ``Nat.Coprime``.
-The ``norm_num`` tactic is smart enough to compute concrete values.
+说 :math:`a / b` 是最简分数意味着
+:math:`a` 和 :math:`b` 没有任何公因子，
+也就是说，它们是*互质*的。
+Mathlib 定义谓词 ``Nat.Coprime m n`` 为 ``Nat.gcd m n = 1``。
+使用 Lean 的匿名投影记号，如果 ``s`` 和 ``t`` 是
+类型为 ``Nat`` 的表达式，我们可以写 ``s.Coprime t`` 而不是
+``Nat.Coprime s t``，对 ``Nat.gcd`` 类似。
+像往常一样，Lean 在需要时通常会
+自动展开 ``Nat.Coprime`` 的定义，
+但我们也可以通过用标识符 ``Nat.Coprime`` 重写或化简
+来手动进行。
+``norm_num`` 策略足够聪明，可以计算具体的值。
 EXAMPLES: -/
 -- QUOTE:
 #print Nat.Coprime
@@ -53,22 +53,21 @@ example : Nat.gcd 12 8 = 4 := by norm_num
 -- QUOTE.
 
 /- TEXT:
-We have already encountered the ``gcd`` function in
-:numref:`more_on_order_and_divisibility`.
-There is also a version of ``gcd`` for the integers;
-we will return to a discussion of the relationship between
-different number systems below.
-There are even a generic ``gcd`` function and generic
-notions of ``Prime`` and ``Coprime``
-that make sense in general classes of algebraic structures.
-We will come to understand how Lean manages this generality
-in the next chapter.
-In the meanwhile, in this section, we will restrict attention
-to the natural numbers.
+我们已经在 :numref:`more_on_order_and_divisibility` 中
+遇到过 ``gcd`` 函数。
+也有一个整数版本的 ``gcd``；
+我们将在下面回到不同数系之间关系的
+讨论。
+甚至还有通用的 ``gcd`` 函数和通用的
+``Prime`` 和 ``Coprime`` 概念，
+它们在一般的代数结构类中都有意义。
+我们将在下一章中理解 Lean 如何管理这种一般性。
+同时，在本节中，我们将把注意力限制在
+自然数上。
 
-We also need the notion of a prime number, ``Nat.Prime``.
-The theorem ``Nat.prime_def_lt`` provides one familiar characterization,
-and ``Nat.Prime.eq_one_or_self_of_dvd`` provides another.
+我们还需要素数 ``Nat.Prime`` 的概念。
+定理 ``Nat.prime_def_lt`` 提供了一个熟悉的刻画，
+而 ``Nat.Prime.eq_one_or_self_of_dvd`` 提供了另一个。
 EXAMPLES: -/
 -- QUOTE:
 #check Nat.prime_def_lt
@@ -92,22 +91,22 @@ example : Nat.Prime 3 :=
 -- QUOTE.
 
 /- TEXT:
-In the natural numbers, a prime number has the property that it cannot
-be written as a product of nontrivial factors.
-In a broader mathematical context, an element of a ring that has this property
-is said to be *irreducible*.
-An element of a ring is said to be *prime* if whenever it divides a product,
-it divides one of the factors.
-It is an important property of the natural numbers
-that in that setting the two notions coincide,
-giving rise to the theorem ``Nat.Prime.dvd_mul``.
+在自然数中，素数具有不能写成非平凡因子
+的乘积的性质。
+在更广泛的数学背景中，一个环中具有此性质的元素
+被称为*不可约*元素。
+如果一个环的元素每当整除一个乘积时，
+它就整除其中一个因子，则该元素被称为*素*元素。
+自然数的一个重要性质是
+在这种设定中这两个概念是一致的，
+从而产生了定理 ``Nat.Prime.dvd_mul``。
 
-We can use this fact to establish a key property in the argument
-above:
-if the square of a number is even, then that number is even as well.
-Mathlib defines the predicate ``Even`` in ``Algebra.Group.Even``,
-but for reasons that will become clear below,
-we will simply use ``2 ∣ m`` to express that ``m`` is even.
+我们可以用这个事实来建立上面论证中的
+一个关键性质：
+如果一个数的平方是偶数，那么该数也是偶数。
+Mathlib 在 ``Algebra.Group.Even`` 中定义了谓词 ``Even``，
+但出于下面将变得清楚的原因，
+我们将简单地使用 ``2 ∣ m`` 来表达 ``m`` 是偶数。
 EXAMPLES: -/
 -- QUOTE:
 #check Nat.Prime.dvd_mul
@@ -125,20 +124,19 @@ example {m : ℕ} (h : 2 ∣ m ^ 2) : 2 ∣ m :=
 -- QUOTE.
 
 /- TEXT:
-As we proceed, you will need to become proficient at finding the facts you
-need.
-Remember that if you can guess the prefix of the name and
-you have imported the relevant library,
-you can use tab completion (sometimes with ``ctrl-tab``) to find
-what you are looking for.
-You can use ``ctrl-click`` on any identifier to jump to the file
-where it is defined, which enables you to browse definitions and theorems
-nearby.
-You can also use the search engine on the
-`Lean community web pages <https://leanprover-community.github.io/>`_,
-and if all else fails,
-don't hesitate to ask on
-`Zulip <https://leanprover.zulipchat.com/>`_.
+随着我们的进行，你将需要熟练地找到你需要的
+事实。
+记住，如果你能猜出名称的前缀并且
+你已经导入了相关的库，
+你可以使用 Tab 补全（有时用 ``ctrl-tab``）来找到
+你要找的东西。
+你可以在任何标识符上使用 ``ctrl-click`` 跳转到
+它被定义的文件，这使你能够浏览附近的定义和定理。
+你也可以使用
+`Lean 社区网页 <https://leanprover-community.github.io/>`_ 上的搜索引擎，
+如果所有方法都失败了，
+不要犹豫在
+`Zulip <https://leanprover.zulipchat.com/>`_ 上提问。
 EXAMPLES: -/
 -- QUOTE:
 example (a b c : Nat) (h : a * b = a * c) (h' : a ≠ 0) : b = c :=
@@ -147,10 +145,10 @@ example (a b c : Nat) (h : a * b = a * c) (h' : a ≠ 0) : b = c :=
 -- QUOTE.
 
 /- TEXT:
-The heart of our proof of the irrationality of the square root of two
-is contained in the following theorem.
-See if you can fill out the proof sketch, using
-``even_of_even_sqr`` and the theorem ``Nat.dvd_gcd``.
+我们证明 2 的平方根是无理数的核心
+包含在以下定理中。
+看看你能否使用 ``even_of_even_sqr`` 和定理 ``Nat.dvd_gcd``
+来填充证明草稿。
 BOTH: -/
 -- QUOTE:
 example {m n : ℕ} (coprime_mn : m.Coprime n) : m ^ 2 ≠ 2 * n ^ 2 := by
@@ -200,13 +198,13 @@ SOLUTIONS: -/
 -- QUOTE.
 
 /- TEXT:
-In fact, with very few changes, we can replace ``2`` by an arbitrary prime.
-Give it a try in the next example.
-At the end of the proof, you'll need to derive a contradiction from
-``p ∣ 1``.
-You can use ``Nat.Prime.two_le``, which says that
-any prime number is greater than or equal to two,
-and ``Nat.le_of_dvd``.
+事实上，只需很少的改动，我们就可以将 ``2`` 替换为任意素数。
+在下一个例子中试一试。
+在证明的最后，你需要从 ``p ∣ 1``
+推导出矛盾。
+你可以使用 ``Nat.Prime.two_le``，它说
+任何素数都大于或等于 2，
+以及 ``Nat.le_of_dvd``。
 BOTH: -/
 -- QUOTE:
 example {m n p : ℕ} (coprime_mn : m.Coprime n) (prime_p : p.Prime) : m ^ 2 ≠ p * n ^ 2 := by
@@ -242,26 +240,26 @@ SOLUTIONS: -/
 
 -- BOTH:
 /- TEXT:
-Let us consider another approach.
-Here is a quick proof that if :math:`p` is prime, then
-:math:`m^2 \ne p n^2`: if we assume :math:`m^2 = p n^2`
-and consider the factorization of :math:`m` and :math:`n` into primes,
-then :math:`p` occurs an even number of times on the left side of the equation
-and an odd number of times on the right, a contradiction.
-Note that this argument requires that :math:`n` and hence :math:`m`
-are not equal to zero.
-The formalization below confirms that this assumption is sufficient.
+让我们考虑另一种方法。
+这里是一个快速的证明：如果 :math:`p` 是素数，那么
+:math:`m^2 \ne p n^2`：如果我们假设 :math:`m^2 = p n^2`
+并考虑 :math:`m` 和 :math:`n` 的素因数分解，
+那么 :math:`p` 在等式左边出现偶数次，
+而在右边出现奇数次，矛盾。
+注意这个论证要求 :math:`n` 和因此 :math:`m`
+不等于零。
+下面的形式化确认了这个假设是充分的。
 
-The unique factorization theorem says that any natural number other
-than zero can be written as the product of primes in a unique way.
-Mathlib contains a formal version of this, expressed in terms of a function
-``Nat.primeFactorsList``, which returns the list of
-prime factors of a number in nondecreasing order.
-The library proves that all the elements of ``Nat.primeFactorsList n``
-are prime, that any ``n`` greater than zero is equal to the
-product of its factors,
-and that if ``n`` is equal to the product of another list of prime numbers,
-then that list is a permutation of ``Nat.primeFactorsList n``.
+唯一分解定理说任何非零的自然数
+都可以以唯一的方式写成素数的乘积。
+Mathlib 包含了这个定理的形式化版本，通过一个函数
+``Nat.primeFactorsList`` 来表达，它返回一个数的
+素因数列表，按非递减顺序排列。
+该库证明了 ``Nat.primeFactorsList n`` 的所有元素
+都是素数，任何大于零的 ``n`` 等于其
+因数的乘积，
+且如果 ``n`` 等于另一个素数列表的乘积，
+那么该列表是 ``Nat.primeFactorsList n`` 的一个排列。
 EXAMPLES: -/
 -- QUOTE:
 #check Nat.primeFactorsList
@@ -271,14 +269,14 @@ EXAMPLES: -/
 -- QUOTE.
 
 /- TEXT:
-You can browse these theorems and others nearby, even though we have not
-talked about list membership, products, or permutations yet.
-We won't need any of that for the task at hand.
-We will instead use the fact that Mathlib has a function ``Nat.factorization``,
-that represents the same data as a function.
-Specifically, ``Nat.factorization n p``, which we can also write
-``n.factorization p``, returns the multiplicity of ``p`` in the prime
-factorization of ``n``. We will use the following three facts.
+你可以浏览这些定理和附近的其他定理，即使我们还没有
+讨论列表成员关系、乘积或排列。
+对于手头的任务，我们不需要这些。
+相反，我们将利用 Mathlib 有函数 ``Nat.factorization`` 这一事实，
+它将相同的数据表示为一个函数。
+具体来说，``Nat.factorization n p``，我们也可以写作
+``n.factorization p``，返回 ``p`` 在 ``n`` 的素因数分解中
+的重数。我们将使用以下三个事实。
 BOTH: -/
 -- QUOTE:
 theorem factorization_mul' {m n : ℕ} (mnez : m ≠ 0) (nnez : n ≠ 0) (p : ℕ) :
@@ -298,17 +296,17 @@ theorem Nat.Prime.factorization' {p : ℕ} (prime_p : p.Prime) :
 -- QUOTE.
 
 /- TEXT:
-In fact, ``n.factorization`` is defined in Lean as a function of finite support,
-which explains the strange notation you will see as you step through the
-proofs above. Don't worry about this now. For our purposes here, we can use
-the three theorems above as a black box.
+事实上，``n.factorization`` 在 Lean 中被定义为一个有限支撑的函数，
+这解释了你逐步执行上面证明时会看到的奇怪记号。
+现在不必担心这个。对于我们这里的目的，我们可以
+将上述三个定理作为黑盒使用。
 
-The next example shows that the simplifier is smart enough to replace
-``n^2 ≠ 0`` by ``n ≠ 0``. The tactic ``simpa`` just calls ``simp``
-followed by ``assumption``.
+下一个例子表明化简器足够聪明，可以将
+``n^2 ≠ 0`` 替换为 ``n ≠ 0``。策略 ``simpa`` 就是调用 ``simp``
+然后调用 ``assumption``。
 
-See if you can use the identities above to fill in the missing parts
-of the proof.
+看看你能否使用上面的恒等式来填补证明中
+缺失的部分。
 BOTH: -/
 -- QUOTE:
 example {m n p : ℕ} (nnz : n ≠ 0) (prime_p : p.Prime) : m ^ 2 ≠ p * n ^ 2 := by
@@ -334,34 +332,34 @@ SOLUTIONS: -/
 -- QUOTE.
 
 /- TEXT:
-A nice thing about this proof is that it also generalizes. There is
-nothing special about ``2``; with small changes, the proof shows that
-whenever we write ``m^k = r * n^k``, the multiplicity of any prime ``p``
-in ``r`` has to be a multiple of ``k``.
+这个证明的一个好处是它也可以推广。这里
+没有什么关于 ``2`` 的特殊之处；通过小改动，证明表明
+每当我们写出 ``m^k = r * n^k`` 时，任何素数 ``p`` 在 ``r`` 中
+的重数必须是 ``k`` 的倍数。
 
-To use ``Nat.count_factors_mul_of_pos`` with ``r * n^k``,
-we need to know that ``r`` is positive.
-But when ``r`` is zero, the theorem below is trivial, and easily
-proved by the simplifier.
-So the proof is carried out in cases.
-The line ``rcases r with _ | r`` replaces the goal with two versions:
-one in which ``r`` is replaced by ``0``,
-and the other in which ``r`` is replaces by ``r + 1``.
-In the second case, we can use the theorem ``r.succ_ne_zero``, which
-establishes ``r + 1 ≠ 0`` (``succ`` stands for successor).
+要用 ``r * n^k`` 使用 ``Nat.count_factors_mul_of_pos``，
+我们需要知道 ``r`` 是正数。
+但当 ``r`` 为零时，下面的定理是平凡的，并且
+可以通过化简器轻松证明。
+因此证明分情况进行。
+行 ``rcases r with _ | r`` 将目标替换为两个版本：
+一个将 ``r`` 替换为 ``0``，
+另一个将 ``r`` 替换为 ``r + 1``。
+在第二种情况下，我们可以使用定理 ``r.succ_ne_zero``，它
+建立了 ``r + 1 ≠ 0``（``succ`` 代表后继）。
 
-Notice also that the line that begins ``have : npow_nz`` provides a
-short proof-term proof of ``n^k ≠ 0``.
-To understand how it works, try replacing it with a tactic proof,
-and then think about how the tactics describe the proof term.
+另请注意，以 ``have : npow_nz`` 开头的行提供了
+``n^k ≠ 0`` 的简短证明项证明。
+要理解它如何工作，尝试用策略证明替换它，
+然后思考策略如何描述证明项。
 
-See if you can fill in the missing parts of the proof below.
-At the very end, you can use ``Nat.dvd_sub'`` and ``Nat.dvd_mul_right``
-to finish it off.
+看看你能否填补下面证明中缺失的部分。
+在最后，你可以使用 ``Nat.dvd_sub'`` 和 ``Nat.dvd_mul_right``
+来完成它。
 
-Note that this example does not assume that ``p`` is prime, but the
-conclusion is trivial when ``p`` is not prime since ``r.factorization p``
-is then zero by definition, and the proof works in all cases anyway.
+注意这个例子不假设 ``p`` 是素数，但
+当 ``p`` 不是素数时结论是平凡的，因为 ``r.factorization p``
+根据定义为零，并且证明在所有情况下都有效。
 BOTH: -/
 -- QUOTE:
 example {m n k r : ℕ} (nnz : n ≠ 0) (pow_eq : m ^ k = r * n ^ k) {p : ℕ} :
@@ -394,46 +392,44 @@ SOLUTIONS: -/
 -- QUOTE.
 
 /- TEXT:
-There are a number of ways in which we might want to improve on these results.
-To start with, a proof that the square root of two is irrational
-should say something about the square root of two,
-which can be understood as an element of the
-real or complex numbers.
-And stating that it is irrational should say something about the
-rational numbers, namely, that no rational number is equal to it.
-Moreover, we should extend the theorems in this section to the integers.
-Although it is mathematically obvious that if we could write the square root of
-two as a quotient of two integers then we could write it as a quotient
-of two natural numbers,
-proving this formally requires some effort.
+我们可能希望通过多种方式改进这些结果。
+首先，2 的平方根是无理数的证明
+应该说一些关于 2 的平方根的内容，
+它可以被理解为实数或复数的一个元素。
+而说它是无理数应该说一些关于
+有理数的内容，即没有有理数等于它。
+此外，我们应该将本节中的定理推广到整数。
+尽管数学上很明显，如果我们能将 2 的平方根
+写成两个整数的商，那么我们就能将它写成
+两个自然数的商，
+但形式化地证明这一点需要一些努力。
 
-In Mathlib, the natural numbers, the integers, the rationals, the reals,
-and the complex numbers are represented by separate data types.
-Restricting attention to the separate domains is often helpful:
-we will see that it is easy to do induction on the natural numbers,
-and it is easiest to reason about divisibility of integers when the
-real numbers are not part of the picture.
-But having to mediate between the different domains is a headache,
-one we will have to contend with.
-We will return to this issue later in this chapter.
+在 Mathlib 中，自然数、整数、有理数、实数
+和复数由不同的数据类型表示。
+将注意力限制在不同的数域通常是有帮助的：
+我们将看到在自然数上做归纳很容易，
+而在不涉及实数的情况下推理整数的整除性
+是最容易的。
+但不得不在不同数域之间进行转换是一个令人头疼的问题，
+我们必须面对它。
+我们将在本章后面回到这个问题。
 
-We should also expect to be able to strengthen the conclusion of the
-last theorem to say that the number ``r`` is a ``k``-th power,
-since its ``k``-th root is just the product of each prime dividing ``r``
-raised to its multiplicity in ``r`` divided by ``k``.
-To be able to do that we will need better means for reasoning about
-products and sums over a finite set,
-which is also a topic we will return to.
+我们还应该期望能够加强最后一个定理的结论，
+说数 ``r`` 是一个 ``k`` 次幂，
+因为它的 ``k`` 次根就是每个整除 ``r`` 的素数
+以其在 ``r`` 中的重数除以 ``k`` 的幂。
+为了能这样做，我们需要更好的方法来推理
+有限集上的乘积与和，
+这也是我们将要回到的一个主题。
 
-In fact, the results in this section are all established in much
-greater generality in Mathlib,
-in ``Data.Real.Irrational``.
-The notion of ``multiplicity`` is defined for an
-arbitrary commutative monoid,
-and that it takes values in the extended natural numbers ``enat``,
-which adds the value infinity to the natural numbers.
-In the next chapter, we will begin to develop the means to
-appreciate the way that Lean supports this sort of generality.
+事实上，本节中的所有结果都在 Mathlib 中以
+更一般的广泛性建立在 ``Data.Real.Irrational`` 中。
+``multiplicity`` 的概念是为
+任意交换幺半群定义的，
+并且它取值于扩展的自然数 ``enat``，
+它在自然数之上添加了无穷大的值。
+在下一章中，我们将开始发展能够理解
+Lean 如何支持这种一般性的手段。
 EXAMPLES: -/
 #check multiplicity
 

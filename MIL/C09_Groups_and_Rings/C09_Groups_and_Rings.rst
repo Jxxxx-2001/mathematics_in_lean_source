@@ -1,19 +1,19 @@
 .. _groups_and_ring:
 
-Groups and Rings
-================
+群与环
+======
 
-We saw in :numref:`proving_identities_in_algebraic_structures` how to reason about
-operations in groups and rings. Later, in :numref:`section_algebraic_structures`, we saw how
-to define abstract algebraic structures, such as group structures, as well as concrete instances
-such as the ring structure on the Gaussian integers. :numref:`Chapter %s <hierarchies>` explained how
-hierarchies of abstract structures are handled in Mathlib.
+我们在 :numref:`proving_identities_in_algebraic_structures` 中看到了如何在群和环中
+进行运算推理。之后，在 :numref:`section_algebraic_structures` 中，我们看到了如何
+定义抽象代数结构（如群结构），以及具体实例
+（如高斯整数上的环结构）。:numref:`第 %s 章 <hierarchies>` 解释了
+Mathlib 中如何处理抽象结构的层级。
 
-In this chapter we work with groups and rings in more detail. We won't be able to
-cover every aspect of the treatment of these topics in Mathlib, especially since Mathlib is constantly growing.
-But we will provide entry points to the library and show how the essential concepts are used.
-There is some overlap with the discussion of
-:numref:`Chapter %s <hierarchies>`, but here we will focus on how to use Mathlib instead of the design
-decisions behind the way the topics are treated.
-So making sense of some of the examples may require reviewing the background from
-:numref:`Chapter %s <hierarchies>`.
+在本章中，我们将更详细地讨论群和环。我们无法
+涵盖 Mathlib 中这些主题的所有方面，尤其是因为 Mathlib 在不断发展。
+但我们将提供库的入口点，并展示如何使用基本概念。
+与 :numref:`第 %s 章 <hierarchies>` 的讨论有一些重叠，
+但这里我们将重点放在如何使用 Mathlib 而非
+这些主题处理方式背后的设计决策。
+因此，理解某些例子可能需要回顾
+:numref:`第 %s 章 <hierarchies>` 中的背景知识。

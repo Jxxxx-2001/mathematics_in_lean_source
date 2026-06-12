@@ -8,16 +8,16 @@ import MIL.Common
 /- TEXT:
 .. index:: vector subspace
 
-Subspaces and quotients
+子空间与商空间
 -----------------------
 
-Subspaces
+子空间
 ^^^^^^^^^
 
-Just as linear maps are bundled, a linear subspace of ``V`` is also a bundled structure consisting of
-a set in ``V``, called the carrier of the subspace, with the relevant closure properties.
-Again the word module appears instead of vector space because of the more general context that
-Mathlib actually uses for linear algebra.
+正如线性映射是打包的，``V`` 的线性子空间也是一个打包结构，由
+``V`` 中的一个集合（称为子空间的承载集）以及相关的封闭性质组成。
+这里再次出现"模"这个词而不是向量空间，是因为 Mathlib
+实际用于线性代数的更一般语境。
 BOTH: -/
 -- QUOTE:
 section
@@ -34,18 +34,18 @@ end
 -- QUOTE.
 
 /- TEXT:
-In the example above, it is important to understand that ``Submodule K V`` is the type of ``K``-linear
-subspaces of ``V``, rather than a predicate ``IsSubmodule U`` where ``U`` is an element of ``Set V``.
-``Submodule K V`` is endowed with a coercion to ``Set V`` and a membership predicate on ``V``.
-See :numref:`section_hierarchies_subobjects` for an explanation of how and why this is done.
+在上面的例子中，重要的是要理解 ``Submodule K V`` 是 ``V`` 的 ``K``-线性
+子空间的类型，而不是一个谓词 ``IsSubmodule U``（其中 ``U`` 是 ``Set V`` 的元素）。
+``Submodule K V`` 被赋予了到 ``Set V`` 的强制转换以及 ``V`` 上的成员谓词。
+关于这样做的原因和方式，请参见 :numref:`section_hierarchies_subobjects`。
 
-Of course, two subspaces are the same if and only if they have the same elements. This fact
-is registered for use with the ``ext`` tactic, which can be used to prove two subspaces are
-equal in the same way it is used to prove that two sets are equal.
+当然，两个子空间相同当且仅当它们具有相同的元素。这个事实
+已注册供 ``ext`` 策略使用，该策略可以用于证明两个子空间相等，
+就像它用于证明两个集合相等一样。
 
-To state and prove, for example, that ``ℝ`` is a ``ℝ``-linear subspace of ``ℂ``,
-what we really want is to construct a term of type ``Submodule ℝ ℂ`` whose projection to
-``Set ℂ`` is ``ℝ``, or, more precisely, the image of ``ℝ`` in ``ℂ``.
+例如，要陈述并证明 ``ℝ`` 是 ``ℂ`` 的 ``ℝ``-线性子空间，
+我们真正想要的是构造一个类型为 ``Submodule ℝ ℂ`` 的项，其到
+``Set ℂ`` 的投影是 ``ℝ``，或者更精确地说，是 ``ℝ`` 在 ``ℂ`` 中的像。
 EXAMPLES: -/
 -- QUOTE:
 noncomputable example : Submodule ℝ ℂ where
@@ -65,16 +65,16 @@ noncomputable example : Submodule ℝ ℂ where
 -- QUOTE.
 
 /- TEXT:
-The prime at the end of proof fields in ``Submodule`` are analogous to the one in ``LinearMap``.
-Those fields are stated in terms of the ``carrier`` field because they are defined before the
-``MemberShip`` instance. They are then superseded by ``Submodule.add_mem``, ``Submodule.zero_mem``
-and ``Submodule.smul_mem`` that we saw above.
+``Submodule`` 中证明字段末尾的撇号与 ``LinearMap`` 中的情况类似。
+这些字段用 ``carrier`` 字段表述，因为它们是在
+``MemberShip`` 实例之前定义的。然后它们被我们上面看到的 ``Submodule.add_mem``、``Submodule.zero_mem``
+和 ``Submodule.smul_mem`` 所取代。
 
-As an exercise in manipulating subspaces and linear maps, you will define the pre-image of
-a subspace by a linear map (of course we will see below that Mathlib already knows about this).
-Remember that ``Set.mem_preimage`` can be used to rewrite a statement involving
-membership and preimage. This is the only lemma you will need in addition to the lemmas
-discussed above about ``LinearMap`` and ``Submodule``.
+作为操作子空间和线性映射的练习，你将定义一个子空间在线性映射下的原像
+（当然，我们下面会看到 Mathlib 已经知道这一点）。
+记住，``Set.mem_preimage`` 可以用来重写涉及
+成员关系和原像的陈述。除了上面讨论的关于 ``LinearMap`` 和 ``Submodule`` 的引理之外，
+这是你唯一需要的引理。
 BOTH: -/
 -- QUOTE:
 variable {K : Type*} [Field K] {V : Type*} [AddCommGroup V] [Module K V]
@@ -108,16 +108,16 @@ SOLUTIONS: -/
 -- QUOTE.
 
 /- TEXT:
-Using type classes, Mathlib knows that a subspace of a vector space inherits a vector space structure.
+利用类型类，Mathlib 知道向量空间的子空间继承了向量空间结构。
 EXAMPLES: -/
 -- QUOTE:
 example (U : Submodule K V) : Module K U := inferInstance
 -- QUOTE.
 
 /- TEXT:
-This example is subtle. The object ``U`` is not a type, but Lean automatically coerces it to
-a type by interpreting it as a subtype of ``V``.
-So the above example can be restated more explicitly as:
+这个例子很微妙。对象 ``U`` 不是一个类型，但 Lean 自动将其强制转换为
+一个类型，将其解释为 ``V`` 的子类型。
+因此，上面的例子可以更明确地重述为：
 EXAMPLES: -/
 -- QUOTE:
 example (U : Submodule K V) : Module K {x : V // x ∈ U} := inferInstance
@@ -125,19 +125,18 @@ example (U : Submodule K V) : Module K {x : V // x ∈ U} := inferInstance
 
 /- TEXT:
 
-Complete lattice structure and internal direct sums
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+完备格结构与内直和
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-An important benefit of having a type ``Submodule K V`` instead of a predicate
-``IsSubmodule : Set V → Prop`` is that one can easily endow ``Submodule K V`` with additional structure.
-Importantly, it has the structure of a complete lattice structure with respect to
-inclusion. For instance, instead of having a lemma stating that an intersection of
-two subspaces of ``V`` is again a subspace, we
-use the lattice operation ``⊓`` to construct the intersection. We can then apply arbitrary
-lemmas about lattices to the construction.
+拥有类型 ``Submodule K V`` 而不是谓词
+``IsSubmodule : Set V → Prop`` 的一个重要好处是，可以轻松地为 ``Submodule K V`` 赋予额外的结构。
+重要的是，它在包含关系下具有完备格结构。
+例如，我们使用格运算 ``⊓`` 来构造两个子空间的交，
+而不是有一条引理陈述 ``V`` 的两个子空间的交仍然是子空间。
+然后我们可以将关于格的任意引理应用于此构造。
 
-Let us check that the set underlying the infimum of two subspaces is indeed, by definition,
-their intersection.
+让我们验证一下，两个子空间的下确界的基础集合确实是，
+根据定义，它们的交集。
 EXAMPLES: -/
 -- QUOTE:
 example (H H' : Submodule K V) :
@@ -145,11 +144,11 @@ example (H H' : Submodule K V) :
 -- QUOTE.
 
 /- TEXT:
-It may look strange to have a different notation for what amounts to the intersection of the
-underlying sets, but the correspondence does not carry over to the supremum operation and set
-union, since a union of subspaces is not, in general, a subspace.
-Instead one needs to use the subspace generated by the union, which is done
-using ``Submodule.span``.
+使用不同的记号来表示本质上就是基础集合的交集可能看起来有些奇怪，
+但这种对应关系不能延续到上确界运算和集合并集，
+因为子空间的并集通常不是一个子空间。
+相反，需要使用由并集生成的子空间，这是通过
+``Submodule.span`` 来完成的。
 EXAMPLES: -/
 -- QUOTE:
 example (H H' : Submodule K V) :
@@ -158,37 +157,35 @@ example (H H' : Submodule K V) :
 -- QUOTE.
 
 /- TEXT:
-Another subtlety is that ``V`` itself does not have type ``Submodule K V``,
-so we need a way to talk about ``V`` seen as a subspace of ``V``.
-This is also provided by the lattice structure: the full subspace is the top element of
-this lattice.
+另一个微妙之处是 ``V`` 本身不具有类型 ``Submodule K V``，
+因此我们需要一种方法将 ``V`` 视为 ``V`` 的子空间来讨论。
+这也是由格结构提供的：整个子空间是这个格的顶元素。
 EXAMPLES: -/
 -- QUOTE:
 example (x : V) : x ∈ (⊤ : Submodule K V) := trivial
 -- QUOTE.
 
 /- TEXT:
-Similarly the bottom element of this lattice is the subspace whose only element is the
-zero element.
+类似地，这个格的底元素是其唯一元素为零元素的子空间。
 EXAMPLES: -/
 -- QUOTE:
 example (x : V) : x ∈ (⊥ : Submodule K V) ↔ x = 0 := Submodule.mem_bot K
 -- QUOTE.
 
 /- TEXT:
-In particular we can discuss the case of subspaces that are in (internal) direct sum.
-In the case of two subspaces, we use the general purpose predicate ``IsCompl``
-which makes sense for any bounded partially ordered type.
-In the case of general families of subspaces we use ``DirectSum.IsInternal``.
+特别是，我们可以讨论处于（内）直和的子空间的情况。
+对于两个子空间的情况，我们使用通用谓词 ``IsCompl``，
+它适用于任何有界偏序类型。
+对于一般子空间族的情况，我们使用 ``DirectSum.IsInternal``。
 
 EXAMPLES: -/
 -- QUOTE:
 
--- If two subspaces are in direct sum then they span the whole space.
+-- 如果两个子空间处于直和中，则它们张成整个空间。
 example (U V : Submodule K V) (h : IsCompl U V) :
   U ⊔ V = ⊤ := h.sup_eq_top
 
--- If two subspaces are in direct sum then they intersect only at zero.
+-- 如果两个子空间处于直和中，则它们仅在零处相交。
 example (U V : Submodule K V) (h : IsCompl U V) :
   U ⊓ V = ⊥ := h.inf_eq_bot
 
@@ -196,21 +193,21 @@ section
 open DirectSum
 variable {ι : Type*} [DecidableEq ι]
 
--- If subspaces are in direct sum then they span the whole space.
+-- 如果子空间处于直和中，则它们张成整个空间。
 example (U : ι → Submodule K V) (h : DirectSum.IsInternal U) :
   ⨆ i, U i = ⊤ := h.submodule_iSup_eq_top
 
--- If subspaces are in direct sum then they pairwise intersect only at zero.
+-- 如果子空间处于直和中，则它们两两仅在零处相交。
 example {ι : Type*} [DecidableEq ι] (U : ι → Submodule K V) (h : DirectSum.IsInternal U)
     {i j : ι} (hij : i ≠ j) : U i ⊓ U j = ⊥ :=
   (h.submodule_iSupIndep.pairwiseDisjoint hij).eq_bot
 
--- Those conditions characterize direct sums.
+-- 这些条件刻画了直和。
 #check DirectSum.isInternal_submodule_iff_iSupIndep_and_iSup_eq_top
 
--- The relation with external direct sums: if a family of subspaces is
--- in internal direct sum then the map from their external direct sum into `V`
--- is a linear isomorphism.
+-- 与外直和的关系：如果一个子空间族处于
+-- 内直和中，则从它们的外直和到 `V` 的映射
+-- 是一个线性同构。
 noncomputable example {ι : Type*} [DecidableEq ι] (U : ι → Submodule K V)
     (h : DirectSum.IsInternal U) : (⨁ i, U i) ≃ₗ[K] V :=
   LinearEquiv.ofBijective (coeLinearMap U) h
@@ -219,16 +216,14 @@ end
 
 /- TEXT:
 
-Subspace spanned by a set
+由集合张成的子空间
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-In addition to building subspaces out of existing subspaces, we can build them out
-of any set ``s`` using ``Submodule.span K s`` which builds the smallest subspace
-containing ``s``.
-On paper it is common to use that this space is made of all linear combinations of elements of
-``s``.
-But it is often more efficient to use its universal property expressed by ``Submodule.span_le``,
-and the whole theory of Galois connections.
+除了从已有子空间构造子空间之外，我们还可以使用
+``Submodule.span K s`` 从任意集合 ``s`` 构造包含 ``s`` 的最小子空间。
+在纸面上，通常使用这个空间由 ``s`` 中元素的所有线性组合构成这一事实。
+但使用 ``Submodule.span_le`` 表达的泛性质和整个 Galois 连接理论
+通常更高效。
 
 
 EXAMPLES: -/
@@ -241,14 +236,13 @@ example : GaloisInsertion (Submodule.span K) ((↑) : Submodule K V → Set V) :
 -- QUOTE.
 /- TEXT:
 
-When those are not enough, one can use the relevant induction principle
-``Submodule.span_induction`` which ensures a property holds for every element of the
-span of ``s`` as long as it holds on ``zero`` and elements of ``s`` and is stable under
-sum and scalar multiplication.
+当这些不够用时，可以使用相关的归纳原理
+``Submodule.span_induction``，它确保只要一个性质对 ``zero`` 和 ``s`` 中的元素成立，
+并且在加法和标量乘法下保持，那么该性质对 ``s`` 的生成的每个元素都成立。
 
-As an exercise, let us reprove one implication of ``Submodule.mem_sup``.
-Remember that you can use the `module` tactic to close goals that follow from
-the axioms relating the various algebraic operations on ``V``.
+作为练习，让我们重新证明 ``Submodule.mem_sup`` 的一个蕴含方向。
+记住，你可以使用 `module` 策略来关闭由
+``V`` 上各种代数运算的公理推出的目标。
 BOTH: -/
 -- QUOTE:
 
@@ -288,12 +282,12 @@ SOLUTIONS: -/
 -- QUOTE.
 /- TEXT:
 
-Pushing and pulling subspaces
+子空间的推与拉
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-As promised earlier, we now describe how to push and pull subspaces by linear maps.
-As usual in Mathlib, the first operation is called ``map`` and the second one is called
-``comap``.
+正如之前承诺的，我们现在描述如何通过线性映射推送和拉回子空间。
+像 Mathlib 中通常一样，第一个运算称为 ``map``，第二个称为
+``comap``。
 BOTH: -/
 -- QUOTE:
 
@@ -309,29 +303,29 @@ variable (F : Submodule K W) in
 -- QUOTE.
 
 /- TEXT:
-Note those live in the ``Submodule`` namespace so one can use dot notation and write
-``E.map φ`` instead of ``Submodule.map φ E``, but this is pretty awkward to read (although some
-Mathlib contributors use this spelling).
+注意，这些位于 ``Submodule`` 命名空间中，因此可以使用点记号写成
+``E.map φ`` 而不是 ``Submodule.map φ E``，但这样读起来相当别扭（尽管有些
+Mathlib 贡献者使用这种写法）。
 
-In particular the range and kernel of a linear map are subspaces. Those special cases are important
-enough to get declarations.
+特别是，线性映射的像和核都是子空间。这些特殊情况足够重要，
+因而有专门的声明。
 EXAMPLES: -/
 -- QUOTE:
 example : LinearMap.range φ = .map φ ⊤ := LinearMap.range_eq_map φ
 
-example : LinearMap.ker φ = .comap φ ⊥ := Submodule.comap_bot φ -- or `rfl`
+example : LinearMap.ker φ = .comap φ ⊥ := Submodule.comap_bot φ -- 或 `rfl`
 -- QUOTE.
 
 
 /- TEXT:
-Note that we cannot write ``φ.ker`` instead of ``LinearMap.ker φ`` because ``LinearMap.ker`` also
-applies to classes of maps preserving more structure, hence it does not expect an argument
-whose type starts with ``LinearMap``, hence dot notation doesn’t work here.
-However we were able to use the other flavor of dot notation in the right-hand side. Because
-Lean expects a term with type ``Submodule K V`` after elaborating the left-hand side, it interprets
-``.comap`` as ``Submodule.comap``.
+注意，我们不能写 ``φ.ker`` 来代替 ``LinearMap.ker φ``，因为 ``LinearMap.ker`` 也
+适用于保持更多结构的映射类，因此它不期望参数
+类型以 ``LinearMap`` 开头，所以点记号在这里不起作用。
+然而，我们可以在右边使用另一种风格的点记号。因为
+Lean 在 elaborating 左边之后期望一个类型为 ``Submodule K V`` 的项，它将
+``.comap`` 解释为 ``Submodule.comap``。
 
-The following lemmas give the key relations between those submodule and the properties of ``φ``.
+以下引理给出了这些子模与 ``φ`` 的性质之间的关键关系。
 BOTH: -/
 -- QUOTE:
 
@@ -342,8 +336,8 @@ example : Injective φ ↔ ker φ = ⊥ := ker_eq_bot.symm
 example : Surjective φ ↔ range φ = ⊤ := range_eq_top.symm
 -- QUOTE.
 /- TEXT:
-As an exercise, let us prove the Galois connection property for ``map`` and ``comap``.
-One can use the following lemmas but this is not required since they are true by definition.
+作为练习，让我们证明 ``map`` 和 ``comap`` 的 Galois 连接性质。
+可以使用以下引理，但这不是必需的，因为它们根据定义为真。
 BOTH: -/
 -- QUOTE:
 
@@ -364,13 +358,13 @@ SOLUTIONS: -/
 -- QUOTE.
 
 /- TEXT:
-Quotient spaces
+商空间
 ^^^^^^^^^^^^^^^
 
-Quotient vector spaces use the general quotient notation (typed with ``\quot``, not the ordinary
-``/``).
-The projection onto a quotient space is ``Submodule.mkQ`` and the universal property is
-``Submodule.liftQ``.
+商向量空间使用一般的商记号（输入 ``\quot``，而不是普通的
+``/``）。
+到商空间上的投影是 ``Submodule.mkQ``，泛性质是
+``Submodule.liftQ``。
 BOTH: -/
 -- QUOTE:
 
@@ -392,8 +386,8 @@ noncomputable example : (V ⧸ LinearMap.ker φ) ≃ₗ[K] range φ := φ.quotKe
 
 -- QUOTE.
 /- TEXT:
-As an exercise, let us prove the correspondence theorem for subspaces of quotient spaces.
-Mathlib knows a slightly more precise version as ``Submodule.comapMkQRelIso``.
+作为练习，让我们证明商空间子空间的对应定理。
+Mathlib 知道一个稍微更精确的版本 ``Submodule.comapMkQRelIso``。
 BOTH: -/
 -- QUOTE:
 

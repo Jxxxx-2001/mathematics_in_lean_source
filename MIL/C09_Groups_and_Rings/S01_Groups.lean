@@ -9,38 +9,25 @@ import MIL.Common
 /- TEXT:
 .. _groups:
 
-Monoids and Groups
+幺半群与群
 ------------------
 
 .. index:: monoid
 .. index:: group (algebraic structure)
 
-Monoids and their morphisms
+幺半群及其态射
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Courses in abstract algebra often start with groups and
-then progress to rings, fields, and vector spaces. This involves some contortions when discussing
-multiplication on rings since the multiplication operation does not come from a group structure
-but many of the proofs carry over verbatim from group theory to this new setting.
-The most common fix, when doing mathematics with pen and paper,
-is to leave those proofs as exercises. A less efficient but safer and
-more formalization-friendly way of proceeding is to use monoids. A *monoid* structure on a type `M`
-is an internal composition law that is associative and has a neutral element.
-Monoids are used primarily to accommodate both groups and the multiplicative structure of
-rings. But there are also a number of natural examples; for instance, the set of natural numbers
-equipped with addition forms a monoid.
+抽象代数课程通常从群开始，然后逐步推进到环、域和向量空间。这在讨论环上的乘法时会涉及一些周折，因为乘法运算并非来自群结构，但许多证明可以从群论逐字移植到这个新设定中。
+最常用的解决方法，在纸上做数学时，是将这些证明留作练习。一种效率较低但更安全、更适合形式化的方法是使用幺半群。类型 `M` 上的*幺半群*（monoid）结构是一个内部的结合运算，并且有一个单位元。
+幺半群主要用于同时容纳群和环的乘法结构。但也有许多自然的例子；例如，配备加法的自然数集合就形成一个幺半群。
 
-From a practical point of view, you can mostly ignore monoids when using Mathlib. But you need
-to know they exist when you are looking for a lemma by browsing Mathlib files. Otherwise, you
-might end up looking for a statement in the group theory files when it is actually in the found
-with monoids because it does not require elements to be invertible.
+从实践的角度来看，在使用 Mathlib 时你基本上可以忽略幺半群。但当你在浏览 Mathlib 文件寻找引理时，你需要知道它们的存在。否则，你可能会在群论文件中寻找一个陈述，而它实际上是在幺半群中找到的，因为它不需要元素可逆。
 
-The type of monoid structures on a type ``M`` is written ``Monoid M``.
-The function ``Monoid`` is a type class so it will almost always appear as an instance implicit
-argument (in other words, in square brackets).
-By default, ``Monoid`` uses multiplicative notation for the operation; for additive notation
-use ``AddMonoid`` instead.
-The commutative versions of these structures add the prefix ``Comm`` before ``Monoid``.
+类型 ``M`` 上的幺半群结构的类型写作 ``Monoid M``。
+函数 ``Monoid`` 是一个类型类，因此它几乎总是作为实例隐式参数出现（换句话说，在方括号中）。
+默认情况下，``Monoid`` 对运算使用乘法记号；对于加法记号，请使用 ``AddMonoid``。
+这些结构的交换版本在 ``Monoid`` 前面加上前缀 ``Comm``。
 EXAMPLES: -/
 -- QUOTE:
 example {M : Type*} [Monoid M] (x : M) : x * 1 = x := mul_one x
@@ -49,13 +36,9 @@ example {M : Type*} [AddCommMonoid M] (x y : M) : x + y = y + x := add_comm x y
 -- QUOTE.
 
 /- TEXT:
-Note that although ``AddMonoid`` is found in the library,
-it is generally confusing to use additive notation with a non-commutative operation.
+注意，虽然 ``AddMonoid`` 可以在库中找到，但对非交换运算使用加法记号通常是令人困惑的。
 
-The type of morphisms between monoids ``M`` and ``N`` is called ``MonoidHom M N`` and written
-``M →* N``. Lean will automatically see such a morphism as a function from ``M`` to ``N`` when
-we apply it to elements of ``M``. The additive version is called ``AddMonoidHom`` and written
-``M →+ N``.
+幺半群 ``M`` 和 ``N`` 之间的态射类型称为 ``MonoidHom M N``，写作 ``M →* N``。当我们将其应用于 ``M`` 的元素时，Lean 会自动将这样的态射视为从 ``M`` 到 ``N`` 的函数。加法版本称为 ``AddMonoidHom``，写作 ``M →+ N``。
 EXAMPLES: -/
 -- QUOTE:
 example {M N : Type*} [Monoid M] [Monoid N] (x y : M) (f : M →* N) : f (x * y) = f x * f y :=
@@ -66,10 +49,9 @@ example {M N : Type*} [AddMonoid M] [AddMonoid N] (f : M →+ N) : f 0 = 0 :=
 -- QUOTE.
 
 /- TEXT:
-These morphisms are bundled maps, i.e. they package together a map and some of its properties.
-Remember that :numref:`section_hierarchies_morphisms` explains bundled maps;
-here we simply note the slightly unfortunate consequence that we cannot use ordinary function
-composition to compose maps. Instead, we need to use ``MonoidHom.comp`` and ``AddMonoidHom.comp``.
+这些态射是捆绑映射（bundled maps），即它们将映射和它的一些性质打包在一起。
+请记住 :numref:`section_hierarchies_morphisms` 解释了捆绑映射；
+这里我们只需注意一个稍微不幸的后果，即我们不能使用普通的函数复合来复合这些映射。相反，我们需要使用 ``MonoidHom.comp`` 和 ``AddMonoidHom.comp``。
 EXAMPLES: -/
 -- QUOTE:
 example {M N P : Type*} [AddMonoid M] [AddMonoid N] [AddMonoid P]
@@ -77,11 +59,10 @@ example {M N P : Type*} [AddMonoid M] [AddMonoid N] [AddMonoid P]
 -- QUOTE.
 
 /- TEXT:
-Groups and their morphisms
+群及其态射
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-We will have much more to say about groups, which are monoids with the extra
-property that every element has an inverse.
+我们将对群有更多的讨论，群是幺半群，并额外具有每个元素都有逆元的性质。
 EXAMPLES: -/
 -- QUOTE:
 example {G : Type*} [Group G] (x : G) : x * x⁻¹ = 1 := mul_inv_cancel x
@@ -91,9 +72,7 @@ example {G : Type*} [Group G] (x : G) : x * x⁻¹ = 1 := mul_inv_cancel x
 
 .. index:: group (tactic), tactics ; group
 
-Similar to the ``ring`` tactic that we saw earlier, there is a ``group`` tactic that proves
-any identity that holds in any group. (Equivalently, it proves the identities that hold in
-free groups.)
+类似于我们之前看到的 ``ring`` 策略，有一个 ``group`` 策略，它可以证明在任何群中成立的任何恒等式。（等价地，它证明在自由群中成立的恒等式。）
 
 EXAMPLES: -/
 -- QUOTE:
@@ -104,7 +83,7 @@ example {G : Type*} [Group G] (x y z : G) : x * (y * z) * (x * z)⁻¹ * (x * y 
 /- TEXT:
 .. index:: abel, tactics ; abel
 
-There is also a tactic for identities in commutative additive groups called ``abel``.
+对于交换加法群中的恒等式，也有一个策略叫做 ``abel``。
 
 EXAMPLES: -/
 -- QUOTE:
@@ -113,9 +92,7 @@ example {G : Type*} [AddCommGroup G] (x y z : G) : z + x + (y - z - x) = y := by
 -- QUOTE.
 
 /- TEXT:
-Interestingly, a group
-morphism is nothing more than a monoid morphism between groups. So we can copy and paste one of our
-earlier examples, replacing ``Monoid`` with ``Group``.
+有趣的是，群同态无非就是群之间的幺半群同态。所以我们可以复制粘贴前面的一个例子，将 ``Monoid`` 替换为 ``Group``。
 EXAMPLES: -/
 -- QUOTE:
 example {G H : Type*} [Group G] [Group H] (x y : G) (f : G →* H) : f (x * y) = f x * f y :=
@@ -123,7 +100,7 @@ example {G H : Type*} [Group G] [Group H] (x y : G) (f : G →* H) : f (x * y) =
 -- QUOTE.
 
 /- TEXT:
-Of course we do get some new properties, such as this one:
+当然，我们确实得到了一些新的性质，比如这个：
 EXAMPLES: -/
 -- QUOTE:
 example {G H : Type*} [Group G] [Group H] (x : G) (f : G →* H) : f (x⁻¹) = (f x)⁻¹ :=
@@ -131,11 +108,7 @@ example {G H : Type*} [Group G] [Group H] (x : G) (f : G →* H) : f (x⁻¹) = 
 -- QUOTE.
 
 /- TEXT:
-You may be worried that constructing group morphisms will require us to do unnecessary work since
-the definition of monoid morphism enforces that neutral elements are sent to neutral elements
-while this is automatic in the case of group morphisms. In practice the extra work is not hard,
-but, to avoid it, there is a function building a group morphism from a function
-between groups that is compatible with the composition laws.
+你可能会担心构造群同态会要求我们做不必要的工作，因为幺半群同态的定义强制要求将单位元映射到单位元，而这在群同态的情况下是自动的。在实践中，这些额外的工作并不困难，但为了避免它，有一个函数可以从一个与复合律兼容的群之间的函数构建群同态。
 EXAMPLES: -/
 -- QUOTE:
 example {G H : Type*} [Group G] [Group H] (f : G → H) (h : ∀ x y, f (x * y) = f x * f y) :
@@ -144,14 +117,12 @@ example {G H : Type*} [Group G] [Group H] (f : G → H) (h : ∀ x y, f (x * y) 
 -- QUOTE.
 
 /- TEXT:
-There is also a type ``MulEquiv`` of group (or monoid) isomorphisms denoted by ``≃*`` (and
-``AddEquiv`` denoted by ``≃+`` in additive notation).
-The inverse of ``f : G ≃* H`` is ``MulEquiv.symm f : H ≃* G``,
-composition of ``f`` and ``g`` is ``MulEquiv.trans f g``, and
-the identity isomorphism of ``G`` is ``M̀ulEquiv.refl G``.
-Using anonymous projector notation, the first two can be written ``f.symm`` and
-``f.trans g`` respectively.
-Elements of this type are automatically coerced to morphisms and functions when necessary.
+还有一个类型 ``MulEquiv`` 表示群（或幺半群）同构，记为 ``≃*``（在加法记号中是 ``AddEquiv``，记为 ``≃+``）。
+``f : G ≃* H`` 的逆是 ``MulEquiv.symm f : H ≃* G``，
+``f`` 和 ``g`` 的复合是 ``MulEquiv.trans f g``，而
+``G`` 的恒等同构是 ``MulEquiv.refl G``。
+使用匿名投影记号，前两个可以分别写作 ``f.symm`` 和 ``f.trans g``。
+此类型的元素在必要时会自动强制转换为态射和函数。
 EXAMPLES: -/
 -- QUOTE:
 example {G H : Type*} [Group G] [Group H] (f : G ≃* H) :
@@ -160,8 +131,8 @@ example {G H : Type*} [Group G] [Group H] (f : G ≃* H) :
 -- QUOTE.
 
 /- TEXT:
-One can use ``MulEquiv.ofBijective`` to build an isomorphism from a bijective morphism.
-Doing so makes the inverse function noncomputable.
+可以使用 ``MulEquiv.ofBijective`` 从双射同态构建同构。
+这样做会使逆函数不可计算。
 EXAMPLES: -/
 -- QUOTE:
 noncomputable example {G H : Type*} [Group G] [Group H]
@@ -171,11 +142,10 @@ noncomputable example {G H : Type*} [Group G] [Group H]
 -- QUOTE.
 
 /- TEXT:
-Subgroups
+子群
 ^^^^^^^^^
 
-Just as group morphisms are bundled, a subgroup of ``G`` is also a bundled structure consisting of
-a set in ``G`` with the relevant closure properties.
+正如群同态是捆绑的，``G`` 的子群也是一个捆绑结构，由 ``G`` 中带有相关闭包性质的集合组成。
 EXAMPLES: -/
 -- QUOTE:
 example {G : Type*} [Group G] (H : Subgroup G) {x y : G} (hx : x ∈ H) (hy : y ∈ H) :
@@ -188,18 +158,15 @@ example {G : Type*} [Group G] (H : Subgroup G) {x : G} (hx : x ∈ H) :
 -- QUOTE.
 
 /- TEXT:
-In the example above, it is important to understand that ``Subgroup G`` is the type of subgroups
-of ``G``, rather than a predicate ``IsSubgroup H`` where ``H`` is an element of ``Set G``.
-``Subgroup G`` is endowed with a coercion to ``Set G`` and a membership predicate on ``G``.
-See :numref:`section_hierarchies_subobjects` for an explanation of how and why this is done.
+在上面的例子中，重要的是要理解 ``Subgroup G`` 是 ``G`` 的子群的类型，而不是一个谓词 ``IsSubgroup H``，其中 ``H`` 是 ``Set G`` 的一个元素。
+``Subgroup G`` 被赋予了到 ``Set G`` 的强制转换和 ``G`` 上的成员关系谓词。
+参见 :numref:`section_hierarchies_subobjects` 以了解这是如何以及为什么这样做的解释。
 
-Of course, two subgroups are the same if and only if they have the same elements. This fact
-is registered for use with the ``ext`` tactic, which can be used to prove two subgroups are
-equal in the same way it is used to prove that two sets are equal.
+当然，两个子群是相同的当且仅当它们具有相同的元素。这一事实已注册供 ``ext`` 策略使用，该策略可以像用于证明两个集合相等一样用于证明两个子群相等。
 
-To state and prove, for example, that ``ℤ`` is an additive subgroup of ``ℚ``,
-what we really want is to construct a term of type ``AddSubgroup ℚ`` whose projection to
-``Set ℚ`` is ``ℤ``, or, more precisely, the image of ``ℤ`` in ``ℚ``.
+为了陈述和证明，例如，``ℤ`` 是 ``ℚ`` 的加法子群，
+我们真正想要的是构造一个类型为 ``AddSubgroup ℚ`` 的项，其到
+``Set ℚ`` 的投影是 ``ℤ``，或者更精确地说，是 ``ℤ`` 在 ``ℚ`` 中的像。
 EXAMPLES: -/
 -- QUOTE:
 example : AddSubgroup ℚ where
@@ -218,32 +185,25 @@ example : AddSubgroup ℚ where
 -- QUOTE.
 
 /- TEXT:
-Using type classes, Mathlib knows that a subgroup of a group inherits a group structure.
+使用类型类，Mathlib 知道群的子群继承群结构。
 EXAMPLES: -/
 -- QUOTE:
 example {G : Type*} [Group G] (H : Subgroup G) : Group H := inferInstance
 -- QUOTE.
 
 /- TEXT:
-This example is subtle. The object ``H`` is not a type, but Lean automatically coerces it to
-a type by interpreting it as a subtype of ``G``.
-So the above example can be restated more explicitly as:
+这个例子很微妙。对象 ``H`` 不是一个类型，但 Lean 会自动将其强制转换为类型，通过将其解释为 ``G`` 的子类型。
+因此上面的例子可以更显式地重述为：
 EXAMPLES: -/
 -- QUOTE:
 example {G : Type*} [Group G] (H : Subgroup G) : Group {x : G // x ∈ H} := inferInstance
 -- QUOTE.
 
 /- TEXT:
-An important benefit of having a type ``Subgroup G`` instead of a predicate
-``IsSubgroup : Set G → Prop`` is that one can easily endow ``Subgroup G`` with additional structure.
-Importantly, it has the structure of a complete lattice structure with respect to
-inclusion. For instance, instead of having a lemma stating that an intersection of
-two subgroups of ``G`` is again a subgroup, we
-have used the lattice operation ``⊓`` to construct the intersection. We can then apply arbitrary
-lemmas about lattices to the construction.
+拥有类型 ``Subgroup G`` 而不是谓词 ``IsSubgroup : Set G → Prop`` 的一个重要好处是，可以轻松地为 ``Subgroup G`` 赋予额外的结构。
+重要的是，它具有关于包含关系的完备格结构。例如，不必有一个引理陈述 ``G`` 的两个子群的交仍是一个子群，我们使用格运算 ``⊓`` 来构造交集。然后我们可以对构造应用关于格的任意引理。
 
-Let us check that the set underlying the infimum of two subgroups is indeed, by definition,
-their intersection.
+让我们检查一下两个子群的下确界的基础集合，根据定义，确实是它们的交集。
 EXAMPLES: -/
 -- QUOTE:
 example {G : Type*} [Group G] (H H' : Subgroup G) :
@@ -251,11 +211,8 @@ example {G : Type*} [Group G] (H H' : Subgroup G) :
 -- QUOTE.
 
 /- TEXT:
-It may look strange to have a different notation for what amounts to the intersection of the
-underlying sets, but the correspondence does not carry over to the supremum operation and set
-union, since a union of subgroups is not, in general, a subgroup.
-Instead one needs to use the subgroup generated by the union, which is done
-using ``Subgroup.closure``.
+对于本质上是基础集合交集的东西使用不同的记号可能看起来奇怪，但这种对应关系在上确界运算和集合并集的情况下并不成立，因为子群的并集通常不是子群。
+相反，需要使用由并集生成的子群，这通过 ``Subgroup.closure`` 完成。
 EXAMPLES: -/
 -- QUOTE:
 example {G : Type*} [Group G] (H H' : Subgroup G) :
@@ -264,26 +221,23 @@ example {G : Type*} [Group G] (H H' : Subgroup G) :
 -- QUOTE.
 
 /- TEXT:
-Another subtlety is that ``G`` itself does not have type ``Subgroup G``,
-so we need a way to talk about ``G`` seen as a subgroup of ``G``.
-This is also provided by the lattice structure: the full subgroup is the top element of
-this lattice.
+另一个微妙之处是 ``G`` 本身不具有类型 ``Subgroup G``，
+所以我们需要一种方式来谈论被视为 ``G`` 的子群的 ``G``。
+这也可以通过格结构提供：全子群是这个格的顶元素。
 EXAMPLES: -/
 -- QUOTE:
 example {G : Type*} [Group G] (x : G) : x ∈ (⊤ : Subgroup G) := trivial
 -- QUOTE.
 
 /- TEXT:
-Similarly the bottom element of this lattice is the subgroup whose only element is the
-neutral element.
+类似地，这个格的底元素是其唯一元素为单位元的子群。
 EXAMPLES: -/
 -- QUOTE:
 example {G : Type*} [Group G] (x : G) : x ∈ (⊥ : Subgroup G) ↔ x = 1 := Subgroup.mem_bot
 -- QUOTE.
 
 /- TEXT:
-As an exercise in manipulating groups and subgroups, you can define the conjugate of a subgroup
-by an element of the ambient group.
+作为操纵群和子群的练习，你可以用外围群的一个元素来定义子群的共轭。
 BOTH: -/
 -- QUOTE:
 def conjugate {G : Type*} [Group G] (x : G) (H : Subgroup G) : Subgroup G where
@@ -322,11 +276,9 @@ SOLUTIONS: -/
 -- QUOTE.
 
 /- TEXT:
-Tying the previous two topics together, one can push forward and pull back subgroups using
-group morphisms. The naming convention in Mathlib is to call those operations ``map``
-and ``comap``.
-These are not the common mathematical terms, but they have the advantage of being
-shorter than "pushforward" and "direct image."
+将前两个主题联系起来，可以使用群同态向前推进和向后拉回子群。Mathlib 中的命名约定是将这些运算称为 ``map``
+和 ``comap``。
+这些不是常见的数学术语，但它们比"前推"（pushforward）和"直接像"（direct image）更短。
 EXAMPLES: -/
 -- QUOTE:
 example {G H : Type*} [Group G] [Group H] (G' : Subgroup G) (f : G →* H) : Subgroup H :=
@@ -340,8 +292,7 @@ example {G H : Type*} [Group G] [Group H] (H' : Subgroup H) (f : G →* H) : Sub
 -- QUOTE.
 
 /- TEXT:
-In particular, the preimage of the bottom subgroup under a morphism ``f`` is a subgroup called
-the *kernel* of ``f``, and the range of ``f`` is also a subgroup.
+特别地，同态 ``f`` 下底子群的原像是一个子群，称为 ``f`` 的*核*（kernel），而 ``f`` 的值域也是一个子群。
 EXAMPLES: -/
 -- QUOTE:
 example {G H : Type*} [Group G] [Group H] (f : G →* H) (g : G) :
@@ -354,9 +305,8 @@ example {G H : Type*} [Group G] [Group H] (f : G →* H) (h : H) :
 -- QUOTE.
 
 /- TEXT:
-As exercises in manipulating group morphisms and subgroups, let us prove some elementary properties.
-They are already proved in Mathlib, so do not use ``exact?`` too quickly if you want to benefit
-from these exercises.
+作为操纵群同态和子群的练习，让我们证明一些基本性质。
+它们在 Mathlib 中已经被证明过了，所以如果你想从这些练习中受益，不要过快地使用 ``exact?``。
 BOTH: -/
 -- QUOTE:
 section exercises
@@ -369,7 +319,7 @@ example (φ : G →* H) (S T : Subgroup H) (hST : S ≤ T) : comap φ S ≤ coma
   sorry
 SOLUTIONS: -/
   intro x hx
-  rw [mem_comap] at * -- Lean does not need this line
+  rw [mem_comap] at * -- Lean 不需要这一行
   exact hST hx
 -- BOTH:
 
@@ -378,27 +328,26 @@ example (φ : G →* H) (S T : Subgroup G) (hST : S ≤ T) : map φ S ≤ map φ
   sorry
 SOLUTIONS: -/
   intro x hx
-  rw [mem_map] at * -- Lean does not need this line
+  rw [mem_map] at * -- Lean 不需要这一行
   rcases hx with ⟨y, hy, rfl⟩
   use y, hST hy
 -- BOTH:
 
 variable {K : Type*} [Group K]
 
--- Remember you can use the `ext` tactic to prove an equality of subgroups.
+-- 记住你可以使用 `ext` 策略来证明子群的相等。
 example (φ : G →* H) (ψ : H →* K) (U : Subgroup K) :
     comap (ψ.comp φ) U = comap φ (comap ψ U) := by
 /- EXAMPLES:
   sorry
 SOLUTIONS: -/
-  -- The whole proof could be ``rfl``, but let's decompose it a bit.
+  -- 整个证明可以是 ``rfl``，但让我们分解一下。
   ext x
   simp only [mem_comap]
   rfl
 -- BOTH:
 
--- Pushing a subgroup along one homomorphism and then another is equal to
--- pushing it forward along the composite of the homomorphisms.
+-- 沿一个同态推进一个子群，然后再沿另一个同态推进，等于沿这两个同态的复合向前推进它。
 example (φ : G →* H) (ψ : H →* K) (S : Subgroup G) :
     map (ψ.comp φ) S = map ψ (S.map φ) := by
 /- EXAMPLES:
@@ -420,12 +369,10 @@ end exercises
 -- QUOTE.
 
 /- TEXT:
-Let us finish this introduction to subgroups in Mathlib with two very classical results.
-Lagrange theorem states the cardinality of a subgroup of a finite group divides the cardinality of
-the group. Sylow's first theorem is a famous partial converse to Lagrange's theorem.
+让我们用两个非常经典的结果来结束对 Mathlib 中子群的介绍。
+拉格朗日定理陈述了有限群的子群的基数整除该群的基数。Sylow 第一定理是拉格朗日定理的著名部分逆定理。
 
-While this corner of Mathlib is partly set up to allow computation, we can tell
-Lean to use nonconstructive logic anyway using the following ``open scoped`` command.
+虽然 Mathlib 的这个角落部分是为了允许计算而设置的，但我们可以使用以下 ``open scoped`` 命令告诉 Lean 无论如何使用非构造性逻辑。
 BOTH: -/
 -- QUOTE:
 open scoped Classical
@@ -445,8 +392,7 @@ example {G : Type*} [Group G] [Finite G] (p : ℕ) {n : ℕ} [Fact p.Prime]
 -- QUOTE.
 
 /- TEXT:
-The next two exercises derive a corollary of Lagrange's lemma. (This is also already in Mathlib,
-so do not use ``exact?`` too quickly.)
+接下来的两个练习推导出拉格朗日引理的一个推论。（这在 Mathlib 中也已经有了，所以不要过快地使用 ``exact?``。）
 BOTH: -/
 -- QUOTE:
 lemma eq_bot_iff_card {G : Type*} [Group G] {H : Subgroup G} :
@@ -478,15 +424,13 @@ SOLUTIONS: -/
 -- QUOTE.
 
 /- TEXT:
-Concrete groups
+具体群
 ^^^^^^^^^^^^^^^
 
-One can also manipulate concrete groups in Mathlib, although this is typically more complicated
-than working with the abstract theory.
-For instance, given any type ``X``, the group of permutations of ``X`` is ``Equiv.Perm X``.
-In particular the symmetric group :math:`\mathfrak{S}_n` is ``Equiv.Perm (Fin n)``.
-One can state abstract results about this group, for instance saying that ``Equiv.Perm X`` is
-generated by cycles if ``X`` is finite.
+在 Mathlib 中也可以操作具体的群，尽管这通常比处理抽象理论更复杂。
+例如，给定任意类型 ``X``，``X`` 的置换群是 ``Equiv.Perm X``。
+特别地，对称群 :math:`\mathfrak{S}_n` 是 ``Equiv.Perm (Fin n)``。
+可以陈述关于此群的抽象结果，例如若 ``X`` 有限，则 ``Equiv.Perm X`` 由循环生成。
 EXAMPLES: -/
 -- QUOTE:
 open Equiv
@@ -496,21 +440,18 @@ example {X : Type*} [Finite X] : Subgroup.closure {σ : Perm X | Perm.IsCycle σ
 -- QUOTE.
 
 /- TEXT:
-One can be fully concrete and compute actual products of cycles. Below we use the ``#simp`` command,
-which calls the ``simp`` tactic on a given expression. The notation ``c[]`` is used to define a
-cyclic permutation. In the example, the result is a permutation of ``ℕ``. One could use a type
-ascription such as ``(1 : Fin 5)`` on the first number appearing to make it a computation in
-``Perm (Fin 5)``.
+可以完全具体地计算循环的实际乘积。下面我们使用 ``#simp`` 命令，
+它在给定表达式上调用 ``simp`` 策略。记号 ``c[]`` 用于定义一个循环置换。在这个例子中，结果是一个 ``ℕ`` 的置换。可以在出现的第一个数字上使用类型标注，如 ``(1 : Fin 5)``，使其成为 ``Perm (Fin 5)`` 中的计算。
 EXAMPLES: -/
 -- QUOTE:
 #simp [mul_assoc] c[1, 2, 3] * c[2, 3, 4]
 -- QUOTE.
 
 /- TEXT:
-Another way to work with concrete groups is to use free groups and group presentations.
-The free group on a type ``α`` is ``FreeGroup α`` and the inclusion map is
-``FreeGroup.of : α → FreeGroup α``. For instance let us define a type ``S`` with three elements denoted
-by ``a``, ``b`` and ``c``, and the element ``ab⁻¹`` of the corresponding free group.
+另一种处理具体群的方法是使用自由群和群展示。
+类型 ``α`` 上的自由群是 ``FreeGroup α``，包含映射是
+``FreeGroup.of : α → FreeGroup α``。例如，让我们定义一个类型 ``S``，它有三个元素，记作
+``a``、``b`` 和 ``c``，以及相应自由群的元素 ``ab⁻¹``。
 EXAMPLES: -/
 -- QUOTE:
 section FreeGroup
@@ -523,12 +464,11 @@ def myElement : FreeGroup S := (.of a) * (.of b)⁻¹
 -- QUOTE.
 
 /- TEXT:
-Note that we gave the expected type of the definition so that Lean knows that ``.of`` means
-``FreeGroup.of``.
+注意我们给出了定义的期望类型，以便 Lean 知道 ``.of`` 的意思是 ``FreeGroup.of``。
 
-The universal property of free groups is embodied as the equivalence ``FreeGroup.lift``.
-For example, let us define the group morphism from ``FreeGroup S`` to ``Perm (Fin 5)`` that
-sends ``a`` to ``c[1, 2, 3]``, ``b`` to ``c[2, 3, 1]``, and ``c`` to ``c[2, 3]``,
+自由群的泛性质体现为等价 ``FreeGroup.lift``。
+例如，让我们定义从 ``FreeGroup S`` 到 ``Perm (Fin 5)`` 的群同态，将
+``a`` 映为 ``c[1, 2, 3]``，``b`` 映为 ``c[2, 3, 1]``，``c`` 映为 ``c[2, 3]``。
 EXAMPLES: -/
 -- QUOTE:
 def myMorphism : FreeGroup S →* Perm (Fin 5) :=
@@ -539,26 +479,18 @@ def myMorphism : FreeGroup S →* Perm (Fin 5) :=
 -- QUOTE.
 
 /- TEXT:
-As a last concrete example, let us see how to define a group generated by a single element whose
-cube is one (so that group will be isomorphic to :math:`\mathbb{Z}/3`) and build a morphism
-from that group to ``Perm (Fin 5)``.
+作为最后一个具体例子，让我们看看如何定义一个由一个元素生成的群，其立方为单位元（因此该群将同构于 :math:`\mathbb{Z}/3`），并构建从该群到 ``Perm (Fin 5)`` 的同态。
 
-As a type with exactly one element, we will use ``Unit`` whose
-only element is denoted by ``()``. The function ``PresentedGroup`` takes a set of relations,
-i.e. a set of elements of some free group, and returns a group that is this free group quotiented
-by a normal subgroup generated by relations. (We will see how to handle more general quotients
-in :numref:`quotient_groups`.) Since we somehow hide this behind a definition, we use ``deriving Group`` to force creation
-of a group instance on ``myGroup``.
+作为恰好有一个元素的类型，我们将使用 ``Unit``，其唯一元素记为 ``()``。函数 ``PresentedGroup`` 接受一组关系，即某个自由群的元素集合，并返回一个群，该群是这个自由群商掉由关系生成的正规子群。（我们将在 :numref:`quotient_groups` 中看到如何处理更一般的商。）由于我们以某种方式将其隐藏在定义后面，我们使用 ``deriving Group`` 来强制创建 ``myGroup`` 上的群实例。
 EXAMPLES: -/
 -- QUOTE:
 def myGroup := PresentedGroup {.of () ^ 3} deriving Group
 -- QUOTE.
 
 /- TEXT:
-The universal property of presented groups ensures that morphisms out of this group can be built
-from functions that send the relations to the neutral element of the target group.
-So we need such a function and a proof that the condition holds. Then we can feed this proof
-to ``PresentedGroup.toGroup`` to get the desired group morphism.
+展示群的泛性质确保，从该群出发的同态可以从将关系映到目标群的单位元的函数构建。
+所以我们需要这样一个函数和一个证明条件成立的证明。然后我们可以将这个证明
+提供给 ``PresentedGroup.toGroup`` 以获得所需的群同态。
 EXAMPLES: -/
 -- QUOTE:
 def myMap : Unit → Perm (Fin 5)
@@ -576,21 +508,15 @@ end FreeGroup
 -- QUOTE.
 
 /- TEXT:
-Group actions
+群作用
 ^^^^^^^^^^^^^
 
-One important way that group theory interacts with the rest of mathematics is through
-the use of group actions.
-An action of a group ``G`` on some type ``X`` is nothing more than a morphism from ``G`` to
-``Equiv.Perm X``. So in a sense group actions are already covered by the previous discussion.
-But we don't want to carry this morphism around; instead, we want it to be inferred automatically
-by Lean as much as possible. So we have a type class for this, which is ``MulAction G X``.
-The downside of this setup is that having multiple actions of the same group on the same type
-requires some contortions, such as defining type synonyms, each of which carries different
-type class instances.
+群论与数学其余部分相互作用的一个重要方式是通过群作用的使用。
+群 ``G`` 在某个类型 ``X`` 上的作用无非是从 ``G`` 到 ``Equiv.Perm X`` 的同态。所以从某种意义上说，群作用已经被前面的讨论涵盖了。
+但我们不想随身携带这个同态；相反，我们希望它尽可能被 Lean 自动推断。所以我们有一个类型类 ``MulAction G X``。
+这种设置的缺点是，同一个群在同一类型上具有多个作用需要一些周折，例如定义类型同义词，每个都携带不同的类型类实例。
 
-This allows us in particular to use ``g • x`` to denote the action of a group element ``g`` on
-a point ``x``.
+这特别允许我们使用 ``g • x`` 来表示群元素 ``g`` 对点 ``x`` 的作用。
 BOTH: -/
 -- QUOTE:
 noncomputable section GroupActions
@@ -602,8 +528,7 @@ example {G X : Type*} [Group G] [MulAction G X] (g g': G) (x : X) :
 -- QUOTE.
 
 /- TEXT:
-There is also a version for additive group called ``AddAction``, where the action is denoted by
-``+ᵥ``. This is used for instance in the definition of affine spaces.
+对于加法群也有一个版本叫做 ``AddAction``，其中的作用记为 ``+ᵥ``。这用于例如仿射空间的定义中。
 EXAMPLES: -/
 -- QUOTE:
 example {G X : Type*} [AddGroup G] [AddAction G X] (g g' : G) (x : X) :
@@ -612,7 +537,7 @@ example {G X : Type*} [AddGroup G] [AddAction G X] (g g' : G) (x : X) :
 -- QUOTE.
 
 /- TEXT:
-The underlying group morphism is called ``MulAction.toPermHom``.
+底层的群同态称为 ``MulAction.toPermHom``。
 EXAMPLES: -/
 -- QUOTE:
 open MulAction
@@ -622,8 +547,7 @@ example {G X : Type*} [Group G] [MulAction G X] : G →* Equiv.Perm X :=
 -- QUOTE.
 
 /- TEXT:
-As an illustration let us see how to define the Cayley isomorphism embedding of any group ``G`` into
-a permutation group, namely ``Perm G``.
+作为说明，让我们看看如何定义任意群 ``G`` 到置换群 ``Perm G`` 的 Cayley 同构嵌入。
 EXAMPLES: -/
 -- QUOTE:
 def CayleyIsoMorphism (G : Type*) [Group G] : G ≃* (toPermHom G G).range :=
@@ -631,27 +555,25 @@ def CayleyIsoMorphism (G : Type*) [Group G] : G ≃* (toPermHom G G).range :=
 -- QUOTE.
 
 /- TEXT:
-Note that nothing before the above definition required having a group rather than a monoid (or any
-type endowed with a multiplication operation really).
+注意，上述定义之前的一切都不需要群而不只是幺半群（或者任何真正配备了乘法运算的类型）。
 
-The group condition really enters the picture when we will want to partition ``X`` into orbits.
-The corresponding equivalence relation on ``X`` is called ``MulAction.orbitRel``.
-It is not declared as a global instance.
+群条件真正进入视野是当我们想要将 ``X`` 划分为轨道时。
+``X`` 上相应的等价关系称为 ``MulAction.orbitRel``。
+它没有被声明为全局实例。
 EXAMPLES: -/
 /- OMIT:
-TODO: We need to explain `Setoid` somewhere.
+TODO: 我们需要在某个地方解释一下 `Setoid`。
 EXAMPLES. -/
 -- QUOTE:
 example {G X : Type*} [Group G] [MulAction G X] : Setoid X := orbitRel G X
 -- QUOTE.
 
 /- TEXT:
-Using this we can state that ``X`` is partitioned into orbits under the action of ``G``.
-More precisely, we get a bijection between ``X`` and the dependent product
-``(ω : orbitRel.Quotient G X) × (orbit G (Quotient.out' ω))``
-where ``Quotient.out' ω`` simply chooses an element that projects to ``ω``.
-Recall that elements of this dependent product are pairs ``⟨ω, x⟩`` where the type
-``orbit G (Quotient.out' ω)`` of ``x`` depends on ``ω``.
+利用这一点，我们可以陈述 ``X`` 在 ``G`` 的作用下被划分为轨道。
+更精确地说，我们得到 ``X`` 与依赖积
+``(ω : orbitRel.Quotient G X) × (orbit G (Quotient.out' ω))`` 之间的双射，
+其中 ``Quotient.out' ω`` 简单地选择一个投影到 ``ω`` 的元素。
+回忆一下，这个依赖积的元素是形如 ``⟨ω, x⟩`` 的对，其中 ``x`` 的类型 ``orbit G (Quotient.out' ω)`` 依赖于 ``ω``。
 EXAMPLES: -/
 -- QUOTE:
 example {G X : Type*} [Group G] [MulAction G X] :
@@ -660,13 +582,9 @@ example {G X : Type*} [Group G] [MulAction G X] :
 -- QUOTE.
 
 /- TEXT:
-In particular, when X is finite, this can be combined with ``Fintype.card_congr`` and
-``Fintype.card_sigma`` to deduce that the cardinality of ``X`` is the sum of the cardinalities
-of the orbits.
-Furthermore, the orbits are in bijection with the quotient of ``G`` under the action of the
-stabilizers by left translation.
-This action of a subgroup by left-translation is used to define quotients of a group by a
-subgroup with notation `/` so we can use the following concise statement.
+特别地，当 X 有限时，这可以与 ``Fintype.card_congr`` 和 ``Fintype.card_sigma`` 结合，推出 ``X`` 的基数是轨道基数之和。
+此外，轨道与 ``G`` 在稳定子群的左平移作用下的商之间存在双射。
+子群通过左平移的作用用于定义群商掉子群的商，记号是 `/`，因此我们可以使用以下简洁的陈述。
 EXAMPLES: -/
 -- QUOTE:
 example {G X : Type*} [Group G] [MulAction G X] (x : X) :
@@ -675,9 +593,8 @@ example {G X : Type*} [Group G] [MulAction G X] (x : X) :
 -- QUOTE.
 
 /- TEXT:
-An important special case of combining the above two results is when ``X`` is a group ``G``
-equipped with the action of a subgroup ``H`` by translation.
-In this case all stabilizers are trivial so every orbit is in bijection with ``H`` and we get:
+结合上述两个结果的一个重要特例是当 ``X`` 是群 ``G`` 本身，配备了子群 ``H`` 平移作用时。
+在这种情况下，所有稳定子群都是平凡的，所以每个轨道都与 ``H`` 双射，我们得到：
 EXAMPLES: -/
 -- QUOTE:
 example {G : Type*} [Group G] (H : Subgroup G) : G ≃ (G ⧸ H) × H :=
@@ -685,11 +602,9 @@ example {G : Type*} [Group G] (H : Subgroup G) : G ≃ (G ⧸ H) × H :=
 -- QUOTE.
 
 /- TEXT:
-This is the conceptual variant of the version of Lagrange theorem that we saw above.
-Note this version makes no finiteness assumption.
+这是我们上面看到的拉格朗日定理版本的概念性变体。注意这个版本不做有限性假设。
 
-As an exercise for this section, let us build the action of a group on its subgroup by
-conjugation, using our definition of ``conjugate`` from a previous exercise.
+作为本节的练习，让我们使用前面练习中对 ``conjugate`` 的定义，构建群在其子群上的共轭作用。
 BOTH: -/
 -- QUOTE:
 variable {G : Type*} [Group G]
@@ -733,16 +648,13 @@ end GroupActions
 /- TEXT:
 .. _quotient_groups:
 
-Quotient groups
+商群
 ^^^^^^^^^^^^^^^
 
-In the above discussion of subgroups acting on groups, we saw the quotient ``G ⧸ H`` appear.
-In general this is only a type. It can be endowed with a group structure such that the quotient
-map is a group morphism if and only if ``H`` is a normal subgroup (and this group structure is
-then unique).
+在上面对子群作用于群的讨论中，我们看到了商 ``G ⧸ H`` 的出现。
+一般来说，这只是一个类型。它可以被赋予一个群结构，使得商映射是一个群同态，当且仅当 ``H`` 是一个正规子群（并且这个群结构是唯一的）。
 
-The normality assumption is a type class ``Subgroup.Normal`` so that type class inference can use it
-to derive the group structure on the quotient.
+正规性假设是一个类型类 ``Subgroup.Normal``，因此类型类推断可以使用它来推导商上的群结构。
 BOTH: -/
 -- QUOTE:
 noncomputable section QuotientGroup
@@ -755,8 +667,8 @@ example {G : Type*} [Group G] (H : Subgroup G) [H.Normal] : G →* G ⧸ H :=
 -- QUOTE.
 
 /- TEXT:
-The universal property of quotient groups is accessed through ``QuotientGroup.lift``:
-a group morphism ``φ`` descends to ``G ⧸ N`` as soon as its kernel contains ``N``.
+商群的泛性质通过 ``QuotientGroup.lift`` 访问：
+群同态 ``φ`` 只要它的核包含 ``N``，就可以下降到 ``G ⧸ N``。
 EXAMPLES: -/
 -- QUOTE:
 example {G : Type*} [Group G] (N : Subgroup G) [N.Normal] {M : Type*}
@@ -765,12 +677,9 @@ example {G : Type*} [Group G] (N : Subgroup G) [N.Normal] {M : Type*}
 -- QUOTE.
 
 /- TEXT:
-The fact that the target group is called ``M`` is the above snippet is a clue that having a
-monoid structure on ``M`` would be enough.
+在上述代码片段中，目标群被称为 ``M`` 这一事实暗示了，在 ``M`` 上有幺半群结构就足够了。
 
-An important special case is when ``N = ker φ``. In that case the descended morphism is
-injective and we get a group isomorphism onto its image. This result is often called
-the first isomorphism theorem.
+一个重要的特例是当 ``N = ker φ`` 时。在这种情况下，下降的同态是单射，我们得到到其像的群同构。这个结果通常被称为第一同构定理。
 EXAMPLES: -/
 -- QUOTE:
 example {G : Type*} [Group G] {M : Type*} [Group M] (φ : G →* M) :
@@ -779,13 +688,9 @@ example {G : Type*} [Group G] {M : Type*} [Group M] (φ : G →* M) :
 -- QUOTE.
 
 /- TEXT:
-Applying the universal property to a composition of a morphism ``φ : G →* G'``
-with a quotient group projection ``Quotient.mk' N'``,
-we can also aim for a morphism from ``G ⧸ N`` to ``G' ⧸ N'``.
-The condition required on ``φ`` is usually formulated by saying "``φ`` should send ``N`` inside
-``N'``." But this is equivalent to asking that ``φ`` should pull ``N'`` back over
-``N``, and the latter condition is nicer to work with since the definition of pullback does not
-involve an existential quantifier.
+将泛性质应用于同态 ``φ : G →* G'`` 与商群投影 ``Quotient.mk' N'`` 的复合，
+我们也可以得到从 ``G ⧸ N`` 到 ``G' ⧸ N'`` 的同态。
+对 ``φ`` 所需的条件通常被表述为"``φ`` 应将 ``N`` 送入 ``N'`` 中"。但这等价于要求 ``φ`` 应将 ``N'`` 拉回到包含 ``N`` 的条件，而后者更容易处理，因为拉回的定义不涉及存在量词。
 EXAMPLES: -/
 -- QUOTE:
 example {G G': Type*} [Group G] [Group G']
@@ -795,10 +700,8 @@ example {G G': Type*} [Group G] [Group G']
 -- QUOTE.
 
 /- TEXT:
-One subtle point to keep in mind is that the type ``G ⧸ N`` really depends on ``N``
-(up to definitional equality), so having a proof that two normal subgroups ``N`` and ``M`` are equal
-is not enough to make the corresponding quotients equal. However the universal properties does give
-an isomorphism in this case.
+需要记住的一个微妙点是，类型 ``G ⧸ N`` 确实依赖于 ``N``
+（直到定义相等），所以有一个证明两个正规子群 ``N`` 和 ``M`` 相等是不够的，不能使相应的商相等。然而，泛性质确实在这种情况下给出了一个同构。
 EXAMPLES: -/
 -- QUOTE:
 example {G : Type*} [Group G] {M N : Subgroup G} [M.Normal]
@@ -806,13 +709,10 @@ example {G : Type*} [Group G] {M N : Subgroup G} [M.Normal]
 -- QUOTE.
 
 /- TEXT:
-As a final series of exercises for this section, we will prove that if ``H`` and ``K`` are disjoint
-normal subgroups of a finite group ``G`` such that the product of their cardinalities is equal to
-the cardinality of ``G``
-then ``G`` is isomorphic to ``H × K``. Recall that disjoint in this context means ``H ⊓ K = ⊥``.
+作为本节最后的一系列练习，我们将证明，如果 ``H`` 和 ``K`` 是有限群 ``G`` 的不相交的正规子群，且它们的基数的乘积等于 ``G`` 的基数，
+那么 ``G`` 同构于 ``H × K``。回忆一下，在此上下文中，不相交意味着 ``H ⊓ K = ⊥``。
 
-We start with playing a bit with Lagrange's lemma, without assuming the subgroups are normal
-or disjoint.
+我们从稍微玩一下拉格朗日引理开始，不假设子群是正规的或不相交的。
 BOTH: -/
 -- QUOTE:
 section
@@ -820,7 +720,7 @@ variable {G : Type*} [Group G] {H K : Subgroup G}
 
 open MonoidHom
 
-#check Nat.card_pos -- The nonempty argument will be automatically inferred for subgroups
+#check Nat.card_pos -- 非空参数对于子群会被自动推断
 #check Subgroup.index_eq_card
 #check Subgroup.index_mul_card
 #check Nat.eq_of_mul_eq_mul_right
@@ -838,8 +738,7 @@ SOLUTIONS: -/
 -- QUOTE.
 
 /- TEXT:
-From now on, we assume that our subgroups are normal and disjoint, and we assume the cardinality
-condition. Now we construct the first building block of the desired isomorphism.
+从现在开始，我们假设我们的子群是正规且不相交的，并假设基数条件。现在我们构造所需同构的第一个构件。
 BOTH: -/
 -- QUOTE:
 variable [H.Normal] [K.Normal] [Fintype G] (h : Disjoint H K)
@@ -864,9 +763,8 @@ SOLUTIONS: -/
 -- QUOTE.
 
 /- TEXT:
-Now we can define our second building block.
-We will need ``MonoidHom.prod``, which builds a morphism from ``G₀`` to ``G₁ × G₂`` out of
-morphisms from ``G₀`` to ``G₁`` and ``G₂``.
+现在我们可以定义我们的第二个构件。
+我们将需要 ``MonoidHom.prod``，它从到 ``G₁`` 和 ``G₂`` 的同态构建从 ``G₀`` 到 ``G₁ × G₂`` 的同态。
 BOTH: -/
 -- QUOTE:
 def iso₂ : G ≃* (G ⧸ K) × (G ⧸ H) := by
@@ -883,7 +781,7 @@ SOLUTIONS: -/
 -- QUOTE.
 
 /- TEXT:
-We are ready to put all pieces together.
+我们准备好将所有部分组合在一起了。
 EXAMPLES: -/
 -- QUOTE:
 #check MulEquiv.prodCongr

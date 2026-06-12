@@ -1,22 +1,20 @@
 .. _hierarchies:
 
-Hierarchies
-===========
+层级
+====
 
-We have seen in :numref:`Chapter %s <structures>` how to define the class
-of groups and build instances of this class, and then how to build an instance
-of the commutative ring class. But of course there is a hierarchy here: a
-commutative ring is in particular an additive group. In this chapter we
-will study how to build such hierarchies. They appear in all branches
-of mathematics but in this chapter the emphasis will be on algebraic examples.
+我们在 :numref:`第 %s 章 <structures>` 中看到了如何定义群的类
+并构建该类的实例，然后如何构建交换环类的实例。但这里当然存在一个层级：
+交换环特别地是一个加法群。在本章中，
+我们将研究如何构建这样的层级。它们出现在数学的所有分支中，
+但在本章中，重点将放在代数例子上。
 
-It may seem premature to discuss how to build hierarchies before more discussions
-about using existing hierarchies. But some understanding of the technology underlying
-hierarchies is required to use them. So you should probably still read this chapter,
-but without trying too hard to remember everything on your first read, then read
-the following chapters and come back here for a second reading.
+在更多讨论如何使用现有层级之前就讨论如何构建层级，似乎为时过早。
+但使用层级需要对底层技术有一定了解。所以你大概还是应该阅读本章，
+但不必在第一次阅读时试图记住所有内容，然后阅读
+后续章节，再回来进行第二次阅读。
 
-In this chapter, we will redefine (simpler versions of) many things that appear in Mathlib
-so we will used indices to distinguish our version. For instance we will have ``Ring₁``
-as our version of ``Ring``. Since we will gradually explain more powerful ways of formalizing
-structures, those indices will sometimes grow beyond one.
+在本章中，我们将重新定义 Mathlib 中出现的许多东西的（简化版本），
+因此我们将使用下标来区分我们的版本。例如，我们将有 ``Ring₁``
+作为 ``Ring`` 的版本。由于我们将逐步解释更强大的形式化结构的方法，
+这些下标有时会超过 1。

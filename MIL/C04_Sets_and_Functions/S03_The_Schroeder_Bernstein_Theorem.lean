@@ -8,105 +8,104 @@ open Function
 /- TEXT:
 .. _the_schroeder_bernstein_theorem:
 
-The Schröder-Bernstein Theorem
+Schröder-Bernstein 定理
 ------------------------------
 
-We close this chapter with an elementary but nontrivial theorem of set theory.
-Let :math:`\alpha` and :math:`\beta` be sets.
-(In our formalization, they will actually be types.)
-Suppose :math:`f : \alpha → \beta` and :math:`g : \beta → \alpha`
-are both injective.
-Intuitively, this means that :math:`\alpha` is no bigger than :math:`\beta` and vice-versa.
-If :math:`\alpha` and :math:`\beta` are finite, this implies that
-they have the same cardinality, which is equivalent to saying that there
-is a bijection between them.
-In the nineteenth century, Cantor stated that same result holds even in the
-case where :math:`\alpha` and :math:`\beta` are infinite.
-This was eventually established by Dedekind, Schröder, and Bernstein
-independently.
+我们以一个初等但非平凡的集合论定理来结束本章。
+设 :math:`\alpha` 和 :math:`\beta` 为集合。
+（在我们的形式化中，它们实际上是类型。）
+假设 :math:`f : \alpha → \beta` 和 :math:`g : \beta → \alpha`
+都是单射。
+直观上，这意味着 :math:`\alpha` 不大于 :math:`\beta`，反之亦然。
+如果 :math:`\alpha` 和 :math:`\beta` 是有限的，这蕴含
+它们具有相同的基数，这等价于说它们之间存在
+一个双射。
+在十九世纪，康托尔断言同样的结果即使在
+:math:`\alpha` 和 :math:`\beta` 是无限的情况下也成立。
+这最终由 Dedekind、Schröder 和 Bernstein
+独立地证明。
 
-Our formalization will introduce some new methods that we will explain
-in greater detail in chapters to come.
-Don't worry if they go by too quickly here.
-Our goal is to show you that you already have the skills to contribute
-to the formal proof of a real mathematical result.
+我们的形式化将引入一些新方法，我们将在
+后续章节中更详细地解释。
+如果这里它们讲得太快，不必担心。
+我们的目标是向你展示，你已经具备了为一个真正的数学结果
+贡献形式化证明的技能。
 
-To understand the idea behind the proof, consider the image of the map
-:math:`g` in :math:`\alpha`.
-On that image, the inverse of :math:`g` is defined and is a bijection
-with :math:`\beta`.
+要理解证明背后的思想，考虑映射 :math:`g`
+在 :math:`\alpha` 中的像。
+在该像上，:math:`g` 的逆是定义的，并且是与 :math:`\beta` 的
+双射。
 
 .. image:: /figures/schroeder_bernstein1.*
    :height: 150 px
-   :alt: the Schröder Bernstein theorem
+   :alt: Schröder Bernstein 定理
    :align: center
 
-The problem is that the bijection does not include the shaded region
-in the diagram, which is nonempty if :math:`g` is not surjective.
-Alternatively, we can use :math:`f` to map all of
-:math:`\alpha` to :math:`\beta`,
-but in that case the problem is that if :math:`f` is not surjective,
-it will miss some elements of :math:`\beta`.
+问题在于这个双射不包含图中阴影区域，
+如果 :math:`g` 不是满射，该区域非空。
+或者，我们可以使用 :math:`f` 将整个
+:math:`\alpha` 映射到 :math:`\beta`，
+但此时的问题是如果 :math:`f` 不是满射，
+它将遗漏 :math:`\beta` 的某些元素。
 
 .. image:: /figures/schroeder_bernstein2.*
    :height: 150 px
-   :alt: the Schröder Bernstein theorem
+   :alt: Schröder Bernstein 定理
    :align: center
 
-But now consider the composition :math:`g \circ f` from :math:`\alpha` to
-itself. Because the composition is injective, it forms a bijection between
-:math:`\alpha` and its image, yielding a scaled-down copy of :math:`\alpha`
-inside itself.
+但现在考虑复合 :math:`g \circ f` 从 :math:`\alpha` 到
+自身。因为这个复合是单射，它在 :math:`\alpha` 和它的像之间
+形成一个双射，产生 :math:`\alpha` 内部的一个缩小副本。
 
 .. image:: /figures/schroeder_bernstein3.*
    :height: 150 px
-   :alt: the Schröder Bernstein theorem
+   :alt: Schröder Bernstein 定理
    :align: center
 
-This composition maps the inner shaded ring to yet another such
-set, which we can think of as an even smaller concentric shaded ring,
-and so on.
-This yields a
-concentric sequence of shaded rings, each of which is in
-bijective correspondence with the next.
-If we map each ring to the next and leave the unshaded
-parts of :math:`\alpha` alone,
-we have a bijection of :math:`\alpha` with the image of :math:`g`.
-Composing with :math:`g^{-1}`, this yields the desired
-bijection between :math:`\alpha` and :math:`\beta`.
+这个复合将内部的阴影环映射到另一个这样的
+集合，我们可以将其视为一个更小的同心阴影环，
+以此类推。
+这产生了一个
+同心阴影环序列，其中每个环都与下一个环
+成双射对应。
+如果我们将每个环映射到下一个，并保持 :math:`\alpha` 的
+非阴影部分不变，
+我们就得到了 :math:`\alpha` 与 :math:`g` 的像之间的双射。
+通过与 :math:`g^{-1}` 复合，这给出了所需的
+:math:`\alpha` 与 :math:`\beta` 之间的双射。
 
-We can describe this bijection more simply.
-Let :math:`A` be the union of the sequence of shaded regions, and
-define :math:`h : \alpha \to \beta` as follows:
+我们可以更简单地描述这个双射。
+令 :math:`A` 为阴影区域序列的并集，并
+定义 :math:`h : \alpha \to \beta` 如下：
 
 .. math::
 
   h(x) = \begin{cases}
-    f(x) & \text{if $x \in A$} \\
-    g^{-1}(x) & \text{otherwise.}
+    f(x) & \text{若 $x \in A$} \\
+    g^{-1}(x) & \text{否则.}
   \end{cases}
 
-In other words, we use :math:`f` on the shaded parts,
-and we use the inverse of :math:`g` everywhere else.
-The resulting map :math:`h` is injective
-because each component is injective
-and the images of the two components are disjoint.
-To see that it is surjective,
-suppose we are given a :math:`y` in :math:`\beta`, and
-consider :math:`g(y)`.
-If :math:`g(y)` is in one of the shaded regions,
-it cannot be in the first ring, so we have :math:`g(y) = g(f(x))`
-for some :math:`x` is in the previous ring.
-By the injectivity of :math:`g`, we have :math:`h(x) = f(x) = y`.
-If :math:`g(y)` is not in the shaded region,
-then by the definition of :math:`h`, we have :math:`h(g(y))= y`.
-Either way, :math:`y` is in the image of :math:`h`.
+换句话说，我们在阴影部分使用 :math:`f`，
+在其他地方使用 :math:`g` 的逆。
+得到的映射 :math:`h` 是单射，
+因为每个分量都是单射，
+且两个分量的像不相交。
+要看到它是满射，
+假设我们给定 :math:`\beta` 中的一个 :math:`y`，并
+考虑 :math:`g(y)`。
+如果 :math:`g(y)` 在某个阴影区域中，
+它不可能在第一个环中，因此我们有 :math:`g(y) = g(f(x))`
+对前一个环中的某个 :math:`x` 成立。
+由 :math:`g` 的单射性，我们有 :math:`h(x) = f(x) = y`。
+如果 :math:`g(y)` 不在阴影区域中，
+则由 :math:`h` 的定义，我们有 :math:`h(g(y))= y`。
+无论哪种情况，:math:`y` 都在 :math:`h` 的像中。
 
-This argument should sound plausible, but the details are delicate.
-Formalizing the proof will not only improve our confidence in the
-result, but also help us understand it better.
-Because the proof uses classical logic, we tell Lean that our definitions
-will generally not be computable.
+这个论证听起来应该是合理的，但细节是微妙的。
+形式化这个证明不仅能提高我们对结果的信心，
+还能帮助我们更好地理解它。
+因为证明使用了经典逻辑，我们告诉 Lean 我们的定义
+通常是不可计算的。
 BOTH: -/
 -- QUOTE:
 noncomputable section
@@ -115,23 +114,23 @@ variable {α β : Type*} [Nonempty β]
 -- QUOTE.
 
 /- TEXT:
-The annotation ``[Nonempty β]`` specifies that ``β`` is nonempty.
-We use it because the Mathlib primitive that we will use to
-construct :math:`g^{-1}` requires it.
-The case of the theorem where :math:`\beta` is empty is trivial,
-and even though it would not be hard to generalize the formalization to cover
-that case as well, we will not bother.
-Specifically, we need the hypothesis ``[Nonempty β]`` for the operation
-``invFun`` that is defined in Mathlib.
-Given ``x : α``, ``invFun g x`` chooses a preimage of ``x``
-in ``β`` if there is one,
-and returns an arbitrary element of ``β`` otherwise.
-The function ``invFun g`` is always a left inverse if ``g`` is injective
-and a right inverse if ``g`` is surjective.
+注解 ``[Nonempty β]`` 指定 ``β`` 是非空的。
+我们使用它，因为我们将用来构造 :math:`g^{-1}` 的 Mathlib 原语
+需要它。
+定理中 :math:`\beta` 为空的情况是平凡的，
+尽管形式化推广以覆盖那种情况
+并不困难，我们就不费心了。
+具体来说，我们需要假设 ``[Nonempty β]`` 来使用 Mathlib 中
+定义的运算 ``invFun``。
+给定 ``x : α``，``invFun g x`` 选择 ``x`` 在 ``β`` 中的一个原像
+（如果存在的话），
+否则返回 ``β`` 的任意元素。
+函数 ``invFun g`` 在 ``g`` 是单射时总是左逆，
+在 ``g`` 是满射时总是右逆。
 
 -- LITERALINCLUDE: invFun g
 
-We define the set corresponding to the union of the shaded regions as follows.
+我们如下定义对应于阴影区域并集的集合。
 
 BOTH: -/
 section
@@ -147,18 +146,18 @@ def sbSet :=
 -- QUOTE.
 
 /- TEXT:
-The definition ``sbAux`` is an example of a *recursive definition*,
-which we will explain in the next chapter.
-It defines a sequence of sets
+定义 ``sbAux`` 是一个*递归定义*的例子，
+我们将在下一章中解释。
+它定义了一个集合序列
 
 .. math::
 
-  S_0 &= \alpha ∖ g(\beta) \\
+  S_0 &= α ∖ g(\beta) \\
   S_{n+1} &= g(f(S_n)).
 
-The definition ``sbSet`` corresponds to the set
-:math:`A = \bigcup_{n \in \mathbb{N}} S_n` in our proof sketch.
-The function :math:`h` described above is now defined as follows:
+定义 ``sbSet`` 对应于我们证明草图中
+的集合 :math:`A = \bigcup_{n \in \mathbb{N}} S_n`。
+上面描述的函数 :math:`h` 现在定义如下：
 BOTH: -/
 -- QUOTE:
 def sbFun (x : α) : β :=
@@ -166,23 +165,23 @@ def sbFun (x : α) : β :=
 -- QUOTE.
 
 /- TEXT:
-We will need the fact that our definition of :math:`g^{-1}` is a
-right inverse on the complement of :math:`A`,
-which is to say, on the non-shaded regions of :math:`\alpha`.
-This is so because the outermost ring, :math:`S_0`, is equal to
-:math:`\alpha \setminus g(\beta)`, so the complement of :math:`A` is
-contained in :math:`g(\beta)`.
-As a result, for every :math:`x` in the complement of :math:`A`,
-there is a :math:`y` such that :math:`g(y) = x`.
-(By the injectivity of :math:`g`, this :math:`y` is unique,
-but next theorem says only that ``invFun g x`` returns some ``y``
-such that ``g y = x``.)
+我们需要 :math:`g^{-1}` 的定义在 :math:`A` 的补集上
+是右逆这一事实，
+也就是说，在 :math:`\alpha` 的非阴影区域上。
+这是因为最外层环 :math:`S_0` 等于
+:math:`\alpha \setminus g(\beta)`，因此 :math:`A` 的补集
+包含在 :math:`g(\beta)` 中。
+因此，对于 :math:`A` 的补集中的每个 :math:`x`，
+存在 :math:`y` 使得 :math:`g(y) = x`。
+（由 :math:`g` 的单射性，这个 :math:`y` 是唯一的，
+但下一个定理只说 ``invFun g x`` 返回某个 ``y``
+使得 ``g y = x``。）
 
-Step through the proof below, make sure you understand what is going on,
-and fill in the remaining parts.
-You will need to use ``invFun_eq`` at the end.
-Notice that rewriting with ``sbAux`` here replaces ``sbAux f g 0``
-with the right-hand side of the corresponding defining equation.
+逐步执行下面的证明，确保你理解其中发生的事情，
+并填补剩余的部分。
+你需要在最后使用 ``invFun_eq``。
+注意，用 ``sbAux`` 重写会将 ``sbAux f g 0``
+替换为对应定义方程的右边。
 BOTH: -/
 -- QUOTE:
 theorem sb_right_inv {x : α} (hx : x ∉ sbSet f g) : g (invFun g x) = x := by
@@ -208,29 +207,29 @@ SOLUTIONS: -/
 -- QUOTE.
 
 /- TEXT:
-We now turn to the proof that :math:`h` is injective.
-Informally, the proof goes as follows.
-First, suppose :math:`h(x_1) = h(x_2)`.
-If :math:`x_1` is in :math:`A`, then :math:`h(x_1) = f(x_1)`,
-and we can show that :math:`x_2` is in :math:`A` as follows.
-If it isn't, then we have :math:`h(x_2) = g^{-1}(x_2)`.
-From :math:`f(x_1) = h(x_1) = h(x_2)` we have :math:`g(f(x_1)) = x_2`.
-From the definition of :math:`A`, since :math:`x_1` is in :math:`A`,
-:math:`x_2` is in :math:`A` as well, a contradiction.
-Hence, if :math:`x_1` is in :math:`A`, so is :math:`x_2`,
-in which case we have :math:`f(x_1) = h(x_1) = h(x_2) = f(x_2)`.
-The injectivity of :math:`f` then implies :math:`x_1 = x_2`.
-The symmetric argument shows that if :math:`x_2` is in :math:`A`,
-then so is :math:`x_1`, which again implies :math:`x_1 = x_2`.
+现在我们转向 :math:`h` 是单射的证明。
+非正式地，证明如下进行。
+首先，假设 :math:`h(x_1) = h(x_2)`。
+如果 :math:`x_1` 在 :math:`A` 中，则 :math:`h(x_1) = f(x_1)`，
+我们可以如下证明 :math:`x_2` 在 :math:`A` 中。
+如果不在，则我们有 :math:`h(x_2) = g^{-1}(x_2)`。
+由 :math:`f(x_1) = h(x_1) = h(x_2)` 我们有 :math:`g(f(x_1)) = x_2`。
+由 :math:`A` 的定义，因为 :math:`x_1` 在 :math:`A` 中，
+:math:`x_2` 也在 :math:`A` 中，矛盾。
+因此，如果 :math:`x_1` 在 :math:`A` 中，那么 :math:`x_2` 也在，
+此时我们有 :math:`f(x_1) = h(x_1) = h(x_2) = f(x_2)`。
+:math:`f` 的单射性然后蕴含 :math:`x_1 = x_2`。
+对称论证表明如果 :math:`x_2` 在 :math:`A` 中，
+那么 :math:`x_1` 也在，这同样蕴含 :math:`x_1 = x_2`。
 
-The only remaining possibility is that neither :math:`x_1` nor :math:`x_2`
-is in :math:`A`. In that case, we have
-:math:`g^{-1}(x_1) = h(x_1) = h(x_2) = g^{-1}(x_2)`.
-Applying :math:`g` to both sides yields :math:`x_1 = x_2`.
+唯一剩下的可能性是 :math:`x_1` 和 :math:`x_2`
+都不在 :math:`A` 中。此时，我们有
+:math:`g^{-1}(x_1) = h(x_1) = h(x_2) = g^{-1}(x_2)`。
+对两边应用 :math:`g` 得到 :math:`x_1 = x_2`。
 
-Once again, we encourage you to step through the following proof
-to see how the argument plays out in Lean.
-See if you can finish off the proof using ``sb_right_inv``.
+再次，我们鼓励你逐步执行以下证明，
+看看该论证如何在 Lean 中展开。
+看看你能否使用 ``sb_right_inv`` 完成证明。
 BOTH: -/
 -- QUOTE:
 theorem sb_injective (hf : Injective f) : Injective (sbFun f g) := by
@@ -275,40 +274,40 @@ SOLUTIONS: -/
 -- QUOTE.
 
 /- TEXT:
-The proof introduces some new tactics.
-To start with, notice the ``set`` tactic, which introduces abbreviations
-``A`` and ``h`` for ``sbSet f g`` and ``sb_fun f g`` respectively.
-We name the corresponding defining equations ``A_def`` and ``h_def``.
-The abbreviations are definitional, which is to say, Lean will sometimes
-unfold them automatically when needed.
-But not always; for example, when using ``rw``, we generally need to
-use ``A_def`` and ``h_def`` explicitly.
-So the definitions bring a tradeoff: they can make expressions shorter
-and more readable, but they sometimes require us to do more work.
+证明引入了一些新策略。
+首先，注意 ``set`` 策略，它引入缩写
+``A`` 和 ``h`` 分别代表 ``sbSet f g`` 和 ``sb_fun f g``。
+我们命名相应的定义等式 ``A_def`` 和 ``h_def``。
+这些缩写是定义性的，也就是说，Lean 有时
+会在需要时自动展开它们。
+但不是总是如此；例如，在使用 ``rw`` 时，我们通常需要
+显式使用 ``A_def`` 和 ``h_def``。
+因此这些定义带来了一种权衡：它们可以使表达式更短
+且更易读，但有时需要我们做更多工作。
 
-A more interesting tactic is the ``wlog`` tactic, which encapsulates
-the symmetry argument in the informal proof above.
-We will not dwell on it now, but notice that it does exactly what we want.
-If you hover over the tactic you can take a look at its documentation.
+一个更有趣的策略是 ``wlog`` 策略，它封装了
+上述非正式证明中的对称论证。
+我们现在不深入讨论它，但请注意它正好做了我们想要的。
+如果你将鼠标悬停在此策略上，可以查看其文档。
 
-The argument for surjectivity is even easier.
-Given :math:`y` in :math:`\beta`,
-we consider two cases, depending on whether :math:`g(y)` is in :math:`A`.
-If it is, it can't be in :math:`S_0`, the outermost ring,
-because by definition that is disjoint from the image of :math:`g`.
-Thus it is an element of :math:`S_{n+1}` for some :math:`n`.
-This means that it is of the form :math:`g(f(x))` for some
-:math:`x` in :math:`S_n`.
-By the injectivity of :math:`g`, we have :math:`f(x) = y`.
-In the case where :math:`g(y)` is in the complement of :math:`A`,
-we immediately have :math:`h(g(y))= y`, and we are done.
+满射性的论证甚至更容易。
+给定 :math:`\beta` 中的 :math:`y`，
+我们考虑两种情况，取决于 :math:`g(y)` 是否在 :math:`A` 中。
+如果在，它不可能在 :math:`S_0` 中，即最外层环，
+因为根据定义，那是与 :math:`g` 的像不相交的。
+因此它是某个 :math:`S_{n+1}` 的元素，对某个 :math:`n`。
+这意味着它具有形式 :math:`g(f(x))`，对于
+:math:`S_n` 中的某个 :math:`x`。
+由 :math:`g` 的单射性，我们有 :math:`f(x) = y`。
+在 :math:`g(y)` 在 :math:`A` 的补集中的情况下，
+我们立即有 :math:`h(g(y))= y`，证毕。
 
-Once again, we encourage you to step through the proof and fill in
-the missing parts.
-The tactic ``rcases n with _ | n`` splits on the cases ``g y ∈ sbAux f g 0``
-and ``g y ∈ sbAux f g (n + 1)``.
-In both cases, calling the simplifier with ``simp [sbAux]``
-applies the corresponding defining equation of ``sbAux``.
+再次，我们鼓励你逐步执行证明并填补
+缺失的部分。
+策略 ``rcases n with _ | n`` 分拆 ``g y ∈ sbAux f g 0``
+和 ``g y ∈ sbAux f g (n + 1)`` 的情况。
+在两种情况下，调用带有 ``simp [sbAux]`` 的化简器
+应用 ``sbAux`` 的对应定义方程。
 BOTH: -/
 -- QUOTE:
 theorem sb_surjective (hg : Injective g) : Surjective (sbFun f g) := by
@@ -341,9 +340,9 @@ SOLUTIONS: -/
 end
 
 /- TEXT:
-We can now put it all together. The final statement is short and sweet,
-and the proof uses the fact that ``Bijective h`` unfolds to
-``Injective h ∧ Surjective h``.
+我们现在可以将所有内容整合在一起。最终的陈述简短而优美，
+证明使用了 ``Bijective h`` 展开为
+``Injective h ∧ Surjective h`` 这一事实。
 EXAMPLES: -/
 -- QUOTE:
 theorem schroeder_bernstein {f : α → β} {g : β → α} (hf : Injective f) (hg : Injective g) :

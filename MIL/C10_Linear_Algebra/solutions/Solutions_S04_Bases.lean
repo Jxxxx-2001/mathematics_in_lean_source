@@ -13,16 +13,16 @@ open Module
 
 variable {ι : Type*} (B : Basis ι K V) (v : V) (i : ι)
 
--- The basis vector with index ``i``
+-- 索引为 ``i`` 的基向量
 #check (B i : V)
 
--- the linear isomorphism with the model space given by ``B``
+-- 由 ``B`` 给出的与模型空间的线性同构
 #check (B.repr : V ≃ₗ[K] ι →₀ K)
 
--- the component function of ``v``
+-- ``v`` 的分量函数
 #check (B.repr v : ι →₀ K)
 
--- the component of ``v`` with index ``i``
+-- ``v`` 在索引 ``i`` 处的分量
 #check (B.repr v i : K)
 
 variable [DecidableEq ι]
@@ -47,7 +47,7 @@ open LinearMap
 
 #check (toMatrix B B' : (V →ₗ[K] W) ≃ₗ[K] Matrix ι' ι K)
 
-open Matrix -- get access to the ``*ᵥ`` notation for multiplication between matrices and vectors.
+open Matrix -- 获取矩阵与向量之间乘法的 ``*ᵥ`` 记号。
 
 example (φ : V →ₗ[K] W) (v : V) : (toMatrix B B' φ) *ᵥ (B.repr v) = B'.repr (φ v) :=
   toMatrix_mulVec_repr B B' φ v
@@ -63,13 +63,13 @@ end
 
 open Module LinearMap Matrix
 
--- Some lemmas coming from the fact that `LinearMap.toMatrix` is an algebra morphism.
+-- 一些来自 `LinearMap.toMatrix` 是代数态射这一事实的引理。
 #check toMatrix_comp
 #check id_comp
 #check comp_id
 #check toMatrix_id
 
--- Some lemmas coming from the fact that ``Matrix.det`` is a multiplicative monoid morphism.
+-- 一些来自 ``Matrix.det`` 是乘法幺半群态射这一事实的引理。
 #check Matrix.det_mul
 #check Matrix.det_one
 
@@ -108,4 +108,3 @@ example (h : finrank K V < finrank K E + finrank K F) :
   have := Submodule.finrank_le (E ⊔ F)
   linarith
 end
-

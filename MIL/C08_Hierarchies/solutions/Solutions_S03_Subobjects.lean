@@ -6,14 +6,14 @@ set_option autoImplicit true
 
 @[ext]
 structure Submonoid₁ (M : Type) [Monoid M] where
-  /-- The carrier of a submonoid. -/
+  /-- 子幺半群的承载集. -/
   carrier : Set M
-  /-- The product of two elements of a submonoid belongs to the submonoid. -/
+  /-- 子幺半群中两个元素的乘积仍属于该子幺半群. -/
   mul_mem {a b} : a ∈ carrier → b ∈ carrier → a * b ∈ carrier
-  /-- The unit element belongs to the submonoid. -/
+  /-- 单位元属于该子幺半群. -/
   one_mem : 1 ∈ carrier
 
-/-- Submonoids in `M` can be seen as sets in `M`. -/
+/-- `M` 中的子幺半群可以被视为 `M` 中的集合。 -/
 instance [Monoid M] : SetLike (Submonoid₁ M) M where
   coe := Submonoid₁.carrier
   coe_injective' _ _ := Submonoid₁.ext
@@ -54,11 +54,11 @@ instance [Monoid M] : SubmonoidClass₁ (Submonoid₁ M) M where
 
 @[ext]
 structure Subgroup₁ (G : Type) [Group G] extends Submonoid₁ G where
-  /-- The inverse of an element of a subgroup belongs to the subgroup. -/
+  /-- 子群中元素的逆元仍属于该子群. -/
   inv_mem {a} : a ∈ carrier → a⁻¹ ∈ carrier
 
 
-/-- Subgroups in `M` can be seen as sets in `M`. -/
+/-- `M` 中的子群可以被视为 `M` 中的集合。 -/
 instance [Group G] : SetLike (Subgroup₁ G) G where
   coe := fun H ↦ H.toSubmonoid₁.carrier
   coe_injective' _ _ := Subgroup₁.ext

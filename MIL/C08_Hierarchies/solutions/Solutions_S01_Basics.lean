@@ -6,14 +6,14 @@ set_option autoImplicit true
 
 
 class One₁ (α : Type) where
-  /-- The element one -/
+  /-- 元素 one -/
   one : α
 
 
 #check One₁.one -- One₁.one {α : Type} [self : One₁ α] : α
 
 @[class] structure One₂ (α : Type) where
-  /-- The element one -/
+  /-- 元素 one -/
   one : α
 
 #check One₂.one
@@ -39,7 +39,7 @@ infixl:70 " ⋄ "   => Dia₁.dia
 
 class Semigroup₀ (α : Type) where
   toDia₁ : Dia₁ α
-  /-- Diamond is associative -/
+  /-- 菱形运算是结合的 -/
   dia_assoc : ∀ a b c : α, a ⋄ b ⋄ c = a ⋄ (b ⋄ c)
 
 
@@ -49,20 +49,20 @@ example {α : Type} [Semigroup₀ α] (a b : α) : α := a ⋄ b
 
 
 class Semigroup₁ (α : Type) extends toDia₁ : Dia₁ α where
-  /-- Diamond is associative -/
+  /-- 菱形运算是结合的 -/
   dia_assoc : ∀ a b c : α, a ⋄ b ⋄ c = a ⋄ (b ⋄ c)
 
 example {α : Type} [Semigroup₁ α] (a b : α) : α := a ⋄ b
 
 
 class Semigroup₂ (α : Type) extends Dia₁ α where
-  /-- Diamond is associative -/
+  /-- 菱形运算是结合的 -/
   dia_assoc : ∀ a b c : α, a ⋄ b ⋄ c = a ⋄ (b ⋄ c)
 
 class DiaOneClass₁ (α : Type) extends One₁ α, Dia₁ α where
-  /-- One is a left neutral element for diamond. -/
+  /-- 壹是菱形运算的左单位元. -/
   one_dia : ∀ a : α, 𝟙 ⋄ a = a
-  /-- One is a right neutral element for diamond -/
+  /-- 壹是菱形运算的右单位元 -/
   dia_one : ∀ a : α, a ⋄ 𝟙 = a
 
 
@@ -95,7 +95,7 @@ example {α : Type} [Monoid₁ α] :
 
 
 class Inv₁ (α : Type) where
-  /-- The inversion function -/
+  /-- 求逆函数 -/
   inv : α → α
 
 @[inherit_doc]
@@ -129,12 +129,12 @@ lemma dia_inv [Group₁ G] (a : G) : a ⋄ a⁻¹ = 𝟙 :=
 
 
 class AddSemigroup₃ (α : Type) extends Add α where
-  /-- Addition is associative -/
+  /-- 加法是结合的 -/
   add_assoc₃ : ∀ a b c : α, a + b + c = a + (b + c)
 
 @[to_additive AddSemigroup₃]
 class Semigroup₃ (α : Type) extends Mul α where
-  /-- Multiplication is associative -/
+  /-- 乘法是结合的 -/
   mul_assoc₃ : ∀ a b c : α, a * b * c = a * (b * c)
 
 class AddMonoid₃ (α : Type) extends AddSemigroup₃ α, AddZeroClass α
@@ -201,9 +201,9 @@ class CommGroup₃ (G : Type) extends Group₃ G, CommMonoid₃ G
 
 
 class Ring₃ (R : Type) extends AddGroup₃ R, Monoid₃ R, MulZeroClass R where
-  /-- Multiplication is left distributive over addition -/
+  /-- 乘法对加法有左分配律 -/
   left_distrib : ∀ a b c : R, a * (b + c) = a * b + a * c
-  /-- Multiplication is right distributive over addition -/
+  /-- 乘法对加法有右分配律 -/
   right_distrib : ∀ a b c : R, (a + b) * c = a * c + b * c
 
 instance {R : Type} [Ring₃ R] : AddCommGroup₃ R :=
@@ -238,7 +238,7 @@ instance : Ring₃ ℤ where
   right_distrib := Int.add_mul
 
 class LE₁ (α : Type) where
-  /-- The Less-or-Equal relation. -/
+  /-- 小于等于关系. -/
   le : α → α → Prop
 
 @[inherit_doc] infix:50 " ≤₁ " => LE₁.le
@@ -270,7 +270,7 @@ instance : OrderedCommMonoid₁ ℕ where
   mul_of_le := fun _ _ h c ↦ Nat.mul_le_mul_left c h
 
 class SMul₃ (α : Type) (β : Type) where
-  /-- Scalar multiplication -/
+  /-- 标量乘法 -/
   smul : α → β → β
 
 infixr:73 " • " => SMul₃.smul
@@ -311,11 +311,11 @@ instance abGrpModule (A : Type) [AddCommGroup₃ A] : Module₁ ℤ A where
 
 
 class AddMonoid₄ (M : Type) extends AddSemigroup₃ M, AddZeroClass M where
-  /-- Multiplication by a natural number. -/
+  /-- 自然数乘法. -/
   nsmul : ℕ → M → M := nsmul₁
-  /-- Multiplication by `(0 : ℕ)` gives `0`. -/
+  /-- 乘以 `(0 : ℕ)` 得到 `0`。 -/
   nsmul_zero : ∀ x, nsmul 0 x = 0 := by intros; rfl
-  /-- Multiplication by `(n + 1 : ℕ)` behaves as expected. -/
+  /-- 乘以 `(n + 1 : ℕ)` 的行为符合预期。 -/
   nsmul_succ : ∀ (n : ℕ) (x), nsmul (n + 1) x = x + nsmul n x := by intros; rfl
 
 instance mySMul {M : Type} [AddMonoid₄ M] : SMul ℕ M := ⟨AddMonoid₄.nsmul⟩
@@ -340,7 +340,7 @@ instance : AddMonoid₄ ℤ where
 
 example (n : ℕ) (m : ℤ) : SMul.smul (self := mySMul) n m = n * m := rfl
 class LT₁ (α : Type) where
-  /-- The Less-Than relation -/
+  /-- 小于关系 -/
   lt : α → α → Prop
 
 @[inherit_doc] infix:50 " <₁ " => LT₁.lt

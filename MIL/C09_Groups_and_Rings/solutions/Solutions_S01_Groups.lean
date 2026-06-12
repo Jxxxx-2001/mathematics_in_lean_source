@@ -31,27 +31,26 @@ open Subgroup
 
 example (φ : G →* H) (S T : Subgroup H) (hST : S ≤ T) : comap φ S ≤ comap φ T := by
   intro x hx
-  rw [mem_comap] at * -- Lean does not need this line
+  rw [mem_comap] at * -- Lean 不需要这一行
   exact hST hx
 
 example (φ : G →* H) (S T : Subgroup G) (hST : S ≤ T) : map φ S ≤ map φ T := by
   intro x hx
-  rw [mem_map] at * -- Lean does not need this line
+  rw [mem_map] at * -- Lean 不需要这一行
   rcases hx with ⟨y, hy, rfl⟩
   use y, hST hy
 
 variable {K : Type*} [Group K]
 
--- Remember you can use the `ext` tactic to prove an equality of subgroups.
+-- 记住你可以使用 `ext` 策略来证明子群的相等。
 example (φ : G →* H) (ψ : H →* K) (U : Subgroup K) :
     comap (ψ.comp φ) U = comap φ (comap ψ U) := by
-  -- The whole proof could be ``rfl``, but let's decompose it a bit.
+  -- 整个证明可以是 ``rfl``，但让我们分解一下。
   ext x
   simp only [mem_comap]
   rfl
 
--- Pushing a subgroup along one homomorphism and then another is equal to
--- pushing it forward along the composite of the homomorphisms.
+-- 沿一个同态推进一个子群，然后再沿另一个同态推进，等于沿这两个同态的复合向前推进它。
 example (φ : G →* H) (ψ : H →* K) (S : Subgroup G) :
     map (ψ.comp φ) S = map ψ (S.map φ) := by
   ext x
@@ -122,7 +121,7 @@ variable {G : Type*} [Group G] {H K : Subgroup G}
 
 open MonoidHom
 
-#check Nat.card_pos -- The nonempty argument will be automatically inferred for subgroups
+#check Nat.card_pos -- 非空参数对于子群会被自动推断
 #check Subgroup.index_eq_card
 #check Subgroup.index_mul_card
 #check Nat.eq_of_mul_eq_mul_right

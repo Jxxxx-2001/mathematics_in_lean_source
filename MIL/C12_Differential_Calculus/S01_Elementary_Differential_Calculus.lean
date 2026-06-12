@@ -13,29 +13,23 @@ noncomputable section
 
 .. _elementary_differential_calculus:
 
-Elementary Differential Calculus
---------------------------------
+初等微分学
+----------
 
-Let ``f`` be a function from the reals to the reals. There is a difference
-between talking about the derivative of ``f`` at a single point and
-talking about the derivative function.
-In Mathlib, the first notion is represented as follows.
+设 ``f`` 是一个从实数到实数的函数。谈论 ``f`` 在单点处的导数与谈论导函数是有区别的。
+在 Mathlib 中，第一个概念表示如下。
 EXAMPLES: -/
 -- QUOTE:
 open Real
 
-/-- The sin function has derivative 1 at 0. -/
+/-- sin 函数在 0 处的导数为 1。-/
 example : HasDerivAt sin 1 0 := by simpa using hasDerivAt_sin 0
 -- QUOTE.
 
 /- TEXT:
-We can also express that ``f`` is differentiable at a point without
-specifying its derivative there
-by writing ``DifferentiableAt ℝ``.
-We specify ``ℝ`` explicitly because in a slightly more general context,
-when talking about functions from ``ℂ`` to ``ℂ``,
-we want to be able to distinguish between being differentiable in the real sense
-and being differentiable in the sense of the complex derivative.
+我们也可以通过写 ``DifferentiableAt ℝ`` 来表达 ``f`` 在一点处可微，而不指定其在该点的导数。
+我们显式指定 ``ℝ`` 是因为在稍微更一般的上下文中，当讨论从 ``ℂ`` 到 ``ℂ`` 的函数时，
+我们希望能够区分实数意义下的可微与复数导数意义下的可微。
 EXAMPLES: -/
 -- QUOTE:
 example (x : ℝ) : DifferentiableAt ℝ sin x :=
@@ -43,11 +37,9 @@ example (x : ℝ) : DifferentiableAt ℝ sin x :=
 -- QUOTE.
 
 /- TEXT:
-It would be inconvenient to have to provide a proof of differentiability
-every time we want to refer to a derivative.
-So Mathlib provides a function ``deriv f : ℝ → ℝ`` that is defined for any
-function ``f : ℝ → ℝ``
-but is defined to take the value ``0`` at any point where ``f`` is not differentiable.
+每次引用导数时都要提供可微性证明会很不方便。
+因此 Mathlib 提供了一个函数 ``deriv f : ℝ → ℝ``，它对任意函数 ``f : ℝ → ℝ`` 有定义，
+但在 ``f`` 不可微的任何点处其值被定义为 ``0``。
 EXAMPLES: -/
 -- QUOTE:
 example {f : ℝ → ℝ} {x a : ℝ} (h : HasDerivAt f a x) : deriv f x = a :=
@@ -58,9 +50,8 @@ example {f : ℝ → ℝ} {x : ℝ} (h : ¬DifferentiableAt ℝ f x) : deriv f x
 -- QUOTE.
 
 /- TEXT:
-Of course there are many lemmas about ``deriv`` that do require differentiability assumptions.
-For instance, you should think about a counterexample to the next lemma without the
-differentiability assumptions.
+当然，关于 ``deriv`` 有许多引理确实需要可微性假设。
+例如，你应该思考一下，在没有可微性假设的情况下，下一个引理的反例是什么。
 EXAMPLES: -/
 -- QUOTE:
 example {f g : ℝ → ℝ} {x : ℝ} (hf : DifferentiableAt ℝ f x) (hg : DifferentiableAt ℝ g x) :
@@ -69,12 +60,8 @@ example {f g : ℝ → ℝ} {x : ℝ} (hf : DifferentiableAt ℝ f x) (hg : Diff
 -- QUOTE.
 
 /- TEXT:
-Interestingly, however, there are statements that can avoid differentiability
-assumptions by taking advantage
-of the fact that the value of ``deriv`` defaults to zero when the function is
-not differentiable.
-So making sense of the following statement requires knowing the precise
-definition of ``deriv``.
+然而有趣的是，有些命题可以利用 ``deriv`` 在函数不可微时默认取零这一事实来避免可微性假设。
+因此，要理解下面的命题就需要知道 ``deriv`` 的精确定义。
 EXAMPLES: -/
 -- QUOTE:
 example {f : ℝ → ℝ} {a : ℝ} (h : IsLocalMin f a) : deriv f a = 0 :=
@@ -82,8 +69,7 @@ example {f : ℝ → ℝ} {a : ℝ} (h : IsLocalMin f a) : deriv f a = 0 :=
 -- QUOTE.
 
 /- TEXT:
-We can even state Rolle's theorem without any differentiability assumptions, which
-seems even weirder.
+我们甚至可以不附加任何可微性假设来陈述罗尔定理，这似乎更加奇怪。
 EXAMPLES: -/
 -- QUOTE:
 open Set
@@ -94,7 +80,7 @@ example {f : ℝ → ℝ} {a b : ℝ} (hab : a < b) (hfc : ContinuousOn f (Icc a
 -- QUOTE.
 
 /- TEXT:
-Of course, this trick does not work for the general mean value theorem.
+当然，这个技巧对一般的均值定理不适用。
 EXAMPLES: -/
 -- QUOTE:
 example (f : ℝ → ℝ) {a b : ℝ} (hab : a < b) (hf : ContinuousOn f (Icc a b))
@@ -103,7 +89,7 @@ example (f : ℝ → ℝ) {a b : ℝ} (hab : a < b) (hf : ContinuousOn f (Icc a 
 -- QUOTE.
 
 /- TEXT:
-Lean can automatically compute some simple derivatives using the ``simp`` tactic.
+Lean 可以使用 ``simp`` 策略自动计算一些简单的导数。
 EXAMPLES: -/
 -- QUOTE:
 example : deriv (fun x : ℝ ↦ x ^ 5) 6 = 5 * 6 ^ 4 := by simp

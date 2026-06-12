@@ -7,13 +7,13 @@ namespace C02S04
 /- TEXT:
 .. _more_on_order_and_divisibility:
 
-More examples using apply and rw
+更多使用 apply 和 rw 的例子
 --------------------------------
 
 .. index:: min, max
 
-The ``min`` function on the real numbers is uniquely characterized
-by the following three facts:
+实数上的 ``min`` 函数由以下三个事实
+唯一刻画：
 TEXT. -/
 -- BOTH:
 section
@@ -26,31 +26,31 @@ variable (a b c d : ℝ)
 -- QUOTE.
 
 /- TEXT:
-Can you guess the names of the theorems that characterize
-``max`` in a similar way?
+你能猜出以类似方式刻画
+``max`` 的定理名称吗？
 
-Notice that we have to apply ``min`` to a pair of arguments ``a`` and ``b``
-by writing ``min a b`` rather than ``min (a, b)``.
-Formally, ``min`` is a function of type ``ℝ → ℝ → ℝ``.
-When we write a type like this with multiple arrows,
-the convention is that the implicit parentheses associate
-to the right, so the type is interpreted as ``ℝ → (ℝ → ℝ)``.
-The net effect is that if ``a`` and ``b`` have type ``ℝ``
-then ``min a`` has type ``ℝ → ℝ`` and
-``min a b`` has type ``ℝ``, so ``min`` acts like a function
-of two arguments, as we expect. Handling multiple
-arguments in this way is known as *currying*,
-after the logician Haskell Curry.
+注意，我们必须通过写 ``min a b`` 而不是 ``min (a, b)``
+将 ``min`` 应用于一对参数 ``a`` 和 ``b``。
+形式上，``min`` 是一个类型为 ``ℝ → ℝ → ℝ`` 的函数。
+当我们写像这样带有多个箭头的类型时，
+惯例是隐式括号向右结合，
+因此该类型被解释为 ``ℝ → (ℝ → ℝ)``。
+最终效果是，如果 ``a`` 和 ``b`` 的类型是 ``ℝ``，
+那么 ``min a`` 的类型是 ``ℝ → ℝ``，
+而 ``min a b`` 的类型是 ``ℝ``，因此 ``min`` 像一个
+两个参数的函数一样运作，正如我们所期望的。以这种方式处理多个
+参数被称为 *柯里化*，
+以逻辑学家 Haskell Curry 命名。
 
-The order of operations in Lean can also take some getting used to.
-Function application binds tighter than infix operations, so the
-expression ``min a b + c`` is interpreted as ``(min a b) + c``.
-With time, these conventions will become second nature.
+Lean 中运算的顺序也可能需要一些时间来适应。
+函数应用比中缀运算绑定得更紧，因此
+表达式 ``min a b + c`` 被解释为 ``(min a b) + c``。
+随着时间推移，这些约定将成为你的第二本能。
 
-Using the theorem ``le_antisymm``, we can show that two
-real numbers are equal if each is less than or equal to the other.
-Using this and the facts above,
-we can show that ``min`` is commutative:
+使用定理 ``le_antisymm``，我们可以证明两个
+实数相等，如果每个都小于等于另一个。
+利用这一点以及上述事实，
+我们可以证明 ``min`` 是可交换的：
 TEXT. -/
 -- QUOTE:
 example : min a b = min b a := by
@@ -68,24 +68,24 @@ example : min a b = min b a := by
 /- TEXT:
 .. index:: show, tactics ; show
 
-Here we have used dots to separate proofs of
-different goals.
-Our usage is inconsistent:
-at the outer level,
-we use dots and indentation for both goals,
-whereas for the nested proofs,
-we use dots only until a single goal remains.
-Both conventions are reasonable and useful.
-We also use the ``show`` tactic to structure
-the proof
-and indicate what is being proved in each block.
-The proof still works without the ``show`` commands,
-but using them makes the proof easier to read and maintain.
+这里我们使用了点号来分隔
+不同目标的证明。
+我们的用法不一致：
+在外层级别，
+我们对两个目标都使用点号和缩进，
+而对于嵌套的证明，
+我们只使用点号直到只剩下一个目标。
+两种约定都是合理的且有用的。
+我们还使用 ``show`` 策略来结构化
+证明
+并指示每个块中要证明什么。
+没有 ``show`` 命令，证明仍然有效，
+但使用它们使证明更易于阅读和维护。
 
-It may bother you that the proof is repetitive.
-To foreshadow skills you will learn later on,
-we note that one way to avoid the repetition
-is to state a local lemma and then use it:
+可能会让你烦恼的是这个证明是重复的。
+为了预示你以后将学到的技能，
+我们注意到避免重复的一种方法是
+陈述一个局部引理然后使用它：
 TEXT. -/
 -- QUOTE:
 example : min a b = min b a := by
@@ -100,21 +100,21 @@ example : min a b = min b a := by
 -- QUOTE.
 
 /- TEXT:
-We will say more about the universal quantifier in
-:numref:`implication_and_the_universal_quantifier`,
-but suffice it to say here that the hypothesis
-``h`` says that the desired inequality holds for
-any ``x`` and ``y``,
-and the ``intro`` tactic introduces an arbitrary
-``x`` and ``y`` to establish the conclusion.
-The first ``apply`` after ``le_antisymm`` implicitly
-uses ``h a b``, whereas the second one uses ``h b a``.
+我们将在
+:numref:`implication_and_the_universal_quantifier` 中更多地讨论全称量词，
+但在这里只需说明假设
+``h`` 表明所需的不等式对
+任意 ``x`` 和 ``y`` 都成立，
+而 ``intro`` 策略引入任意的
+``x`` 和 ``y`` 来建立结论。
+``le_antisymm`` 之后的第一个 ``apply`` 隐式地
+使用 ``h a b``，而第二个使用 ``h b a``。
 
 .. index:: repeat, tactics ; repeat
 
-Another solution is to use the ``repeat`` tactic,
-which applies a tactic (or a block) as many times
-as it can.
+另一种解决方案是使用 ``repeat`` 策略，
+它尽可能多次地
+应用一个策略（或一个块）。
 TEXT. -/
 -- QUOTE:
 example : min a b = min b a := by
@@ -126,8 +126,8 @@ example : min a b = min b a := by
 -- QUOTE.
 
 /- TEXT:
-We encourage you to prove the following as exercises.
-You can use either of the tricks just described to shorten the first.
+我们鼓励你将以下内容作为练习来证明。
+你可以使用刚才描述的任何一种技巧来缩短第一个。
 TEXT. -/
 -- QUOTE:
 -- BOTH:
@@ -168,28 +168,29 @@ SOLUTIONS: -/
 -- QUOTE.
 
 /- TEXT:
-Of course, you are welcome to prove the associativity of ``max`` as well.
+当然，欢迎你也证明 ``max`` 的结合律。
 
-It is an interesting fact that ``min`` distributes over ``max``
-the way that multiplication distributes over addition,
-and vice-versa.
-In other words, on the real numbers, we have the identity
+一个有趣的事实是，``min`` 对 ``max`` 满足分配律，
+就像乘法对加法满足分配律一样，
+反之亦然。
+换句话说，在实数上，我们有恒等式
 ``min a (max b c) = max (min a b) (min a c)``
-as well as the corresponding version with ``max`` and ``min``
-switched.
-But in the next section we will see that this does *not* follow
-from the transitivity and reflexivity of ``≤`` and
-the characterizing properties of ``min`` and ``max`` enumerated above.
-We need to use the fact that ``≤`` on the real numbers is a *total order*,
-which is to say,
-it satisfies ``∀ x y, x ≤ y ∨ y ≤ x``.
-Here the disjunction symbol, ``∨``, represents "or".
-In the first case, we have ``min x y = x``,
-and in the second case, we have ``min x y = y``.
-We will learn how to reason by cases in :numref:`disjunction`,
-but for now we will stick to examples that don't require the case split.
+以及相应的 ``max`` 和 ``min``
+交换的版本。
+但在下一节中我们将看到，这 *不* 能从
+``≤`` 的传递性和自反性以及
+上面列举的 ``min`` 和 ``max`` 的刻画性质
+推导出来。
+我们需要使用这样一个事实：实数上的 ``≤`` 是一个 *全序*，
+也就是说，
+它满足 ``∀ x y, x ≤ y ∨ y ≤ x``。
+这里析取符号 ``∨`` 表示"或"。
+在第一种情况下，我们有 ``min x y = x``，
+在第二种情况下，我们有 ``min x y = y``。
+我们将在 :numref:`disjunction` 中学习如何按情况推理，
+但目前我们只关注不需要分情况的例子。
 
-Here is one such example:
+这里是这样一个例子：
 TEXT. -/
 -- QUOTE:
 -- BOTH:
@@ -220,24 +221,22 @@ SOLUTIONS: -/
 -- QUOTE.
 
 /- TEXT:
-It is clear that ``aux`` provides one of the two inequalities
-needed to prove the equality,
-but applying it to suitable values yields the other direction
-as well.
-As a hint, you can use the theorem ``add_neg_cancel_right``
-and the ``linarith`` tactic.
+很明显，``aux`` 提供了证明等式所需的两个不等式之一，
+但将其应用于适当的值同样可以得到另一个方向。
+作为提示，你可以使用定理 ``add_neg_cancel_right``
+和 ``linarith`` 策略。
 
 .. index:: absolute value
 
-Lean's naming convention is made manifest
-in the library's name for the triangle inequality:
+Lean 的命名约定在库中三角不等式的
+名称中体现得很明显：
 TEXT. -/
 -- QUOTE:
 #check (abs_add_le : ∀ a b : ℝ, |a + b| ≤ |a| + |b|)
 -- QUOTE.
 
 /- TEXT:
-Use it to prove the following variant, using also ``add_sub_cancel_right``:
+使用它来证明以下变体，同时使用 ``add_sub_cancel_right``：
 TEXT. -/
 -- QUOTE:
 -- BOTH:
@@ -253,7 +252,7 @@ SOLUTIONS: -/
     _ ≤ |a - b| := by rw [add_sub_cancel_right]
 
 
--- alternatively
+-- 替代方案
 example : |a| - |b| ≤ |a - b| := by
   have h := abs_add_le (a - b) b
   rw [sub_add_cancel] at h
@@ -264,20 +263,20 @@ end
 -- QUOTE.
 
 /- TEXT:
-See if you can do this in three lines or less.
-You can use the theorem ``sub_add_cancel``.
+看看你能否在三行或更少的行数内完成。
+你可以使用定理 ``sub_add_cancel``。
 
 .. index:: divisibility
 
-Another important relation that we will make use of
-in the sections to come is the divisibility relation
-on the natural numbers, ``x ∣ y``.
-Be careful: the divisibility symbol is *not* the
-ordinary bar on your keyboard.
-Rather, it is a unicode character obtained by
-typing ``\|`` in VS Code.
-By convention, Mathlib uses ``dvd``
-to refer to it in theorem names.
+我们在接下来的章节中会使用到的
+另一个重要关系是自然数上的整除关系，
+``x ∣ y``。
+注意：整除符号 *不是*
+你键盘上的普通竖线。
+相反，它是一个 Unicode 字符，通过在 VS Code 中
+输入 ``\|`` 来获得。
+按照约定，Mathlib 在定理名称中使用 ``dvd``
+来指代它。
 TEXT. -/
 -- BOTH:
 section
@@ -296,12 +295,12 @@ example : x ∣ x ^ 2 := by
 -- QUOTE.
 
 /- TEXT:
-In the last example, the exponent is a natural
-number, and applying ``dvd_mul_left``
-forces Lean to expand the definition of ``x^2`` to
-``x^1 * x``.
-See if you can guess the names of the theorems
-you need to prove the following:
+在最后一个例子中，指数是一个自然
+数，应用 ``dvd_mul_left``
+会迫使 Lean 将 ``x^2`` 展开为
+``x^1 * x``。
+看看你能否猜出证明以下内容
+所需的定理名称：
 TEXT. -/
 -- QUOTE:
 -- BOTH:
@@ -325,11 +324,11 @@ end
 /- TEXT:
 .. index:: gcd, lcm
 
-With respect to divisibility, the *greatest common divisor*,
-``gcd``, and least common multiple, ``lcm``,
-are analogous to ``min`` and ``max``.
-Since every number divides ``0``,
-``0`` is really the greatest element with respect to divisibility:
+关于整除关系，*最大公约数*，
+``gcd``，和最小公倍数，``lcm``，
+类似于 ``min`` 和 ``max``。
+由于每个数都整除 ``0``，
+``0`` 实际上是整除关系下的最大元素：
 TEXT. -/
 -- BOTH:
 section
@@ -343,8 +342,7 @@ variable (m n : ℕ)
 -- QUOTE.
 
 /- TEXT:
-See if you can guess the names of the theorems you will need to
-prove the following:
+看看你能否猜出证明以下内容所需的定理名称：
 TEXT. -/
 -- QUOTE:
 -- BOTH:
@@ -363,12 +361,11 @@ SOLUTIONS: -/
 end
 
 /- TEXT:
-Hint: you can use ``dvd_antisymm``, but if you do, Lean will
-complain that the expression is ambiguous between the generic
-theorem and the version ``Nat.dvd_antisymm``,
-the one specifically for the natural numbers.
-You can use ``_root_.dvd_antisymm`` to specify the generic one;
-either one will work.
+提示：你可以使用 ``dvd_antisymm``，但如果你这样做，Lean 会
+抱怨该表达式在通用定理和版本 ``Nat.dvd_antisymm``
+（专门用于自然数的版本）之间是模糊的。
+你可以使用 ``_root_.dvd_antisymm`` 来指定通用版本；
+两者都可以使用。
 TEXT. -/
 
 -- OMIT: fix this: protect `dvd_antisymm`.

@@ -147,4 +147,3 @@ example : (⋃ p ∈ primes, { x | x ≤ p }) = univ := by
   use p, primep
 
 end
-

@@ -8,30 +8,29 @@ namespace C05S03
 /- TEXT:
 .. _section_infinitely_many_primes:
 
-Infinitely Many Primes
+无穷多个素数
 ----------------------
 
-Let us continue our exploration of induction and recursion with another
-mathematical standard: a proof that there are infinitely many primes.
-One way to formulate this is as the statement that
-for every natural number
-:math:`n`, there is a prime number greater than :math:`n`.
-To prove this, let :math:`p` be any prime factor of :math:`n! + 1`.
-If :math:`p` is less than or equal to :math:`n`, it divides :math:`n!`.
-Since it also divides :math:`n! + 1`, it divides 1, a contradiction.
-Hence :math:`p` is greater than :math:`n`.
+让我们继续我们对归纳与递归的探索，使用另一个
+数学标准：存在无穷多个素数的证明。
+一种表述方式是：对于每个自然数
+:math:`n`，存在一个大于 :math:`n` 的素数。
+为证明这一点，令 :math:`p` 为 :math:`n! + 1` 的任意素因子。
+如果 :math:`p` 小于或等于 :math:`n`，它整除 :math:`n!`。
+因为它也整除 :math:`n! + 1`，它整除 1，矛盾。
+因此 :math:`p` 大于 :math:`n`。
 
-To formalize that proof, we need to show that any number greater than or equal
-to 2 has a prime factor.
-To do that, we will need to show that any natural number that is
-not equal to 0 or 1 is greater-than or equal to 2.
-And this brings us to a quirky feature of formalization:
-it is often trivial statements like this that are among the most
-annoying to formalize.
-Here we consider a few ways to do it.
+要形式化这个证明，我们需要证明任何大于或等于 2
+的数都有素因子。
+为此，我们需要证明任何不等于 0 或 1 的自然数
+都大于或等于 2。
+而这将我们带到形式化的一个古怪特点：
+通常是像这样的平凡陈述在形式化时
+最令人烦恼。
+在这里我们考虑几种方法。
 
-To start with, we can use the ``cases`` tactic and the fact that the
-successor function respects the ordering on the natural numbers.
+首先，我们可以使用 ``cases`` 策略和后继函数
+在自然数的序上保持性质的事实。
 BOTH: -/
 -- QUOTE:
 theorem two_le {m : ℕ} (h0 : m ≠ 0) (h1 : m ≠ 1) : 2 ≤ m := by
@@ -43,11 +42,11 @@ theorem two_le {m : ℕ} (h0 : m ≠ 0) (h1 : m ≠ 1) : 2 ≤ m := by
 -- QUOTE.
 
 /- TEXT:
-Another strategy is to use the tactic ``interval_cases``,
-which automatically splits the goal into cases when
-the variable in question is contained in an interval
-of natural numbers or integers.
-Remember that you can hover over it to see its documentation.
+另一种策略是使用策略 ``interval_cases``，
+当涉及的变量包含在自然数或整数
+的区间中时，它会自动将目标拆分为
+各种情况。
+记住你可以将鼠标悬停在其上查看其文档。
 EXAMPLES: -/
 -- QUOTE:
 example {m : ℕ} (h0 : m ≠ 0) (h1 : m ≠ 1) : 2 ≤ m := by
@@ -59,13 +58,13 @@ example {m : ℕ} (h0 : m ≠ 0) (h1 : m ≠ 1) : 2 ≤ m := by
 /- TEXT:
 .. index:: decide, tactics ; decide
 
-Recall that the semicolon after ``interval_cases m`` means
-that the next tactic is applied to each of the cases that it generates.
-Yet another option is to use the tactic ``decide``, which tries
-to find a decision procedure to solve the problem.
-Lean knows that you can decide the truth value of a statement that
-begins with a bounded quantifier ``∀ x, x < n → ...`` or ``∃ x, x < n ∧ ...``
-by deciding each of the finitely many instances.
+回忆 ``interval_cases m`` 后面的分号意味着
+下一个策略被应用到它生成的每种情况。
+另一个选择是使用策略 ``decide``，它尝试
+寻找一个决策过程来解决问题。
+Lean 知道你可以通过决定有限多个实例
+来决定一个以有界量词 ``∀ x, x < n → ...`` 或 ``∃ x, x < n ∧ ...``
+开头的陈述的真值。
 EXAMPLES: -/
 -- QUOTE:
 example {m : ℕ} (h0 : m ≠ 0) (h1 : m ≠ 1) : 2 ≤ m := by
@@ -77,30 +76,30 @@ example {m : ℕ} (h0 : m ≠ 0) (h1 : m ≠ 1) : 2 ≤ m := by
 -- QUOTE.
 
 /- TEXT:
-With the theorem ``two_le`` in hand, let's start by showing that every
-natural number greater than two has a prime divisor.
-Mathlib contains a function ``Nat.minFac`` that
-returns the smallest prime divisor,
-but for the sake of learning new parts of the library,
-we'll avoid using it and prove the theorem directly.
+有了定理 ``two_le`` 在手，让我们从证明每个
+大于 2 的自然数都有一个素因子开始。
+Mathlib 包含一个函数 ``Nat.minFac``，
+它返回最小的素因子，
+但为了学习库的新部分，
+我们将避免使用它，直接证明该定理。
 
-Here, ordinary induction isn't enough.
-We want to use *strong induction*, which allows us to prove
-that every natural number :math:`n` has a property :math:`P`
-by showing that for every number :math:`n`, if :math:`P` holds
-of all values less than :math:`n`, it holds at :math:`n` as well.
-In Lean, this principle is called ``Nat.strong_induction_on``,
-and we can use the ``using`` keyword to tell the induction tactic
-to use it.
-Notice that when we do that, there is no base case; it is subsumed
-by the general induction step.
+这里，普通归纳不够。
+我们想使用*强归纳*，它允许我们通过证明
+对于每个数 :math:`n`，如果 :math:`P` 对所有小于 :math:`n` 的值
+成立，那么它在 :math:`n` 处也成立，来证明
+每个自然数 :math:`n` 具有性质 :math:`P`。
+在 Lean 中，这个原理被称为 ``Nat.strong_induction_on``，
+我们可以使用 ``using`` 关键字告诉归纳策略
+使用它。
+注意当我们这样做时，没有基础情况；它被
+一般归纳步骤所包含。
 
-The argument is simply as follows. Assuming :math:`n ≥ 2`,
-if :math:`n` is prime, we're done. If it isn't,
-then by one of the characterizations of what it means to be a prime number,
-it has a nontrivial factor, :math:`m`,
-and we can apply the inductive hypothesis to that.
-Step through the next proof to see how that plays out.
+论证如下。假设 :math:`n ≥ 2`，
+如果 :math:`n` 是素数，我们完成了。如果不是，
+那么根据素数定义的一个刻画，
+它有一个非平凡因子 :math:`m`，
+我们可以对该因子应用归纳假设。
+逐步执行下一个证明，看看这是如何展开的。
 BOTH: -/
 -- QUOTE:
 theorem exists_prime_factor {n : Nat} (h : 2 ≤ n) : ∃ p : Nat, p.Prime ∧ p ∣ n := by
@@ -123,10 +122,10 @@ theorem exists_prime_factor {n : Nat} (h : 2 ≤ n) : ∃ p : Nat, p.Prime ∧ p
 -- QUOTE.
 
 /- TEXT:
-We can now prove the following formulation of our theorem.
-See if you can fill out the sketch.
-You can use ``Nat.factorial_pos``, ``Nat.dvd_factorial``,
-and ``Nat.dvd_sub'``.
+现在我们可以证明我们定理的如下表述。
+看看你能否填补草稿。
+你可以使用 ``Nat.factorial_pos``、``Nat.dvd_factorial``
+和 ``Nat.dvd_sub'``。
 BOTH: -/
 -- QUOTE:
 theorem primes_infinite : ∀ n, ∃ p > n, Nat.Prime p := by
@@ -168,34 +167,34 @@ SOLUTIONS: -/
 -- BOTH:
 -- QUOTE.
 /- TEXT:
-Let's consider a variation of the proof above, where instead
-of using the factorial function,
-we suppose that we are given a finite set
-:math:`\{ p_1, \ldots, p_n \}` and we consider a prime factor of
-:math:`\prod_{i = 1}^n p_i + 1`.
-That prime factor has to be distinct from each
-:math:`p_i`, showing that there is no finite set that contains
-all the prime numbers.
+让我们考虑上述证明的一个变体，其中
+不使用阶乘函数，
+而是假设给定一个有限集
+:math:`\{ p_1, \ldots, p_n \}` 并考虑
+:math:`\prod_{i = 1}^n p_i + 1` 的一个素因子。
+该素因子必须不同于每个
+:math:`p_i`，表明不存在包含所有素数的
+有限集。
 
-Formalizing this argument requires us to reason about finite
-sets. In Lean, for any type ``α``, the type ``Finset α``
-represents finite sets of elements of type ``α``.
-Reasoning about finite sets computationally requires having
-a procedure to test equality on ``α``, which is why the snippet
-below includes the assumption ``[DecidableEq α]``.
-For concrete data types like ``ℕ``, ``ℤ``, and ``ℚ``,
-the assumption is satisfied automatically. When reasoning about
-the real numbers, it can be satisfied using classical logic
-and abandoning the computational interpretation.
+形式化这个论证需要我们推理有限集。
+在 Lean 中，对于任何类型 ``α``，类型 ``Finset α``
+表示类型为 ``α`` 的元素的有限集。
+在计算上推理有限集需要有一个
+测试 ``α`` 上相等性的过程，这就是为什么下面的代码段
+包含假设 ``[DecidableEq α]``。
+对于像 ``ℕ``、``ℤ`` 和 ``ℚ`` 这样的具体数据类型，
+该假设会自动满足。当推理
+实数时，可以通过使用经典逻辑
+并放弃计算解释来满足它。
 
-We use the command ``open Finset`` to avail ourselves of shorter names
-for the relevant theorems. Unlike the case with sets,
-most equivalences involving finsets do not hold definitionally,
-so they need to be expanded manually using equivalences like
-``Finset.subset_iff``, ``Finset.mem_union``, ``Finset.mem_inter``,
-and ``Finset.mem_sdiff``. The ``ext`` tactic can still be used
-to show that two finite sets are equal by showing
-that every element of one is an element of the other.
+我们使用命令 ``open Finset`` 来使用
+更短的相关定理名称。与集合的情况不同，
+大多数涉及有限集的等价关系在定义上不成立，
+因此需要使用像
+``Finset.subset_iff``、``Finset.mem_union``、``Finset.mem_inter``
+和 ``Finset.mem_sdiff`` 这样的等价关系来手动展开。``ext`` 策略仍然可以用来
+通过证明两个有限集的一个中的
+每个元素是另一个的元素来显示它们相等。
 BOTH: -/
 -- QUOTE:
 open Finset
@@ -229,10 +228,10 @@ end
 -- QUOTE.
 
 /- TEXT:
-We have used a new trick: the ``tauto`` tactic (and a strengthened
-version, ``tauto!``, which uses classical logic) can be used to
-dispense with propositional tautologies. See if you can use
-these methods to prove the two examples below.
+我们使用了一个新技巧：``tauto`` 策略（以及加强版
+``tauto!``，它使用经典逻辑）可以用来
+处理命题重言式。看看你能否使用
+这些方法来证明下面的两个例子。
 BOTH: -/
 section
 variable {α : Type*} [DecidableEq α] (r s t : Finset α)
@@ -270,9 +269,9 @@ example : (r \ s) \ t = r \ (s ∪ t) := by
 end
 
 /- TEXT:
-The theorem ``Finset.dvd_prod_of_mem`` tells us that if an
-``n`` is an element of a finite set ``s``, then ``n`` divides
-``∏ i ∈ s, i``.
+定理 ``Finset.dvd_prod_of_mem`` 告诉我们，如果
+``n`` 是有限集 ``s`` 的一个元素，那么 ``n`` 整除
+``∏ i ∈ s, i``。
 EXAMPLES: -/
 -- QUOTE:
 example (s : Finset ℕ) (n : ℕ) (h : n ∈ s) : n ∣ ∏ i ∈ s, i :=
@@ -280,10 +279,10 @@ example (s : Finset ℕ) (n : ℕ) (h : n ∈ s) : n ∣ ∏ i ∈ s, i :=
 -- QUOTE.
 
 /- TEXT:
-We also need to know that the converse holds in the case where
-``n`` is prime and ``s`` is a set of primes.
-To show that, we need the following lemma, which you should
-be able to prove using the theorem ``Nat.Prime.eq_one_or_self_of_dvd``.
+我们还需要知道在 ``n`` 是素数且 ``s`` 是素数集合的
+情况下，反过来也成立。
+要展示这一点，我们需要以下引理，你应该
+能够使用定理 ``Nat.Prime.eq_one_or_self_of_dvd`` 来证明它。
 BOTH: -/
 -- QUOTE:
 theorem _root_.Nat.Prime.eq_of_dvd_of_prime {p q : ℕ}
@@ -299,22 +298,22 @@ SOLUTIONS: -/
 -- BOTH:
 
 /- TEXT:
-We can use this lemma to show that if a prime ``p`` divides a product of a finite
-set of primes, then it is equal to one of them.
-Mathlib provides a useful principle of induction on finite sets:
-to show that a property holds of an arbitrary finite set ``s``,
-show that it holds of the empty set, and show that it is preserved
-when we add a single new element ``a ∉ s``.
-The principle is known as ``Finset.induction_on``.
-When we tell the induction tactic to use it, we can also specify the names
-``a`` and ``s``, the name for the assumption ``a ∉ s`` in the inductive step,
-and the name of the inductive hypothesis.
-The expression ``Finset.insert a s`` denotes the union of ``s`` with the singleton ``a``.
-The identities ``Finset.prod_empty`` and ``Finset.prod_insert`` then provide
-the relevant rewrite rules for the product.
-In the proof below, the first ``simp`` applies ``Finset.prod_empty``.
-Step through the beginning of the proof to see the induction unfold,
-and then finish it off.
+我们可以使用这个引理来证明：如果一个素数 ``p`` 整除一个有限
+素数集的乘积，那么它等于其中之一。
+Mathlib 提供了一个有用的有限集归纳原理：
+要证明一个性质对任意有限集 ``s`` 成立，
+证明它对空集成立，并证明当添加一个
+不在 ``s`` 中的新元素 ``a ∉ s`` 时它被保持。
+该原理被称为 ``Finset.induction_on``。
+当我们告诉归纳策略使用它时，我们也可以指定名称
+``a`` 和 ``s``，归纳步骤中假设 ``a ∉ s`` 的名称，
+以及归纳假设的名称。
+表达式 ``Finset.insert a s`` 表示 ``s`` 与单元素集 ``a`` 的并集。
+恒等式 ``Finset.prod_empty`` 和 ``Finset.prod_insert`` 然后提供了
+乘积的相关重写规则。
+在下面的证明中，第一个 ``simp`` 应用了 ``Finset.prod_empty``。
+逐步执行证明的开头，看看归纳如何展开，
+然后完成它。
 BOTH: -/
 -- QUOTE:
 theorem mem_of_dvd_prod_primes {s : Finset ℕ} {p : ℕ} (prime_p : p.Prime) :
@@ -337,13 +336,13 @@ SOLUTIONS: -/
 -- BOTH:
 -- QUOTE.
 /- TEXT:
-We need one last property of finite sets.
-Given an element ``s : Set α`` and a predicate
-``P`` on ``α``, in  :numref:`Chapter %s <sets_and_functions>`
-we wrote ``{ x ∈ s | P x }`` for the set of
-elements of ``s`` that satisfy ``P``.
-Given ``s : Finset α``,
-the analogous notion is written ``s.filter P``.
+我们还需要有限集的最后一个性质。
+给定一个元素 ``s : Set α`` 和一个 ``α`` 上的谓词
+``P``，在 :numref:`Chapter %s <sets_and_functions>` 中
+我们写了 ``{ x ∈ s | P x }`` 表示 ``s`` 中
+满足 ``P`` 的元素的集合。
+给定 ``s : Finset α``，
+类似的概念写作 ``s.filter P``。
 EXAMPLES: -/
 -- QUOTE:
 example (s : Finset ℕ) (x : ℕ) : x ∈ s.filter Nat.Prime ↔ x ∈ s ∧ x.Prime :=
@@ -351,16 +350,16 @@ example (s : Finset ℕ) (x : ℕ) : x ∈ s.filter Nat.Prime ↔ x ∈ s ∧ x.
 -- QUOTE.
 
 /- TEXT:
-We now prove an alternative formulation of the statement that there are infinitely many
-primes, namely, that given any ``s : Finset ℕ``, there is a prime ``p`` that is not
-an element of ``s``.
-Aiming for a contradiction, we assume that all the primes are in ``s``, and then
-cut down to a set ``s'`` that contains all and only the primes.
-Taking the product of that set, adding one, and finding a prime factor
-of the result
-leads to the contradiction we are looking for.
-See if you can complete the sketch below.
-You can use ``Finset.prod_pos`` in the proof of the first ``have``.
+现在我们证明存在无穷多个素数的另一种表述，
+即给定任何 ``s : Finset ℕ``，存在一个素数 ``p`` 不是
+``s`` 的元素。
+为了推导矛盾，我们假设所有素数都在 ``s`` 中，然后
+缩减到仅包含所有素数的集合 ``s'``。
+取该集合的乘积，加一，并找到结果的一个
+素因子，
+导致我们正在寻找的矛盾。
+看看你能否完成下面的草稿。
+在第一个 ``have`` 的证明中，你可以使用 ``Finset.prod_pos``。
 BOTH: -/
 -- QUOTE:
 theorem primes_infinite' : ∀ s : Finset Nat, ∃ p, Nat.Prime p ∧ p ∉ s := by
@@ -404,20 +403,20 @@ SOLUTIONS: -/
 -- BOTH:
 -- QUOTE.
 /- TEXT:
-We have thus seen two ways of saying that there are infinitely many primes:
-saying that they are not bounded by any ``n``, and saying that they are
-not contained in any finite set ``s``.
-The two proofs below show that these formulations are equivalent.
-In the second, in order to form ``s.filter Q``, we have to assume that there
-is a procedure for deciding whether or not ``Q`` holds. Lean knows that there
-is a procedure for ``Nat.Prime``. In general, if we use classical logic
-by writing ``open Classical``,
-we can dispense with the assumption.
+我们因此看到了两种表述存在无穷多个素数的方式：
+说它们不被任何 ``n`` 所界定，以及说它们
+不被包含在任何有限集 ``s`` 中。
+下面的两个证明表明这些表述是等价的。
+在第二个中，为了形成 ``s.filter Q``，我们必须假设存在
+一个决定 ``Q`` 是否成立的过程。Lean 知道
+对 ``Nat.Prime`` 存在一个过程。通常，如果我们通过写
+``open Classical`` 使用经典逻辑，
+我们可以免除这个假设。
 
-In Mathlib, ``Finset.sup s f`` denotes the supremum of the values of ``f x`` as ``x``
-ranges over ``s``, returning ``0`` in the case where ``s`` is empty and
-the codomain of ``f`` is ``ℕ``. In the first proof, we use ``s.sup id``,
-where ``id`` is the identity function, to refer to the maximum value in ``s``.
+在 Mathlib 中，``Finset.sup s f`` 表示 ``f x`` 在 ``x`` 取遍
+``s`` 时的上确界，当 ``s`` 为空且
+``f`` 的上域为 ``ℕ`` 时返回 ``0``。在第一个证明中，我们使用 ``s.sup id``，
+其中 ``id`` 是恒等函数，来引用 ``s`` 中的最大值。
 BOTH: -/
 -- QUOTE:
 theorem bounded_of_ex_finset (Q : ℕ → Prop) :
@@ -438,49 +437,49 @@ theorem ex_finset_of_bounded (Q : ℕ → Prop) [DecidablePred Q] :
 -- QUOTE.
 
 /- TEXT:
-A small variation on our second proof that there are infinitely many primes
-shows that there are infinitely many primes congruent to 3 modulo 4.
-The argument goes as follows.
-First, notice that if the product of two numbers :math:`m` and :math:`n`
-is equal to 3 modulo 4, then one of the two numbers is congruent to 3 modulo 4.
-After all, both have to be odd, and if they are both congruent to 1 modulo 4,
-so is their product.
-We can use this observation to show that if some number
-greater than 2 is congruent to 3 modulo 4,
-then that number has a prime divisor that is also congruent to 3 modulo 4.
+我们第二个证明存在无穷多个素数的一个小变体
+表明存在无穷多个模 4 余 3 的素数。
+论证如下。
+首先，注意如果两个数 :math:`m` 和 :math:`n` 的乘积
+模 4 等于 3，那么这两个数之一模 4 余 3。
+毕竟，两者都必须是奇数，如果它们都模 4 余 1，
+那么它们的乘积也是。
+我们可以用这个观察来证明如果某个大于 2 的数
+模 4 余 3，
+那么该数有一个也模 4 余 3 的素因子。
 
-Now suppose there are only finitely many prime numbers congruent to 3
-modulo 4, say, :math:`p_1, \ldots, p_k`.
-Without loss of generality, we can assume that :math:`p_1 = 3`.
-Consider the product :math:`4 \prod_{i = 2}^k p_i + 3`.
-It is easy to see that this is congruent to 3 modulo 4, so it has
-a prime factor :math:`p` congruent to 3 modulo 4.
-It can't be the case that :math:`p = 3`; since :math:`p`
-divides :math:`4 \prod_{i = 2}^k p_i + 3`, if :math:`p`
-were equal to 3 then it would also divide :math:`\prod_{i = 2}^k p_i`,
-which implies that :math:`p` is equal to
-one of the :math:`p_i` for :math:`i = 2, \ldots, k`;
-and we have excluded 3 from this list.
-So :math:`p` has to be one of the other elements :math:`p_i`.
-But in that case, :math:`p` divides :math:`4 \prod_{i = 2}^k p_i`
-and hence 3, which contradicts the fact that it is not 3.
+现在假设只有有限多个模 4 余 3 的素数，
+比如说 :math:`p_1, \ldots, p_k`。
+不失一般性，我们可以假设 :math:`p_1 = 3`。
+考虑乘积 :math:`4 \prod_{i = 2}^k p_i + 3`。
+容易看出它模 4 等于 3，因此它有一个
+模 4 余 3 的素因子 :math:`p`。
+不可能有 :math:`p = 3`；因为 :math:`p`
+整除 :math:`4 \prod_{i = 2}^k p_i + 3`，如果 :math:`p`
+等于 3，那么它也会整除 :math:`\prod_{i = 2}^k p_i`，
+这蕴含 :math:`p` 等于
+某个 :math:`p_i`（:math:`i = 2, \ldots, k`）；
+而我们已经从列表中排除了 3。
+因此 :math:`p` 必须是其他元素 :math:`p_i` 之一。
+但在这种情况下，:math:`p` 整除 :math:`4 \prod_{i = 2}^k p_i`
+从而整除 3，这与它不是 3 的事实矛盾。
 
-In Lean, the notation ``n % m``, read "``n`` modulo ``m``,"
-denotes the remainder of the division of ``n`` by ``m``.
+在 Lean 中，记号 ``n % m``，读作"``n`` 模 ``m``"，"
+表示 ``n`` 除以 ``m`` 的余数。
 EXAMPLES: -/
 -- QUOTE:
 example : 27 % 4 = 3 := by norm_num
 -- QUOTE.
 
 /- TEXT:
-We can then render the statement "``n`` is congruent to 3 modulo 4"
-as ``n % 4 = 3``. The following example and theorems sum up
-the facts about this function that we will need to use below.
-The first named theorem is another illustration of reasoning by
-a small number of cases.
-In the second named theorem, remember that the semicolon means that
-the subsequent tactic block is applied to all the goals created by the
-preceding tactic.
+然后，我们可以将陈述"``n`` 模 4 余 3"
+表示为 ``n % 4 = 3``。下面的例子和定理总结了
+我们将在下面需要使用的关于这个函数的事实。
+第一个命名定理是另一种通过少量情况
+进行推理的说明。
+在第二个命名定理中，记住分号意味着
+后续的策略块被应用到前一个策略
+创建的所有目标。
 EXAMPLES: -/
 -- QUOTE:
 example (n : ℕ) : (4 * n + 3) % 4 = 3 := by
@@ -503,10 +502,10 @@ theorem two_le_of_mod_4_eq_3 {n : ℕ} (h : n % 4 = 3) : 2 ≤ n := by
 -- QUOTE.
 
 /- TEXT:
-We will also need the following fact, which says that if
-``m`` is a nontrivial divisor of ``n``, then so is ``n / m``.
-See if you can complete the proof using ``Nat.div_dvd_of_dvd``
-and ``Nat.div_lt_self``.
+我们还需要以下事实，它说如果
+``m`` 是 ``n`` 的一个非平凡因子，那么 ``n / m`` 也是。
+看看你能否使用 ``Nat.div_dvd_of_dvd`` 和 ``Nat.div_lt_self``
+来完成证明。
 BOTH: -/
 -- QUOTE:
 theorem aux {m n : ℕ} (h₀ : m ∣ n) (h₁ : 2 ≤ m) (h₂ : m < n) : n / m ∣ n ∧ n / m < n := by
@@ -520,9 +519,9 @@ SOLUTIONS: -/
 
 -- BOTH:
 /- TEXT:
-Now put all the pieces together to prove that any
-number congruent to 3 modulo 4 has a prime divisor with that
-same property.
+现在将所有片段组合在一起，证明任何
+模 4 余 3 的数都有一个具有相同
+性质的素因子。
 BOTH: -/
 -- QUOTE:
 theorem exists_prime_factor_mod_4_eq_3 {n : Nat} (h : n % 4 = 3) :
@@ -562,9 +561,9 @@ SOLUTIONS: -/
 -- BOTH:
 -- QUOTE.
 /- TEXT:
-We are in the home stretch. Given a set ``s`` of prime
-numbers, we need to talk about the result of removing 3 from that
-set, if it is present. The function ``Finset.erase`` handles that.
+我们到了最后阶段。给定一个素数集合 ``s``，
+我们需要讨论从该集合中移除 3 的结果
+（如果它存在）。函数 ``Finset.erase`` 处理这一点。
 EXAMPLES: -/
 -- QUOTE:
 example (m n : ℕ) (s : Finset ℕ) (h : m ∈ erase s n) : m ≠ n ∧ m ∈ s := by
@@ -576,11 +575,10 @@ example (m n : ℕ) (s : Finset ℕ) (h : m ∈ erase s n) : m ≠ n ∧ m ∈ s
 -- QUOTE.
 
 /- TEXT:
-We are now ready to prove that there are infinitely many primes
-congruent to 3 modulo 4.
-Fill in the missing parts below.
-Our solution uses ``Nat.dvd_add_iff_left`` and ``Nat.dvd_sub'``
-along the way.
+现在我们已经准备好证明存在无穷多个
+模 4 余 3 的素数。
+填补下面缺失的部分。
+我们的解在过程中使用了 ``Nat.dvd_add_iff_left`` 和 ``Nat.dvd_sub'``。
 BOTH: -/
 -- QUOTE:
 theorem primes_mod_4_eq_3_infinite : ∀ n, ∃ p > n, Nat.Prime p ∧ p % 4 = 3 := by
@@ -649,8 +647,8 @@ SOLUTIONS: -/
 -- QUOTE.
 
 /- TEXT:
-If you managed to complete the proof, congratulations! This has been a serious
-feat of formalization.
+如果你设法完成了证明，恭喜！这是一个严肃的
+形式化成就。
 TEXT. -/
 -- OMIT:
 /-

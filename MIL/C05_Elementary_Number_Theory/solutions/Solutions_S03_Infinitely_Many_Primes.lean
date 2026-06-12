@@ -230,4 +230,3 @@ theorem primes_mod_4_eq_3_infinite : ∀ n, ∃ p > n, Nat.Prime p ∧ p % 4 = 3
   have : p = 3 := by
     apply pp.eq_of_dvd_of_prime Nat.prime_three this
   contradiction
-

@@ -7,18 +7,18 @@ namespace C03S06
 /- TEXT:
 .. _sequences_and_convergence:
 
-Sequences and Convergence
+数列与收敛
 -------------------------
 
-We now have enough skills at our disposal to do some real mathematics.
-In Lean, we can represent a sequence :math:`s_0, s_1, s_2, \ldots` of
-real numbers as a function ``s : ℕ → ℝ``.
-Such a sequence is said to *converge* to a number :math:`a` if for every
-:math:`\varepsilon > 0` there is a point beyond which the sequence
-remains within :math:`\varepsilon` of :math:`a`,
-that is, there is a number :math:`N` such that for every
-:math:`n \ge N`, :math:`| s_n - a | < \varepsilon`.
-In Lean, we can render this as follows:
+我们现在已经掌握了足够的技能来做一些真正的数学。
+在 Lean 中，我们可以将实数序列 :math:`s_0, s_1, s_2, \ldots`
+表示为一个函数 ``s : ℕ → ℝ``。
+这样一个序列被称为*收敛*到数 :math:`a`，如果对于每个
+:math:`\varepsilon > 0`，存在某个点，在该点之后序列
+保持在 :math:`a` 的 :math:`\varepsilon` 范围内，
+即存在一个数 :math:`N`，使得对于每个
+:math:`n \ge N`，有 :math:`| s_n - a | < \varepsilon`。
+在 Lean 中，我们可以这样表述：
 BOTH: -/
 -- QUOTE:
 def ConvergesTo (s : ℕ → ℝ) (a : ℝ) :=
@@ -26,26 +26,26 @@ def ConvergesTo (s : ℕ → ℝ) (a : ℝ) :=
 -- QUOTE.
 
 /- TEXT:
-The notation ``∀ ε > 0, ...`` is a convenient abbreviation
-for ``∀ ε, ε > 0 → ...``, and, similarly,
-``∀ n ≥ N, ...`` abbreviates ``∀ n, n ≥ N →  ...``.
-And remember that ``ε > 0``, in turn, is defined as ``0 < ε``,
-and ``n ≥ N`` is defined as ``N ≤ n``.
+记号 ``∀ ε > 0, ...`` 是
+``∀ ε, ε > 0 → ...`` 的方便缩写，类似地，
+``∀ n ≥ N, ...`` 是 ``∀ n, n ≥ N →  ...`` 的缩写。
+同时记住 ``ε > 0`` 被定义为 ``0 < ε``，
+而 ``n ≥ N`` 被定义为 ``N ≤ n``。
 
 .. index:: extensionality, ext, tactics ; ext
 
-In this section, we'll establish some properties of convergence.
-But first, we will discuss three tactics for working with equality
-that will prove useful.
-The first, the ``ext`` tactic,
-gives us a way of proving that two functions are equal.
-Let :math:`f(x) = x + 1` and :math:`g(x) = 1 + x`
-be functions from reals to reals.
-Then, of course, :math:`f = g`, because they return the same
-value for every :math:`x`.
-The ``ext`` tactic enables us to prove an equation between functions
-by proving that their values are the same
-at all the values of their arguments.
+在本节中，我们将建立收敛的一些性质。
+但首先，我们将讨论三个处理等式的策略，
+它们将会很有用。
+第一个是 ``ext`` 策略，
+它为我们提供了一种证明两个函数相等的方法。
+设 :math:`f(x) = x + 1` 和 :math:`g(x) = 1 + x`
+是从实数到实数的函数。
+那么，当然，:math:`f = g`，因为它们对每个 :math:`x`
+都返回相同的值。
+``ext`` 策略使我们能够通过证明
+函数在它们参数的所有取值处
+具有相同的值来证明函数之间的等式。
 TEXT. -/
 -- QUOTE:
 example : (fun x y : ℝ ↦ (x + y) ^ 2) = fun x y : ℝ ↦ x ^ 2 + 2 * x * y + y ^ 2 := by
@@ -56,13 +56,12 @@ example : (fun x y : ℝ ↦ (x + y) ^ 2) = fun x y : ℝ ↦ x ^ 2 + 2 * x * y 
 /- TEXT:
 .. index:: congr, tactics ; congr
 
-We'll see later that ``ext`` is actually more general, and also one can
-specify the name of the variables that appear.
-For instance you can try to replace ``ext`` with ``ext u v`` in the
-above proof.
-The second tactic, the ``congr`` tactic,
-allows us to prove an equation between two expressions
-by reconciling the parts that are different:
+我们稍后会看到 ``ext`` 实际上是更一般的，而且还可以
+指定出现的变量的名称。
+例如，你可以尝试在上面的证明中将 ``ext`` 替换为 ``ext u v``。
+第二个策略，``congr`` 策略，
+允许我们通过调和不同的部分
+来证明两个表达式之间的等式：
 TEXT. -/
 -- QUOTE:
 example (a b : ℝ) : |a| = |a - b + b| := by
@@ -71,22 +70,20 @@ example (a b : ℝ) : |a| = |a - b + b| := by
 -- QUOTE.
 
 /- TEXT:
-Here the ``congr`` tactic peels off the ``abs`` on each side,
-leaving us to prove ``a = a - b + b``.
+这里 ``congr`` 策略剥去了每一边的 ``abs``，
+留下 ``a = a - b + b`` 需要证明。
 
 .. index:: convert, tactics ; convert
 
-Finally, the ``convert`` tactic is used to apply a theorem
-to a goal when the conclusion of the theorem doesn't quite match.
-For example, suppose we want to prove ``a < a * a`` from ``1 < a``.
-A theorem in the library, ``mul_lt_mul_iff_left₀``,
-will let us prove ``1 * a < a * a``.
-One possibility is to work backwards and rewrite the goal
-so that it has that form.
-Instead, the ``convert`` tactic lets us apply the theorem
-as it is,
-and leaves us with the task of proving the equations that
-are needed to make the goal match.
+最后，``convert`` 策略用于当定理的结论不完全匹配时，
+将定理应用于目标。
+例如，假设我们想从 ``1 < a`` 证明 ``a < a * a``。
+库中的一个定理 ``mul_lt_mul_iff_left₀``
+将使我们能够证明 ``1 * a < a * a``。
+一种可能性是反向工作，重写目标
+使其具有那种形式。
+而 ``convert`` 策略让我们可以直接应用定理，
+并留下证明使目标匹配所需等式的任务。
 TEXT. -/
 -- QUOTE:
 example {a : ℝ} (h : 1 < a) : a < a * a := by
@@ -96,13 +93,13 @@ example {a : ℝ} (h : 1 < a) : a < a * a := by
 -- QUOTE.
 
 /- TEXT:
-This example illustrates another useful trick: when we apply an
-expression with an underscore
-and Lean can't fill it in for us automatically,
-it simply leaves it for us as another goal.
+这个例子说明了另一个有用的技巧：当我们应用一个
+带有下划线的表达式，
+而 Lean 无法自动为我们填充它时，
+它只是将其留作另一个目标。
 
-The following shows that any constant sequence :math:`a, a, a, \ldots`
-converges.
+以下证明了任何常数序列 :math:`a, a, a, \ldots`
+收敛。
 BOTH: -/
 -- QUOTE:
 theorem convergesTo_const (a : ℝ) : ConvergesTo (fun _x : ℕ ↦ a) a := by
@@ -116,35 +113,34 @@ theorem convergesTo_const (a : ℝ) : ConvergesTo (fun _x : ℕ ↦ a) a := by
 /- TEXT:
 .. TODO: reference to the simplifier
 
-Lean has a tactic, ``simp``, which can often save you the
-trouble of carrying out steps like ``rw [sub_self, abs_zero]``
-by hand.
-We will tell you more about it soon.
+Lean 有一个策略 ``simp``，它通常可以为你省去
+手动执行诸如 ``rw [sub_self, abs_zero]`` 这类步骤的麻烦。
+我们很快会告诉你更多关于它的信息。
 
-For a more interesting theorem, let's show that if ``s``
-converges to ``a`` and ``t`` converges to ``b``, then
-``fun n ↦ s n + t n`` converges to ``a + b``.
-It is helpful to have a clear pen-and-paper
-proof in mind before you start writing a formal one.
-Given ``ε`` greater than ``0``,
-the idea is to use the hypotheses to obtain an ``Ns``
-such that beyond that point, ``s`` is within ``ε / 2``
-of ``a``,
-and an ``Nt`` such that beyond that point, ``t`` is within
-``ε / 2`` of ``b``.
-Then, whenever ``n`` is greater than or equal to the
-maximum of ``Ns`` and ``Nt``,
-the sequence ``fun n ↦ s n + t n`` should be within ``ε``
-of ``a + b``.
-The following example begins to implement this strategy.
-See if you can finish it off.
+对于一个更有趣的定理，让我们证明如果 ``s``
+收敛到 ``a`` 且 ``t`` 收敛到 ``b``，那么
+``fun n ↦ s n + t n`` 收敛到 ``a + b``。
+在开始编写形式化证明之前，心中有一个清晰的纸笔
+证明是有帮助的。
+给定大于 ``0`` 的 ``ε``，
+思路是使用假设获得一个 ``Ns``，
+使得在该点之后，``s`` 在 ``a`` 的 ``ε / 2``
+范围内，
+以及一个 ``Nt``，使得在该点之后，``t`` 在
+``b`` 的 ``ε / 2`` 范围内。
+那么，每当 ``n`` 大于或等于
+``Ns`` 和 ``Nt`` 中的最大值时，
+序列 ``fun n ↦ s n + t n`` 应该在 ``a + b`` 的 ``ε``
+范围内。
+以下例子开始实施这个策略。
+看看你能否完成它。
 TEXT. -/
 -- QUOTE:
 theorem convergesTo_add {s t : ℕ → ℝ} {a b : ℝ}
       (cs : ConvergesTo s a) (ct : ConvergesTo t b) :
     ConvergesTo (fun n ↦ s n + t n) (a + b) := by
   intro ε εpos
-  dsimp -- this line is not needed but cleans up the goal a bit.
+  dsimp -- 此行不是必需的，但可以使目标更清晰一些。
   have ε2pos : 0 < ε / 2 := by linarith
   rcases cs (ε / 2) ε2pos with ⟨Ns, hs⟩
   rcases ct (ε / 2) ε2pos with ⟨Nt, ht⟩
@@ -174,26 +170,26 @@ theorem convergesTo_addαα {s t : ℕ → ℝ} {a b : ℝ}
     _ = ε := by norm_num
 
 /- TEXT:
-As hints, you can use ``le_of_max_le_left`` and ``le_of_max_le_right``,
-and ``norm_num`` can prove ``ε / 2 + ε / 2 = ε``.
-Also, it is helpful to use the ``congr`` tactic to
-show that ``|s n + t n - (a + b)|`` is equal to
-``|(s n - a) + (t n - b)|,``
-since then you can use the triangle inequality.
-Notice that we marked all the variables ``s``, ``t``, ``a``, and ``b``
-implicit because they can be inferred from the hypotheses.
+作为提示，你可以使用 ``le_of_max_le_left`` 和 ``le_of_max_le_right``，
+而 ``norm_num`` 可以证明 ``ε / 2 + ε / 2 = ε``。
+另外，使用 ``congr`` 策略来
+证明 ``|s n + t n - (a + b)|`` 等于
+``|(s n - a) + (t n - b)|`` 是有帮助的，
+因为这样你就可以使用三角不等式。
+注意我们将所有变量 ``s``、``t``、``a`` 和 ``b``
+标记为隐式，因为它们可以从假设中推断出来。
 
-Proving the same theorem with multiplication in place
-of addition is tricky.
-We will get there by proving some auxiliary statements first.
-See if you can also finish off the next proof,
-which shows that if ``s`` converges to ``a``,
-then ``fun n ↦ c * s n`` converges to ``c * a``.
-It is helpful to split into cases depending on whether ``c``
-is equal to zero or not.
-We have taken care of the zero case,
-and we have left you to prove the result with
-the extra assumption that ``c`` is nonzero.
+将乘法代替加法来证明同样的定理
+是棘手的。
+我们将通过首先证明一些辅助命题来达到这个目标。
+看看你能否也完成下一个证明，
+它证明了如果 ``s`` 收敛到 ``a``，
+那么 ``fun n ↦ c * s n`` 收敛到 ``c * a``。
+根据 ``c`` 是否等于零
+来分情况讨论是有帮助的。
+我们已经处理了零的情况，
+留给你在额外的假设 ``c`` 非零
+的情况下证明该结果。
 TEXT. -/
 -- QUOTE:
 theorem convergesTo_mul_const {s : ℕ → ℝ} {a : ℝ} (c : ℝ) (cs : ConvergesTo s a) :
@@ -230,10 +226,10 @@ theorem convergesTo_mul_constαα {s : ℕ → ℝ} {a : ℝ} (c : ℝ) (cs : Co
     _ = ε := mul_div_cancel₀ _ (ne_of_lt acpos).symm
 
 /- TEXT:
-The next theorem is also independently interesting:
-it shows that a convergent sequence is eventually bounded
-in absolute value.
-We have started you off; see if you can finish it.
+下一个定理也是独立有趣的：
+它证明了一个收敛序列的绝对值
+最终是有界的。
+我们已经为你开了个头；看看你能否完成它。
 TEXT. -/
 -- QUOTE:
 theorem exists_abs_le_of_convergesTo {s : ℕ → ℝ} {a : ℝ} (cs : ConvergesTo s a) :
@@ -257,19 +253,19 @@ theorem exists_abs_le_of_convergesToαα {s : ℕ → ℝ} {a : ℝ} (cs : Conve
     _ < |a| + 1 := by linarith [h n ngt]
 
 /- TEXT:
-In fact, the theorem could be strengthened to assert
-that there is a bound ``b`` that holds for all values of ``n``.
-But this version is strong enough for our purposes,
-and we will see at the end of this section that it
-holds more generally.
+事实上，该定理可以被加强为断言
+存在一个对 ``n`` 的所有值都成立的界 ``b``。
+但这个版本对我们的目的来说已经足够强了，
+我们将在本节末尾看到它
+在更一般的情况下也成立。
 
-The next lemma is auxiliary: we prove that if
-``s`` converges to ``a`` and ``t`` converges to ``0``,
-then ``fun n ↦ s n * t n`` converges to ``0``.
-To do so, we use the previous theorem to find a ``B``
-that bounds ``s`` beyond some point ``N₀``.
-See if you can understand the strategy we have outlined
-and finish the proof.
+下一个引理是辅助性的：我们证明如果
+``s`` 收敛到 ``a`` 且 ``t`` 收敛到 ``0``，
+那么 ``fun n ↦ s n * t n`` 收敛到 ``0``。
+为此，我们使用前面的定理找到一个 ``B``，
+它在某点 ``N₀`` 之后界定了 ``s``。
+看看你能否理解我们概述的策略
+并完成证明。
 TEXT. -/
 -- QUOTE:
 theorem aux {s t : ℕ → ℝ} {a : ℝ} (cs : ConvergesTo s a) (ct : ConvergesTo t 0) :
@@ -302,9 +298,9 @@ theorem auxαα {s t : ℕ → ℝ} {a : ℝ} (cs : ConvergesTo s a) (ct : Conve
     _ = ε := mul_div_cancel₀ _ (ne_of_lt Bpos).symm
 
 /- TEXT:
-If you have made it this far, congratulations!
-We are now within striking distance of our theorem.
-The following proof finishes it off.
+如果你已经走到了这一步，恭喜！
+我们现在已经接近我们的定理了。
+以下证明完成了它。
 TEXT. -/
 -- QUOTE:
 -- BOTH:
@@ -322,11 +318,10 @@ theorem convergesTo_mul {s t : ℕ → ℝ} {a b : ℝ}
 -- QUOTE.
 
 /- TEXT:
-For another challenging exercise,
-try filling out the following sketch of a proof that limits
-are unique.
-(If you are feeling bold,
-you can delete the proof sketch and try proving it from scratch.)
+另一个有挑战性的练习是，
+尝试填写下面极限唯一性的证明概要。
+（如果你有勇气，
+可以删除证明概要并尝试从头证明它。）
 TEXT. -/
 -- QUOTE:
 theorem convergesTo_unique {s : ℕ → ℝ} {a b : ℝ}
@@ -384,12 +379,12 @@ theorem convergesTo_uniqueαα {s : ℕ → ℝ} {a b : ℝ}
   exact lt_irrefl _ this
 
 /- TEXT:
-We close the section with the observation that our proofs can be generalized.
-For example, the only properties that we have used of the
-natural numbers is that their structure carries a partial order
-with ``min`` and ``max``.
-You can check that everything still works if you replace ``ℕ``
-everywhere by any linear order ``α``:
+我们以观察到我们的证明可以推广来结束本节。
+例如，我们使用自然数的唯一
+性质是它们的结构带有具有 ``min`` 和 ``max`` 的
+偏序。
+你可以检查，如果你用任意线性序 ``α``
+替换所有地方的 ``ℕ``，一切仍然有效：
 TEXT. -/
 section
 -- QUOTE:
@@ -402,9 +397,9 @@ def ConvergesTo' (s : α → ℝ) (a : ℝ) :=
 end
 
 /- TEXT:
-In :numref:`filters`, we will see that Mathlib has mechanisms
-for dealing with convergence in vastly more general terms,
-not only abstracting away particular features of the domain
-and codomain,
-but also abstracting over different types of convergence.
+在 :numref:`filters` 中，我们将看到 Mathlib 有
+以更一般的方式处理收敛的机制，
+不仅抽象掉定义域和陪域
+的特定特征，
+还抽象掉不同类型的收敛。
 TEXT. -/

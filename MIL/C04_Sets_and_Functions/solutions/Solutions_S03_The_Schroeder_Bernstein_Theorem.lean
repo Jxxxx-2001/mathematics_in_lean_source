@@ -85,4 +85,3 @@ theorem sb_surjective (hg : Injective g) : Surjective (sbFun f g) := by
   apply leftInverse_invFun hg
 
 end
-

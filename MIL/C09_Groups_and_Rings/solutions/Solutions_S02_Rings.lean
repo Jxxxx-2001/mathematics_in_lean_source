@@ -15,8 +15,7 @@ open Ideal Quotient Function
 #check Pi.ringHom
 #check ker_Pi_Quotient_mk
 
-/-- The homomorphism from ``R ⧸ ⨅ i, I i`` to ``Π i, R ⧸ I i`` featured in the Chinese
-  Remainder Theorem. -/
+/-- 从 ``R ⧸ ⨅ i, I i`` 到 ``Π i, R ⧸ I i`` 的同态，出现于中国剩余定理中。 -/
 def chineseMap (I : ι → Ideal R) : (R ⧸ ⨅ i, I i) →+* Π i, R ⧸ I i :=
   Ideal.Quotient.lift (⨅ i, I i) (Pi.ringHom fun i : ι ↦ Ideal.Quotient.mk (I i))
     (by simp [← RingHom.mem_ker, ker_Pi_Quotient_mk])
@@ -78,4 +77,3 @@ noncomputable def chineseIso [Fintype ι] (f : ι → Ideal R)
     chineseMap f with }
 
 end
-

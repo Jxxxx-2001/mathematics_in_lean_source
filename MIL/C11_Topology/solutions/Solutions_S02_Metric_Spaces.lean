@@ -13,7 +13,7 @@ variable {X : Type*} [MetricSpace X] (a b c : X)
 #check (dist_comm a b : dist a b = dist b a)
 #check (dist_triangle a b c : dist a c ≤ dist a b + dist b c)
 
--- Note the next three lines are not quoted, their purpose is to make sure those things don't get renamed while we're looking elsewhere.
+-- 注意，接下来三行没有被引用，它们的目的是确保在我们关注其他地方时这些东西不会被重命名。
 #check EMetricSpace
 #check PseudoMetricSpace
 #check PseudoEMetricSpace
@@ -209,10 +209,10 @@ example [CompleteSpace X] (f : ℕ → Set X) (ho : ∀ n, IsOpen (f n)) (hd : �
     Dense (⋂ n, f n) := by
   let B : ℕ → ℝ := fun n ↦ (1 / 2) ^ n
   have Bpos : ∀ n, 0 < B n := fun n ↦ pow_pos (by linarith) n
-  /- Translate the density assumption into two functions `center` and `radius` associating
-    to any n, x, δ, δpos a center and a positive radius such that
-    `closedBall center radius` is included both in `f n` and in `closedBall x δ`.
-    We can also require `radius ≤ (1/2)^(n+1)`, to ensure we get a Cauchy sequence later. -/
+  /- 将稠密性假设转化为两个函数 `center` 和 `radius`，它们将
+    任何 n, x, δ, δpos 关联到一个中心和正半径，使得
+    `closedBall center radius` 既包含在 `f n` 中又包含在 `closedBall x δ` 中。
+    我们还可以要求 `radius ≤ (1/2)^(n+1)`，以确保稍后得到 Cauchy 序列。 -/
   have :
     ∀ (n : ℕ) (x : X),
       ∀ δ > 0, ∃ y : X, ∃ r > 0, r ≤ B (n + 1) ∧ closedBall y r ⊆ closedBall x δ ∩ f n := by
@@ -244,11 +244,11 @@ example [CompleteSpace X] (f : ℕ → Set X) (ho : ∀ n, IsOpen (f n)) (hd : �
           )
   choose! center radius Hpos HB Hball using this
   refine fun x ↦ (mem_closure_iff_nhds_basis nhds_basis_closedBall).2 fun ε εpos ↦ ?_
-  /- `ε` is positive. We have to find a point in the ball of radius `ε` around `x` belonging to all
-    `f n`. For this, we construct inductively a sequence `F n = (c n, r n)` such that the closed ball
-    `closedBall (c n) (r n)` is included in the previous ball and in `f n`, and such that
-    `r n` is small enough to ensure that `c n` is a Cauchy sequence. Then `c n` converges to a
-    limit which belongs to all the `f n`. -/
+  /- `ε` 是正的。我们需要在 `x` 周围半径为 `ε` 的球中找到一个属于所有
+    `f n` 的点。为此，我们归纳地构造一个序列 `F n = (c n, r n)`，使得闭球
+    `closedBall (c n) (r n)` 包含在前一个球中且在 `f n` 中，并且使得
+    `r n` 足够小以确保 `c n` 是 Cauchy 序列。然后 `c n` 收敛到一个
+    属于所有 `f n` 的极限。 -/
   let F : ℕ → X × ℝ := fun n ↦
     Nat.recOn n (Prod.mk x (min ε (B 0))) fun n p ↦ Prod.mk (center n p.1 p.2) (radius n p.1 p.2)
   let c : ℕ → X := fun n ↦ (F n).1
@@ -278,10 +278,10 @@ example [CompleteSpace X] (f : ℕ → Set X) (ho : ∀ n, IsOpen (f n)) (hd : �
 
     exact I A
   have : CauchySeq c := cauchySeq_of_le_geometric_two' cdist
-  -- as the sequence `c n` is Cauchy in a complete space, it converges to a limit `y`.
+  -- 由于序列 `c n` 在完备空间中是 Cauchy 列，它收敛到一个极限 `y`。
   rcases cauchySeq_tendsto_of_complete this with ⟨y, ylim⟩
-  -- this point `y` will be the desired point. We will check that it belongs to all
-  -- `f n` and to `ball x ε`.
+  -- 这个点 `y` 将是我们所需的点。我们将检查它属于所有
+  -- `f n` 以及 `ball x ε`。
   use y
   have I : ∀ n, ∀ m ≥ n, closedBall (c m) (r m) ⊆ closedBall (c n) (r n) := by
     intro n
